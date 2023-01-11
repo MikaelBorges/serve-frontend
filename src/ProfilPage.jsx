@@ -205,7 +205,7 @@ function ProfilPage(props) {
 
       <div className='px-6'>
 
-        {!isVisitor &&
+        {/* {!isVisitor &&
           <>
             <h1 className='pb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
             <div className='pb-4 flex text-sm'>
@@ -248,11 +248,11 @@ function ProfilPage(props) {
               </button>
             </div>
           </>
-        }
+        } */}
         <div className='pb-4 flex justify-between'>
           <div className='flex flex-col justify-center'>
             <h2 className='text-3xl dark:text-white'>
-              {isVisitor && !noAds && Object.keys(liteInfosOfUser).length > 0 ?
+              {/* {isVisitor && !noAds && Object.keys(liteInfosOfUser).length > 0 ?
                 `Annonce(s) de ${liteInfosOfUser.firstname}` : ''
               }
               {!isVisitor && !noAds && Object.keys(props.dataUser).length > 0 ?
@@ -263,7 +263,8 @@ function ProfilPage(props) {
               }
               {noAds && !isVisitor ?
                 `Vous n'avez pas d'annonce(s) ${props.dataUser.firstname}` : ''
-              }
+              } */}
+              Annonce(s) :
             </h2>
           </div>
           {!isVisitor && showCheckboxsDraft &&

@@ -24,14 +24,21 @@ import { userIsLogout, userIsLogged } from './functions/user'
 import logo3D from './images/logos/gitlab-5562373-4642718.png'
 import logo from './images/logos/gitlab_tile_logo_icon_170092.png'
 import { debounce } from 'lodash'
-import FilterButton from './components/FilterButton'
-import FilterRadio from './components/FilterRadio'
-import FilterCheckbox from './components/FilterCheckbox'
+import FilterButton from './components/filter/FilterButton'
+import FilterRadio from './components/filter/FilterRadio'
+import FilterCheckbox from './components/filter/FilterCheckbox'
+import FilterInput from './components/filter/FilterInput'
+import IconSearch from './components/icons/IconSearch'
+import IconFiltering from './components/icons/IconFiltering'
+import IconCross from './components/icons/IconCross'
+import IconHorizontalRule from './components/icons/IconHorizontalRule'
 
 import { connect } from 'react-redux'
 
-const filterElementsRadio = ['oui', 'non']
-const filterElementsCheckbox = ['1', '2', '3', '4', '5']
+const filterElementsRadio = ['oui', 'non'],
+      filterLocationPlaceholderElements = ['ville'],
+      filterPricePlaceholderElements = ['min', 'max'],
+      filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
 
 function Layout(props) {
   const navigate = useNavigate(),
@@ -39,9 +46,9 @@ function Layout(props) {
         //[menu, setMenu] = useState(false),
         [search, setSearch] = useSearchParams(),
         [isMenuOpen, setIsMenuOpen] = useState(false),
-        [isPriceFilterOpen, setIsPriceFilterOpen] = useState(true),
+        [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false),
         [dbLocationIsOnline, setDbLocationIsOnline] = useState(false),
-        [isLocationFilterOpen, setIsLocationFilterOpen] = useState(true),
+        [isLocationFilterOpen, setIsLocationFilterOpen] = useState(false),
         [isButtonFilterActive, setIsButtonFilterActive] = useState(true)
 
   // console.log('props.dataUser', props.dataUser)
@@ -137,31 +144,52 @@ function Layout(props) {
     e.stopPropagation()
   }
 
-  function handleChangeMinPriceFilter(e) {
+  /* function handleChangeMinPriceFilter(e) {
     const price = e.target.value
     if (price.length) search.set('minPrice', price)
     else search.delete('minPrice')
     setSearch(search)
 
     props.changeMinPrice(e.target.value)
+  } */
+
+  function handleChangePriceInput(e) {
+    const name = e.target.name,
+          price = e.target.value
+
+    if (price.length) {
+      if(name === 'min') {
+        search.set('minPrice', price)
+      } else {
+        search.set('maxPrice', price)
+      }
+    } else {
+      if(name === 'min') {
+        search.delete('minPrice')
+      } else {
+        search.delete('maxPrice')
+      }
+    }
+
+    setSearch(search)
   }
 
-  function handleChangeMaxPriceFilter(e) {
+  /* function handleChangeMaxPriceFilter(e) {
     const price = e.target.value
     if (price.length) search.set('maxPrice', price)
     else search.delete('maxPrice')
     setSearch(search)
 
     props.changeMaxPrice(e.target.value)
-  }
+  } */
 
-  function handleClickLocationFilter() {
+  /* function handleClickLocationFilter() {
     setIsLocationFilterOpen(!isLocationFilterOpen)
-  }
+  } */
 
-  function handleClickLocationInput(e) {
+  /* function handleClickLocationInput(e) {
     e.stopPropagation()
-  }
+  } */
 
   function handleChangeLocationInput(e) {
     const text = e.target.value
@@ -171,11 +199,16 @@ function Layout(props) {
     //setSearch(search, { replace: true })
     //navigate(`/?location=${e.target.value}`)
 
-    props.changeLocationTyped(e.target.value)
+    //props.changeLocationTyped(e.target.value)
   }
 
   function handleClickFilterButton() {
     setIsButtonFilterActive(!isButtonFilterActive)
+  }
+
+  function handleClickIconCross() {
+    const searchInput = document.getElementById('searchInput')
+    searchInput.value = ''
   }
 
   // if(props.dataUser) console.log('in layout',props.dataUser._id)
@@ -185,185 +218,171 @@ function Layout(props) {
       <header
         className={`
           z-10
-          flex
-          h-10
           px-6
           py-1.5
           w-full
           sticky
-          justify-between
-          ${styleOf.header}
+          top-0
           ${isButtonFilterActive ? 'dark:bg-slate-800 bg-slate-100' : ''}
         `}
       >
-          <Link to='/' className='contents'>
-            <img src={logo} alt='logo' className='max-w-none h-full mr-6' />
-          </Link>
-          <div
-            /* before:content-['h']
-            before:w-10
-            before:h-full
-            before:block
-            before:bg-slate-600
-            before:absolute
-            before:left-0
-            before:z-10 */
-            className={`
-              relative
-              flex
-              w-full
-              content-start
-              dark:text-white
-              overflow-x-scroll
-              whitespace-nowrap
-              ${isButtonFilterActive ? '' : 'hidden'}
-            `}
-          >
-            <button
+        <div
+          className={`
+            h-8
+            flex
+            justify-between
+        `}>
+          <div className='flex'>
+            <Link to='/' className='contents'>
+              <img src={logo} alt='logo' className='max-w-none h-full mr-6' />
+            </Link>
+            <div
               className={`
-                px-3
-                mr-2
-                h-full
-                border
+                flex
+                px-2
                 rounded-3xl
-                border-solid
+                items-center
                 border-black
                 dark:border-white
+                ${isButtonFilterActive ?
+                  'dark:bg-slate-800 border'
+                  :
+                  'dark:bg-slate-800 bg-slate-100'
+                }
               `}
-              onClick={handleClickPriceFilter}
             >
-              Prix
-              <div className={isPriceFilterOpen ? 'inline-block' : 'hidden'}>
-                <input
-                  type='number'
-                  placeholder='min'
-                  name='minPriceInput'
-                  onChange={(e) => handleChangeMinPriceFilter(e)}
-                  onClick={(e) => handleClickMinOrMaxPriceFilter(e)}
-                  className={`
-                    h-4
-                    w-20
-                    ml-3
-                    border-b-2
-                    bg-slate-100
-                    border-slate-400
-                    dark:bg-slate-800
-                  `}
-                />
-                <input
-                  type='number'
-                  placeholder='max'
-                  name='maxPriceInput'
-                  onChange={(e) => handleChangeMaxPriceFilter(e)}
-                  onClick={(e) => handleClickMinOrMaxPriceFilter(e)}
-                  className={`
-                    h-4
-                    w-20
-                    ml-3
-                    border-b-2
-                    bg-slate-100
-                    border-slate-400
-                    dark:bg-slate-800
-                  `}
-                />
-              </div>
-            </button>
-            <button
-              className={`
-                px-3
-                mr-2
-                h-full
-                border
-                rounded-3xl
-                border-solid
-                border-black
-                dark:border-white
-              `}
-              onClick={handleClickLocationFilter}
-            >
-              Lieu
+              <IconSearch />
               <input
                 type='text'
-                placeholder='ville'
-                name='locationInput'
-                onClick={(e) => handleClickLocationInput(e)}
-                onChange={(e) => handleChangeLocationInput(e)}
+                id='searchInput'
                 className={`
-                  h-4
-                  w-20
-                  ml-3
-                  border-b-2
-                  bg-slate-100
-                  border-slate-400
-                  dark:bg-slate-800
-                  ${isLocationFilterOpen ? '' : 'hidden'}
+                  mx-2
+                  w-full
+                  text-black
+                  dark:text-white
+                  ${isButtonFilterActive ?
+                    'dark:bg-slate-800 bg-slate-100'
+                    :
+                    'dark:bg-slate-800 bg-slate-100'
+                  }
                 `}
               />
-            </button>
-            {filterElementsRadio.length &&
-              <FilterButton filterButtonName='Super user'>
-                {filterElementsRadio.map((radioName, index) =>
-                  <FilterRadio
-                    key={index}
-                    radioName={radioName}
-                    groupName='superUserRadioGroup'
-                  />
-                )}
-              </FilterButton>
-            }
-            {filterElementsCheckbox.length &&
-              <FilterButton filterButtonName='Notes'>
-                {filterElementsCheckbox.map((checkboxName, index) =>
-                  <FilterCheckbox
-                    key={index}
-                    checkboxName={checkboxName}
-                    groupName='ratingCheckboxGroup'
-                  />
-                )}
-              </FilterButton>
-            }
-            {filterElementsRadio.length &&
-              <FilterButton filterButtonName='Photos'>
-                {filterElementsRadio.map((radioName, index) =>
-                  <FilterRadio
-                    key={index}
-                    radioName={radioName}
-                    groupName='photoRadioGroup'
-                  />
-                )}
-              </FilterButton>
-            }
-            {/* <span
-              className={`
-                px-1
-                ml-1
-                rounded-full
-                bg-orange-400
-                ${styleOf.filtersNb}
-              `}
-            >
-              2
-            </span> */}
+              <button
+                onClick={() => handleClickIconCross()}
+              >
+                <IconCross />
+              </button>
+            </div>
           </div>
-          <button
+          <div className='flex'>
+            <button
+              className={`
+                ml-6
+                px-1.5
+                rounded-full
+                dark:text-white
+                dark:border-white
+                ${isButtonFilterActive ?
+                  'dark:bg-slate-800 bg-slate-100'
+                  :
+                  'dark:bg-slate-800 bg-white'}
+                `}
+              onClick={handleClickFilterButton}
+            >
+              <IconFiltering />
+            </button>
+          </div>
+        </div>
+        <div
+          className={`
+            flex
+            flex-wrap
+            justify-end
+            dark:text-white
+            ${isButtonFilterActive ? '' : 'hidden'}
+          `}
+        >
+          {filterPricePlaceholderElements.length &&
+            <FilterButton filterButtonName='Prix'>
+              {filterPricePlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  key={index}
+                  type='number'
+                  placeholder={placeholder}
+                  handleChangeInput={handleChangePriceInput}
+                />
+              )}
+            </FilterButton>
+          }
+          {filterLocationPlaceholderElements.length &&
+            <FilterButton filterButtonName='Lieu'>
+              {filterLocationPlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  key={index}
+                  type='text'
+                  placeholder={placeholder}
+                  handleChangeInput={handleChangeLocationInput}
+                />
+              )}
+            </FilterButton>
+          }
+          {filterElementsRadio.length &&
+            <FilterButton filterButtonName='Super user'>
+              {filterElementsRadio.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='superUserRadioGroup'
+                />
+              )}
+            </FilterButton>
+          }
+          {filterElementsCheckbox.length &&
+            <FilterButton filterButtonName='Notes'>
+              {filterElementsCheckbox.map((checkboxName, index) =>
+                <FilterCheckbox
+                  key={index}
+                  checkboxName={checkboxName}
+                  groupName='ratingCheckboxGroup'
+                />
+              )}
+            </FilterButton>
+          }
+          {filterElementsRadio.length &&
+            <FilterButton filterButtonName='Photos'>
+              {filterElementsRadio.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='photoRadioGroup'
+                />
+              )}
+            </FilterButton>
+          }
+          {/* <span
             className={`
-              ml-6
-              px-3
-              h-full
-              border
-              rounded-3xl
-              text-black
-              border-solid
-              border-black
-              dark:text-white
-              dark:border-white
-              ${isButtonFilterActive ? 'dark:bg-slate-800 bg-slate-100' : 'dark:bg-slate-900 bg-white'}
+              px-1
+              ml-1
+              rounded-full
+              bg-orange-400
+              ${styleOf.filtersNb}
             `}
-            onClick={handleClickFilterButton}
           >
-            Filtres
-          </button>
-
+            2
+          </span> */}
+        </div>
+        <div
+          className={`
+            h-4
+            flex
+            items-center
+            justify-center
+            overflow-hidden
+            ${isButtonFilterActive ? '' : 'hidden'}
+          `}
+        >
+          <IconHorizontalRule />
+        </div>
         {/* {config.api_url === 'http://localhost:3306' && (
           <div className=''>
             <button
@@ -406,7 +425,6 @@ function Layout(props) {
                 <li
                   className={`
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -424,7 +442,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -442,7 +459,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -460,7 +476,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -478,7 +493,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -496,7 +510,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -514,7 +527,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -536,7 +548,6 @@ function Layout(props) {
                   className={`
                     my-2
                     flex
-                    block
                     rounded-full
                     items-center
                     aspect-square
@@ -561,7 +572,6 @@ function Layout(props) {
                     className={`
                       my-2
                       flex
-                      block
                       rounded-full
                       items-center
                       aspect-square
@@ -585,7 +595,6 @@ function Layout(props) {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className={`
                 flex
-                block
                 rounded-full
                 items-center
                 aspect-square

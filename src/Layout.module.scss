@@ -2,13 +2,6 @@
   font-size: 0.6rem;
 }
 
-/* .filtersButtons {
-  margin: 0.18rem;
-} */
-
-.header {
-  top: 0;
-  &:-webkit-scrollbar {
-    display: none;
-  }
+.filterButton {
+  min-height: 2rem;
 }

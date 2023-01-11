@@ -1,4 +1,3 @@
-import { starIcon } from '../constants/icons'
 function FilterCheckbox({checkboxName, groupName}) {
 
   const handleClickCheckbox = (e) => {
@@ -7,15 +6,17 @@ function FilterCheckbox({checkboxName, groupName}) {
 
   return (
     <label
-      className='ml-3'
       htmlFor={checkboxName}
+      className='ml-3 cursor-pointer'
       onClick={(e) => handleClickCheckbox(e)}
     >
       <input
         type='checkbox'
         name={groupName}
+        id={checkboxName}
+        className='cursor-pointer'
       />
-      {checkboxName}{starIcon}
+      {checkboxName}
     </label>
   )
 }

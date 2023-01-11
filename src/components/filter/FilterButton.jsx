@@ -1,13 +1,10 @@
-//import FilterRadio from './FilterRadio'
+import styleOf from './FilterButton.module.scss'
 import { useState } from 'react'
 
-/* const filterElementsRadio = ['oui', 'non']
-const filterElementsCheckbox = ['1', '2', '3', '4', '5'] */
-
 function FilterButton({filterButtonName, children}) {
-  const [isFilterOpen, setIsFilterOpen] = useState(true)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
-  const handleClickLocationFilter = () => {
+  const handleClickFilter = () => {
     setIsFilterOpen(!isFilterOpen)
   }
 
@@ -15,20 +12,23 @@ function FilterButton({filterButtonName, children}) {
     <button
       className={`
         px-3
-        mr-2
-        h-full
+        mt-1.5
+        ml-1.5
         border
         last:mr-0
         rounded-3xl
         border-solid
         border-black
         dark:border-white
+        ${styleOf.filterButton}
       `}
-      onClick={handleClickLocationFilter}
+      onClick={handleClickFilter}
     >
       {filterButtonName}
       <div className={isFilterOpen ? 'inline-block' : 'hidden'}>
-        {children}
+        <fieldset>
+          {children}
+        </fieldset>
       </div>
     </button>
   )

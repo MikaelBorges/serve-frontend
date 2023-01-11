@@ -435,7 +435,7 @@ function Card(props) {
               </div>
             </button>
           </div>
-          {weAreOnUserPage && !props.isVisitor &&
+          {/* {weAreOnUserPage && !props.isVisitor &&
             <div className='flex pt-3'>
               <button
                 className={`
@@ -510,7 +510,7 @@ function Card(props) {
                 />
               }
             </div>
-          }
+          } */}
         </div>
 
       </div>
