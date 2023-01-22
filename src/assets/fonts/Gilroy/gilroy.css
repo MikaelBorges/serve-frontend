@@ -1,0 +1,165 @@
+/* // Pre declared Fonts actualy inused
+// @font-face{
+//     font-family:"Gilroy W00 UltraLight";
+//     src:url("./gilroy/f0b50c15-df08-49c5-8aaa-2f5432d264b4.eot?#iefix");
+//     src:url("./gilroy/f0b50c15-df08-49c5-8aaa-2f5432d264b4.eot?#iefix") format("eot"),url("./gilroy/655e4bd8-859c-4c4d-90fc-33970517b873.woff2") format("woff2"),url("./gilroy/4eeb416b-5d9d-43ba-9b9e-f7667d92ece1.woff") format("woff"),url("./gilroy/7e15790f-b154-4c63-a401-d8040124a5c0.ttf") format("truetype"),url("./gilroy/c52efc05-c146-42b2-a724-c5f0fd50b0e3.svg#c52efc05-c146-42b2-a724-c5f0fd50b0e3") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 UltraLight Italic";
+//     src:url("./gilroy/5522ff23-0e4a-4fcd-b2bc-496b9736d3cb.eot?#iefix");
+//     src:url("./gilroy/5522ff23-0e4a-4fcd-b2bc-496b9736d3cb.eot?#iefix") format("eot"),url("./gilroy/44b2b221-bdc0-43d5-927f-dfd10e40682d.woff2") format("woff2"),url("./gilroy/0d387bc0-9ec0-4a64-9a00-f5e241edc04e.woff") format("woff"),url("./gilroy/c42e5f84-0c85-4403-9222-50c7cd5ab870.ttf") format("truetype"),url("./gilroy/e931cb98-847e-476b-b93e-bf6df3cfcaf0.svg#e931cb98-847e-476b-b93e-bf6df3cfcaf0") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 Thin";
+//     src:url("./gilroy/e116cf97-6379-4092-a013-7626c59d3140.eot?#iefix");
+//     src:url("./gilroy/e116cf97-6379-4092-a013-7626c59d3140.eot?#iefix") format("eot"),url("./gilroy/6cfdf3b6-bdbc-488d-807c-d5aa76d66113.woff2") format("woff2"),url("./gilroy/144a816b-e535-4257-b2d6-3e3798815586.woff") format("woff"),url("./gilroy/9ec33b6d-97f8-461e-a75c-8c5f671bf40b.ttf") format("truetype"),url("./gilroy/24d2057d-cfa2-4a28-bc05-fe8c940eca03.svg#24d2057d-cfa2-4a28-bc05-fe8c940eca03") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 Thin Italic";
+//     src:url("./gilroy/891cd68f-d606-454f-b3fd-6e9edd0157b9.eot?#iefix");
+//     src:url("./gilroy/891cd68f-d606-454f-b3fd-6e9edd0157b9.eot?#iefix") format("eot"),url("./gilroy/afd37de9-b27d-4e80-acf1-b2e455948597.woff2") format("woff2"),url("./gilroy/2f36dbb9-ef60-4848-aee3-165ea3cf3a88.woff") format("woff"),url("./gilroy/ea196215-fa18-4505-b59d-aa88938fc9da.ttf") format("truetype"),url("./gilroy/db89fd10-d629-4f0b-a771-8c3da212094c.svg#db89fd10-d629-4f0b-a771-8c3da212094c") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 Light Italic";
+//     src:url("./gilroy/ed23aa09-5133-4523-8e30-fb4adf453051.eot?#iefix");
+//     src:url("./gilroy/ed23aa09-5133-4523-8e30-fb4adf453051.eot?#iefix") format("eot"),url("./gilroy/a7de201f-fcf3-4022-be07-cc34378181ec.woff2") format("woff2"),url("./gilroy/46e0bc81-64d9-4b4c-b3f4-c384123c6004.woff") format("woff"),url("./gilroy/f3eb2f0d-80b8-4398-994f-05c9f12cff05.ttf") format("truetype"),url("./gilroy/03d61c55-e0b7-484b-9fae-cf34768cc545.svg#03d61c55-e0b7-484b-9fae-cf34768cc545") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 Regular";
+//     src:url("./gilroy/db03f9a3-d054-4656-ac72-4e3a9ea4b5f2.eot?#iefix");
+//     src:url("./gilroy/db03f9a3-d054-4656-ac72-4e3a9ea4b5f2.eot?#iefix") format("eot"),url("./gilroy/ae8b809e-b8bb-4e75-883c-04fb85429645.woff2") format("woff2"),url("./gilroy/e3a5a442-9a7c-4ebd-8bdf-f9c38bc20dc6.woff") format("woff"),url("./gilroy/d3565d67-9a4c-4bcc-8b1a-6343f49ad3da.ttf") format("truetype"),url("./gilroy/da829e55-d815-4d43-bf15-400e6e1e2d82.svg#da829e55-d815-4d43-bf15-400e6e1e2d82") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 Regular Italic";
+//     src:url("./gilroy/8fe8c5da-4c7b-4576-bb9e-04b101117ce9.eot?#iefix");
+//     src:url("./gilroy/8fe8c5da-4c7b-4576-bb9e-04b101117ce9.eot?#iefix") format("eot"),url("./gilroy/556fd0d1-4ab7-4b58-9024-6f4ece4652d8.woff2") format("woff2"),url("./gilroy/03143cb7-dcdd-4548-9842-eb8e9a43aa72.woff") format("woff"),url("./gilroy/026e440e-21f7-4a91-a6ae-6540425c100d.ttf") format("truetype"),url("./gilroy/e0c025ab-05ca-4e73-9925-a5495929ad82.svg#e0c025ab-05ca-4e73-9925-a5495929ad82") format("svg");
+// } */
+@font-face {
+    font-family: 'Gilroy-SemiBold';
+    src: url('./gilroy/d2c69706-9309-415c-ba46-9369da3a3d0a.eot?#iefix');
+    src: url('./gilroy/d2c69706-9309-415c-ba46-9369da3a3d0a.eot?#iefix') format('eot'),
+        url('./gilroy/dace493d-2c1a-478b-a98e-0e73f323a856.woff2') format('woff2'),
+        url('./gilroy/a7e2bbd1-4a46-45fa-9e36-1a26e482c098.woff') format('woff'),
+        url('./gilroy/49a87d40-722b-4a8d-aa96-5159f4051bfe.ttf') format('truetype'),
+        url('./gilroy/d248e829-5afe-46cd-955f-26411a18ceab.svg#d248e829-5afe-46cd-955f-26411a18ceab') format('svg');
+}
+/* // @font-face{
+//     font-family:"Gilroy W00 SemiBold Italic";
+//     src:url("./gilroy/250e57c0-3d45-4413-b780-d061671f7716.eot?#iefix");
+//     src:url("./gilroy/250e57c0-3d45-4413-b780-d061671f7716.eot?#iefix") format("eot"),url("./gilroy/4ed9b65e-e077-42aa-b793-7ab1243dc175.woff2") format("woff2"),url("./gilroy/2e17378c-ba45-4426-95a0-deb485e7079b.woff") format("woff"),url("./gilroy/8f750ace-aa61-44ce-8956-7da56804d1bf.ttf") format("truetype"),url("./gilroy/cc382eba-da9d-464d-bf0d-36c3344944a9.svg#cc382eba-da9d-464d-bf0d-36c3344944a9") format("svg");
+// } */
+
+@font-face {
+    font-family: 'Gilroy-Bold-Italic';
+    src: url('./gilroy/c47adb39-e72f-40e7-b86a-8946e173dca5.eot?#iefix');
+    src: url('./gilroy/c47adb39-e72f-40e7-b86a-8946e173dca5.eot?#iefix') format('eot'),
+        url('./gilroy/4af4830c-4830-479d-b2da-ff899036c959.woff2') format('woff2'),
+        url('./gilroy/1ba9c2f5-76f5-4a56-b808-60fb1398a88e.woff') format('woff'),
+        url('./gilroy/56d25f53-52c4-448a-9dbb-af8065284ea2.ttf') format('truetype'),
+        url('./gilroy/29613652-89ba-4d1d-a140-dd2610df03ce.svg#29613652-89ba-4d1d-a140-dd2610df03ce') format('svg');
+}
+
+/* // @font-face{
+//     font-family:"Gilroy W00 Heavy";
+//     src:url("./gilroy/6928d1fc-32f2-4b72-a379-b45d8ea86d5f.eot?#iefix");
+//     src:url("./gilroy/6928d1fc-32f2-4b72-a379-b45d8ea86d5f.eot?#iefix") format("eot"),url("./gilroy/b151ea22-47d6-40fd-ba90-df28b4ca0c6e.woff2") format("woff2"),url("./gilroy/13bba6ad-fc3e-459c-b325-8f93cd1d3345.woff") format("woff"),url("./gilroy/6bf28c52-d42e-4456-9f25-2dcc17236f5d.ttf") format("truetype"),url("./gilroy/10e5cb55-3e9e-41a3-8f92-7d8c1debbe0e.svg#10e5cb55-3e9e-41a3-8f92-7d8c1debbe0e") format("svg");
+// }
+// @font-face{
+//     font-family:"Gilroy W00 Heavy Italic";
+//     src:url("./gilroy/d1bee944-50d7-44bb-a0d4-60af5a90e88d.eot?#iefix");
+//     src:url("./gilroy/d1bee944-50d7-44bb-a0d4-60af5a90e88d.eot?#iefix") format("eot"),url("./gilroy/ee97f9d4-01fb-4b01-8625-0eb8a0390ded.woff2") format("woff2"),url("./gilroy/57dfecfa-35cb-4f44-896c-ed47dc644641.woff") format("woff"),url("./gilroy/9f764099-c919-4873-985d-8da128092d93.ttf") format("truetype"),url("./gilroy/51fcfd36-1259-4bb7-9187-12b3eed3b68f.svg#51fcfd36-1259-4bb7-9187-12b3eed3b68f") format("svg");
+// }
+
+// @font-face{
+//     font-family:"Gilroy W00 Black Italic";
+//     src:url("./gilroy/ef7dcf57-41d7-45fb-ae2e-25dacecc46c2.eot?#iefix");
+//     src:url("./gilroy/ef7dcf57-41d7-45fb-ae2e-25dacecc46c2.eot?#iefix") format("eot"),url("./gilroy/74a5048c-440c-4478-942f-c7ee9bf68a2e.woff2") format("woff2"),url("./gilroy/c6123855-4007-492f-ad63-47ff28a009a0.woff") format("woff"),url("./gilroy/2a2bf56c-fbaa-4284-960c-3a8ff9031a33.ttf") format("truetype"),url("./gilroy/b0d1c996-74ea-4a3b-936c-2e809dcd6033.svg#b0d1c996-74ea-4a3b-936c-2e809dcd6033") format("svg");
+// }
+
+// Fonts actualy used */
+@font-face {
+    font-family: 'Gilroy-ExtraBold';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./gilroy/ddfcdab4-f6ee-4cec-bfa6-2e4fa5a22a76.eot?#iefix');
+    src: url('./gilroy/ddfcdab4-f6ee-4cec-bfa6-2e4fa5a22a76.eot?#iefix') format('eot'),
+        url('./gilroy/f1d392e1-7817-4e01-a563-9c1883c59446.woff2') format('woff2'),
+        url('./gilroy/a99e1d44-e11f-45cb-9323-bf6d93dd64dc.woff') format('woff'),
+        url('./gilroy/68773a15-f20a-4bd2-a495-5d5bff5848b5.ttf') format('truetype'),
+        url('./gilroy/5fb14402-0a5d-485d-b2d7-4053239cc541.svg#5fb14402-0a5d-485d-b2d7-4053239cc541') format('svg');
+}
+
+@font-face {
+    font-family: 'Gilroy-Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./gilroy/5420c205-8697-4669-8deb-3df9b89a643b.eot?#iefix');
+    src: url('./gilroy/5420c205-8697-4669-8deb-3df9b89a643b.eot?#iefix') format('eot'),
+        url('./gilroy/9b941ec6-0652-468c-80c6-e7a624c32a75.woff2') format('woff2'),
+        url('./gilroy/f475817d-5210-4456-ae08-6d82c026a2f3.woff') format('woff'),
+        url('./gilroy/4a28a5dc-a361-4a3c-8414-2ab42ae72872.ttf') format('truetype'),
+        url('./gilroy/5151bed8-f99a-46b0-b6a5-1ba070a0fe54.svg#5151bed8-f99a-46b0-b6a5-1ba070a0fe54') format('svg');
+}
+
+@font-face {
+    font-family: 'Gilroy-Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./gilroy/e614cc7a-7369-438b-ae6b-e81a483780da.eot?#iefix');
+    src: url('./gilroy/e614cc7a-7369-438b-ae6b-e81a483780da.eot?#iefix') format('eot'),
+        url('./gilroy/ab57e807-506b-4e1d-aed1-cb2b62dd7258.woff2') format('woff2'),
+        url('./gilroy/4ac1d6d8-0dca-4d0c-9b27-89cbaaf6a542.woff') format('woff'),
+        url('./gilroy/c353d337-cd72-47c5-8939-c28d728dbc84.ttf') format('truetype'),
+        url('./gilroy/91cfd09a-4f27-4a3f-b418-395d55464a0c.svg#91cfd09a-4f27-4a3f-b418-395d55464a0c') format('svg');
+}
+
+@font-face {
+    font-family: 'Gilroy-Light';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./gilroy/d4d77b00-ccba-4506-94a0-c90613e04292.eot?#iefix');
+    src: url('./gilroy/d4d77b00-ccba-4506-94a0-c90613e04292.eot?#iefix') format('eot'),
+        url('./gilroy/10dab18c-5820-4bec-914f-96252d66819f.woff2') format('woff2'),
+        url('./gilroy/3cbf7bc2-b151-4d39-9dec-4336ac098a9e.woff') format('woff'),
+        url('./gilroy/1deaea41-5541-4484-ac60-9b7ffff5ead3.ttf') format('truetype'),
+        url('./gilroy/afeead01-d35f-4d49-8e39-d6630acbfbd9.svg#afeead01-d35f-4d49-8e39-d6630acbfbd9') format('svg');
+}
+
+@font-face {
+    font-family: 'Gilroy-MediumItalic';
+    src: url('./gilroy/4b0c0a03-e34b-4e99-a140-01d7a8938019.eot?#iefix');
+    src: url('./gilroy/4b0c0a03-e34b-4e99-a140-01d7a8938019.eot?#iefix') format('eot'),
+        url('./gilroy/0bf2ba31-08e4-42b1-ac2d-43cf13fa64de.woff2') format('woff2'),
+        url('./gilroy/aa8f1223-a894-4ecf-8ffc-323dd872038c.woff') format('woff'),
+        url('./gilroy/f8f06e15-288f-4fec-8eb1-b3d69e345759.ttf') format('truetype'),
+        url('./gilroy/c24774f0-06cd-499f-bcd7-d83a98d45f9e.svg#c24774f0-06cd-499f-bcd7-d83a98d45f9e') format('svg');
+}
+
+@font-face {
+    font-family: 'Gilroy-ExtraBold-Italic';
+    src: url('./gilroy/a4bf3124-89a4-4951-8443-a71cf8a64826.eot?#iefix');
+    src: url('./gilroy/a4bf3124-89a4-4951-8443-a71cf8a64826.eot?#iefix') format('eot'),
+        url('./gilroy/53711085-013d-4ca8-9945-beee9de0e9e2.woff2') format('woff2'),
+        url('./gilroy/1e953d84-bdc9-419b-9074-ee1abe619ff6.woff') format('woff'),
+        url('./gilroy/3fa7aa6a-f077-4474-aaca-ab8789b24bad.ttf') format('truetype'),
+        url('./gilroy/e1883fdc-943a-45bc-b6e7-ccd8cd8f7cfc.svg#e1883fdc-943a-45bc-b6e7-ccd8cd8f7cfc') format('svg');
+}
+
+@font-face {
+    font-family: 'Gilroy-Black';
+    src: url('./gilroy/155ea3f0-3a9d-4c95-9e98-7e9839ceecbe.eot?#iefix');
+    src: url('./gilroy/155ea3f0-3a9d-4c95-9e98-7e9839ceecbe.eot?#iefix') format('eot'),
+        url('./gilroy/9acce963-44a3-4d28-9c9f-f08ac25678f2.woff2') format('woff2'),
+        url('./gilroy/88ca6090-86ea-494f-8231-21b080a26d52.woff') format('woff'),
+        url('./gilroy/655e7159-890c-4cb8-bc56-6402a5b3066d.ttf') format('truetype'),
+        url('./gilroy/7025f3cf-d2e6-43f4-a429-ac3d7bb6b603.svg#7025f3cf-d2e6-43f4-a429-ac3d7bb6b603') format('svg');
+}
+
+/* @font-face {
+    font-family: 'icomoon';
+    font-style: normal;
+    font-weight: normal;
+    src: url('./icomoon.eot?io03bu');
+    src: url('./icomoon.eot?io03bu#iefix') format('embedded-opentype'), url('./icomoon.ttf?io03bu') format('truetype'),
+        url('./icomoon.woff?io03bu') format('woff'), url('./icomoon.svg?io03bu#icomoon') format('svg');
+} */
