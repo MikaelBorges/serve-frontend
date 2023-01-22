@@ -1,8 +1,3 @@
-import { deleteAd } from '../api/ads'
-import styleOf from './Card.module.scss'
-import { useState, useEffect } from 'react'
-//import { addToFavorites } from '../api/user'
-import { useNavigate } from 'react-router-dom'
 import {
   binIcon,
   pinIcon,
@@ -13,15 +8,17 @@ import {
   pencilIcon,
   paperPencilIcon
 } from '../constants/icons'
-
-import { Swiper, SwiperSlide } from "swiper/react";
-
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
-import "./swiper-custom.scss";
-import { Pagination, Navigation } from "swiper";
+import 'swiper/css'
+import './swiper-custom.scss'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import { deleteAd } from '../api/ads'
+import styleOf from './Card.module.scss'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import PictureUser from './PictureUser'
+import { Pagination, Navigation } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 function Card(props) {
   const navigate = useNavigate(),
@@ -175,8 +172,8 @@ function Card(props) {
               dark:text-black
               ${styleOf.limitTextTo}
               ${styleOf.twoLinesMax}
-              ${props.darkMode ? styleOf.highlightedTextForDarkMode : styleOf.highlightedText}
               ${styleOf.letterSpacingThinner}
+              ${props.darkMode ? styleOf.highlightedTextForDarkMode : styleOf.highlightedText}
               ${props.layoutOneColumn && !props.horizontalCard ?
                 'leading-7' : ''
               }
@@ -199,7 +196,6 @@ function Card(props) {
             }
           </div>
         </div>
-
         <div
           className={`
             p-3
@@ -216,7 +212,6 @@ function Card(props) {
             }
           `}
         >
-
           <div className='pb-3'>
             <div
               className={`
@@ -228,7 +223,7 @@ function Card(props) {
               <a
                 className={`
                   flex
-                  py-0.5
+                  py-1
                   text-sm
                   text-left
                   rounded-3xl
@@ -242,19 +237,13 @@ function Card(props) {
                 `}
                 onClick={e => handleShowUserProfile(e)}
               >
-                <div className='w-9 flex flex-col justify-center mr-2'>
-                  <img
-                    src={props.ad.imageUser}
-                    alt="image de l'utilisateur"
-                    className={`
-                      ${props.layoutOneColumn ?
-                        'max-w-none h-full rounded-full' : 'rounded-full'
-                      }
-                    `}
-                  />
-                </div>
+                <PictureUser
+                  imageUser={props.ad.imageUser}
+                  layoutOneColumn={props.layoutOneColumn}
+                />
                 <h4
                   className={`
+                    ml-2
                     flex
                     flex-1
                     min-w-0
@@ -283,7 +272,6 @@ function Card(props) {
                     {props.ad.lastname}
                   </div>
                 </h4>
-
               </a>
             </div>
             <span className='text-sm'>{displayStars(props.ad.starsNb)}</span>
@@ -379,7 +367,6 @@ function Card(props) {
             >
               {props.ad.price} €/h
             </button>
-            
           </div>
           <div className='flex justify-between'>
             <button
