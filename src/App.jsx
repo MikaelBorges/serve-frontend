@@ -7,6 +7,8 @@ import ProfilPage from './pages/ProfilPage'
 import RegisterPage from './pages/RegisterPage'
 import { addToFavorites } from './api/user'
 import { useState, useEffect } from 'react'
+import RequireAuth from './helpers/RequireAuth'
+import UserSettings from './pages/UserSettings'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { userIsLogout } from './functions/user'
 import { lightIcon, darkIcon, systemIcon } from './constants/icons'
@@ -304,43 +306,21 @@ function App() {
         <Route
           exact
           path='/user/login'
-          element={userIsLogout(dataUser) ?
+          element={
             <LoginPage
               darkMode={darkMode}
               dataUser={dataUser}
               updateUser={updateUser}
-            />
-            :
-            <HomePage
-              refreshUrl
-              darkMode={darkMode}
-              clickedAd={clickedAd}
-              updateUser={updateUser}
-              resetClickedAd={resetClickedAd}
-              horizontalCard={horizontalCard}
-              layoutOneColumn={layoutOneColumn}
-              handleAddToFavorites={handleAddToFavorites}
             />
           }
         />
         <Route
           exact
           path='/user/register'
-          element={userIsLogout(dataUser) ?
+          element={
             <RegisterPage
               dataUser={dataUser}
               darkMode={darkMode}
-            />
-            :
-            <HomePage
-              refreshUrl
-              darkMode={darkMode}
-              clickedAd={clickedAd}
-              updateUser={updateUser}
-              resetClickedAd={resetClickedAd}
-              horizontalCard={horizontalCard}
-              layoutOneColumn={layoutOneColumn}
-              handleAddToFavorites={handleAddToFavorites}
             />
           }
         />
@@ -363,8 +343,19 @@ function App() {
         />
         <Route
           exact
+          path='/user/:userIdPage/settings'
+          element={<RequireAuth child={UserSettings} auth={true} dataUser={dataUser} />}
+        />
+        <Route
+          exact
           path='/user/:id/new'
           element={
+            <NewAdPage
+              darkMode={darkMode}
+              dataUser={dataUser}
+            />
+          }
+          /* element={
             pathname === `/user/${JSON.parse(window.localStorage.getItem('user'))?._id}/new`
             ||
             pathname === `/user/${JSON.parse(window.localStorage.getItem('user'))?._id}/new/`
@@ -384,19 +375,19 @@ function App() {
               layoutOneColumn={layoutOneColumn}
               handleAddToFavorites={handleAddToFavorites}
             />
-          }
+          } */
         />
       </Routes>
     </Layout>
   );
 }
 
-const mapStateToProps = (store) => {
+/* const mapStateToProps = (store) => {
   console.log('(APP) store', store)
   return {
     userInfo: store.user
   }
-}
+} */
 
-export default connect(mapStateToProps)(App)
-// export default App
+// export default connect(mapStateToProps)(App)
+export default App

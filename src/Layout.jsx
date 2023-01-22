@@ -4,25 +4,29 @@ import {
   userIcon,
   cardIcon,
   plusIcon,
+  heartIcon,
   wheelIcon,
   lightIcon,
   systemIcon,
+  messageIcon,
   leftHandIcon,
   rightHandIcon,
   rowLayoutIcon,
   disconnectIcon,
   columnLayoutIcon
 } from './constants/icons'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { config } from './config'
 import { logoutUser } from './api/user'
-import { Ul, Li } from './components/Ul'
-import { Lien } from './components/Lien'
+import { Ul, Li } from './components/tests-components/Ul'
+import { Lien } from './components/tests-components/Lien'
 import styleOf from './Layout.module.scss'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { userIsLogout, userIsLogged } from './functions/user'
-import logo3D from './images/logos/gitlab-5562373-4642718.png'
-import logo from './images/logos/gitlab_tile_logo_icon_170092.png'
+import logo3D from './assets/images/logos/gitlab-5562373-4642718.png'
+import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
+import logoRoundLight from './assets/images/logos/square.png'
+import logo from './assets/images/logos/gitlab_tile_logo_icon_170092.png'
 import { debounce } from 'lodash'
 import FilterButton from './components/filter/FilterButton'
 import FilterRadio from './components/filter/FilterRadio'
@@ -32,24 +36,46 @@ import IconSearch from './components/icons/IconSearch'
 import IconFiltering from './components/icons/IconFiltering'
 import IconCross from './components/icons/IconCross'
 import IconHorizontalRule from './components/icons/IconHorizontalRule'
+import PictureUser from './components/PictureUser'
+import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
 import { connect } from 'react-redux'
+import { logoutUserAction } from './actions/user/userActions'
 
-const filterElementsRadio = ['oui', 'non'],
-      filterLocationPlaceholderElements = ['ville'],
-      filterPricePlaceholderElements = ['min', 'max'],
-      filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
+const filterElementsRadio = []
+//const filterElementsRadio = ['oui', 'non']
+const filterLocationPlaceholderElements = ['ville']
+const filterPricePlaceholderElements = ['min', 'max']
+//const filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
+const filterElementsCheckbox = []
 
 function Layout(props) {
+  const inputRef = useRef(null)
   const navigate = useNavigate(),
         [error, setError] = useState(null),
-        //[menu, setMenu] = useState(false),
+        // [menu, setMenu] = useState(false),
         [search, setSearch] = useSearchParams(),
+        [isFocused, setIsFocused] = useState(false),
         [isMenuOpen, setIsMenuOpen] = useState(false),
-        [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false),
+        // [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false),
         [dbLocationIsOnline, setDbLocationIsOnline] = useState(false),
-        [isLocationFilterOpen, setIsLocationFilterOpen] = useState(false),
-        [isButtonFilterActive, setIsButtonFilterActive] = useState(true)
+        [isButtonFilterActive, setIsButtonFilterActive] = useState(true),
+        [isLocationFilterOpen, setIsLocationFilterOpen] = useState(false)
+
+  /* function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  }
+
+  const token = window.localStorage.getItem("serve-token")
+  if(token) {
+    const parsedJwt = parseJwt(token)
+    console.warn('parsed jwt', parsedJwt)
+  } */
 
   // console.log('props.dataUser', props.dataUser)
 
@@ -105,9 +131,9 @@ function Layout(props) {
     let data = { _id : props.dataUser._id }
     logoutUser(data)
     .then(res => {
-      /* console.log('RES (LAYOUT) :')
-      console.log(res) */
       if (res.status === 200) {
+        console.warn('RES (LAYOUT) :', res.data.message)
+
         /* console.log('res.status === 200')
         window.localStorage.setItem("saas-token", res.token);
         let user = res.data.user
@@ -120,6 +146,10 @@ function Layout(props) {
         // props.updateCorrectDataUser({})
 
         window.localStorage.removeItem('user')
+        window.localStorage.removeItem('serve-token')
+
+        props.logoutUserAction()
+
         props.updateUser({})
         if(window.location.pathname !== '/') navigate('/')
       }
@@ -136,13 +166,13 @@ function Layout(props) {
     })
   }
 
-  function handleClickPriceFilter() {
+  /* function handleClickPriceFilter() {
     setIsPriceFilterOpen(!isPriceFilterOpen)
   }
 
   function handleClickMinOrMaxPriceFilter(e) {
     e.stopPropagation()
-  }
+  } */
 
   /* function handleChangeMinPriceFilter(e) {
     const price = e.target.value
@@ -207,8 +237,11 @@ function Layout(props) {
   }
 
   function handleClickIconCross() {
-    const searchInput = document.getElementById('searchInput')
-    searchInput.value = ''
+    inputRef.current.value = ''
+  }
+
+  function handleBlur() {
+    setIsFocused(false)
   }
 
   // if(props.dataUser) console.log('in layout',props.dataUser._id)
@@ -217,357 +250,130 @@ function Layout(props) {
     <div className='min-h-screen dark:bg-slate-900'>
       <header
         className={`
+          p-3
           z-10
-          px-6
-          py-1.5
+          top-0
           w-full
           sticky
-          top-0
-          ${isButtonFilterActive ? 'dark:bg-slate-800 bg-slate-100' : ''}
         `}
+        //${isButtonFilterActive ? 'dark:bg-slate-800 bg-slate-100' : ''}
       >
         <div
           className={`
-            h-8
+            h-10
             flex
+            relative
             justify-between
-        `}>
-          <div className='flex'>
-            <Link to='/' className='contents'>
-              <img src={logo} alt='logo' className='max-w-none h-full mr-6' />
-            </Link>
-            <div
-              className={`
-                flex
-                px-2
-                rounded-3xl
-                items-center
-                border-black
-                dark:border-white
-                ${isButtonFilterActive ?
-                  'dark:bg-slate-800 border'
-                  :
-                  'dark:bg-slate-800 bg-slate-100'
-                }
-              `}
-            >
-              <IconSearch />
-              <input
-                type='text'
-                id='searchInput'
-                className={`
-                  mx-2
-                  w-full
-                  text-black
-                  dark:text-white
-                  ${isButtonFilterActive ?
-                    'dark:bg-slate-800 bg-slate-100'
-                    :
-                    'dark:bg-slate-800 bg-slate-100'
-                  }
-                `}
-              />
-              <button
-                onClick={() => handleClickIconCross()}
-              >
-                <IconCross />
-              </button>
-            </div>
-          </div>
-          <div className='flex'>
+          `}
+        >
+          <Link to='/' className='contents'>
+            <img src={props.darkMode ? logoRoundDark : logoRoundLight} alt='logo' className='max-w-none h-full' />
+          </Link>
+          <div
+            className={`
+              mx-3
+              flex
+              px-2
+              w-full
+              border
+              bg-white
+              rounded-3xl
+              items-center
+              border-transparent
+              dark:bg-slate-800
+              ${props.darkMode ? '' : styleOf.biggerShadow}
+              ${isFocused ? 'absolute left-0 mx-0 z-30 h-full' : ''}
+            `}
+          >
             <button
               className={`
-                ml-6
-                px-1.5
+                p-1
                 rounded-full
                 dark:text-white
-                dark:border-white
-                ${isButtonFilterActive ?
-                  'dark:bg-slate-800 bg-slate-100'
-                  :
-                  'dark:bg-slate-800 bg-white'}
-                `}
+                dark:bg-slate-700
+                ${isButtonFilterActive ? 'bg-slate-200' : ''}
+                ${!isButtonFilterActive && !props.darkMode ? styleOf.biggerShadow : ''}
+              `}
               onClick={handleClickFilterButton}
             >
               <IconFiltering />
             </button>
-          </div>
-        </div>
-        <div
-          className={`
-            flex
-            flex-wrap
-            justify-end
-            dark:text-white
-            ${isButtonFilterActive ? '' : 'hidden'}
-          `}
-        >
-          {filterPricePlaceholderElements.length &&
-            <FilterButton filterButtonName='Prix'>
-              {filterPricePlaceholderElements.map((placeholder, index) =>
-                <FilterInput
-                  key={index}
-                  type='number'
-                  placeholder={placeholder}
-                  handleChangeInput={handleChangePriceInput}
-                />
-              )}
-            </FilterButton>
-          }
-          {filterLocationPlaceholderElements.length &&
-            <FilterButton filterButtonName='Lieu'>
-              {filterLocationPlaceholderElements.map((placeholder, index) =>
-                <FilterInput
-                  key={index}
-                  type='text'
-                  placeholder={placeholder}
-                  handleChangeInput={handleChangeLocationInput}
-                />
-              )}
-            </FilterButton>
-          }
-          {filterElementsRadio.length &&
-            <FilterButton filterButtonName='Super user'>
-              {filterElementsRadio.map((radioName, index) =>
-                <FilterRadio
-                  key={index}
-                  radioName={radioName}
-                  groupName='superUserRadioGroup'
-                />
-              )}
-            </FilterButton>
-          }
-          {filterElementsCheckbox.length &&
-            <FilterButton filterButtonName='Notes'>
-              {filterElementsCheckbox.map((checkboxName, index) =>
-                <FilterCheckbox
-                  key={index}
-                  checkboxName={checkboxName}
-                  groupName='ratingCheckboxGroup'
-                />
-              )}
-            </FilterButton>
-          }
-          {filterElementsRadio.length &&
-            <FilterButton filterButtonName='Photos'>
-              {filterElementsRadio.map((radioName, index) =>
-                <FilterRadio
-                  key={index}
-                  radioName={radioName}
-                  groupName='photoRadioGroup'
-                />
-              )}
-            </FilterButton>
-          }
-          {/* <span
-            className={`
-              px-1
-              ml-1
-              rounded-full
-              bg-orange-400
-              ${styleOf.filtersNb}
-            `}
-          >
-            2
-          </span> */}
-        </div>
-        <div
-          className={`
-            h-4
-            flex
-            items-center
-            justify-center
-            overflow-hidden
-            ${isButtonFilterActive ? '' : 'hidden'}
-          `}
-        >
-          <IconHorizontalRule />
-        </div>
-        {/* {config.api_url === 'http://localhost:3306' && (
-          <div className=''>
-            <button
+            <input
+              type='text'
+              ref={inputRef}
+              id='searchInput'
               className={`
+                mx-2
+                w-full
                 bg-white
-                px-4
-                rounded-full
-                shadow-xl
-
-                dark:text-yellow-100
-                dark:bg-black
+                text-black
+                dark:text-white
+                placeholder:italic
+                dark:bg-slate-800
+                placeholder:text-sm
               `}
-              onClick={handleDbLocationIsOnline}
+              placeholder='recherchez'
+              //onFocus={() => setIsFocused(true)}
+              onBlur={handleBlur}
+            />
+            <button
+              onClick={handleClickIconCross}
             >
-              {dbLocationIsOnline ? 'online' : 'local'}
+              <IconCross />
             </button>
           </div>
-        )} */}
-
-      </header>
-      <main className='min-h-screen pt-6'>
-        {props.children}
-        <nav
-          className={`
-            p-2
-            w-12
-            z-10
-            fixed
-            bg-white
-            bottom-4
-            shadow-2xl
-            rounded-full
-            dark:bg-black
-            ${props.rightHand ? 'justify-end right-4' : 'left-4'}
-          `}
-        >
-          <ul>
-            {isMenuOpen &&
-              <>  
-                <li
-                  className={`
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    justify-center
-                  `}
+          {/* <button
+            className={`
+              px-2
+              mr-2.5
+              bg-white
+              rounded-full
+              dark:text-white
+              dark:bg-slate-800
+              ${props.darkMode ? '' : styleOf.biggerShadow}
+            `}
+            onClick={handleClickFilterButton}
+          >
+            <IconFiltering />
+          </button> */}
+          <nav className={`aspect-square ${isFocused ? 'blur-2xl' : ''}`}>
+            <ul
+              className={`
+                bg-white
+                rounded-3xl
+                dark:bg-black
+                ${isMenuOpen ? 'p-1' : ''}
+                ${styleOf.biggerShadow}
+              `}
+            >
+              <li
+                className={`
+                  flex
+                  rounded-full
+                  items-center
+                  aspect-square
+                  bg-slate-200
+                  cursor-pointer
+                  justify-center
+                  dark:bg-slate-400
+                `}
+              >
+                <button
+                  className='rounded-3xl h-full w-full'
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                  <button
-                    disabled={props.layoutOneColumn ? false : true}
-                    onClick={() => props.toggleDirectionCard('toggle')}
-                  >
-                    {cardIcon}
-                  </button>
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    justify-center
-                  `}
-                >
-                  <button
-                    disabled={true}
-                    onClick={() => props.toggleLayout('toggle')}
-                  >
-                    {props.layoutOneColumn ? rowLayoutIcon : columnLayoutIcon}
-                  </button>
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    bg-slate-200
-                    cursor-pointer
-                    justify-center
-                    dark:bg-slate-400
-                  `}
-                >
-                  <button onClick={() => props.toggleHand()}>
-                    {props.rightHand ? leftHandIcon : rightHandIcon}
-                  </button>
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    bg-slate-200
-                    cursor-pointer
-                    justify-center
-                    dark:bg-slate-400
-                  `}
-                >
-                  <button onClick={e => props.toggleTheme(e.target.innerText)}>
-                    {lightIcon}
-                  </button>
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    bg-slate-200
-                    cursor-pointer
-                    justify-center
-                    dark:bg-slate-400
-                  `}
-                >
-                  <button onClick={e => props.toggleTheme(e.target.innerText)}>
-                    {darkIcon}
-                  </button>
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    bg-slate-200
-                    cursor-pointer
-                    justify-center
-                    dark:bg-slate-400
-                  `}
-                >
-                  <button onClick={e => props.toggleTheme(e.target.innerText)}>
-                    {systemIcon}
-                  </button>
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    bg-slate-200
-                    cursor-pointer
-                    justify-center
-                    dark:bg-slate-400
-                  `}
-                >
-                  {userIsLogout(props.dataUser) ?
-                    <Link to='user/login'>{keyIcon}</Link>
-                    :
-                    <button onClick={() => handleLogout()}>
-                      {disconnectIcon}
-                    </button>
-                  }
-                </li>
-                <li
-                  className={`
-                    my-2
-                    flex
-                    rounded-full
-                    items-center
-                    aspect-square
-                    bg-slate-200
-                    cursor-pointer
-                    justify-center
-                    dark:bg-slate-400
-                  `}
-                >
-                  <Link
-                    to={userIsLogout(props.dataUser) ?
-                      '/user/register'
+                  <PictureUser
+                    layoutOneColumn={props.layoutOneColumn}
+                    imageUser={props.dataUser._id ?
+                      props.dataUser.imageUser
                       :
-                      `/user/${props.dataUser._id}`
+                      defaultProfile
                     }
-                  >
-                    {userIcon}
-                  </Link>
-                </li>
-                {userIsLogged(props.dataUser) &&
+                  />
+                </button>
+              </li>
+              {isMenuOpen &&
+                <>
                   <li
                     className={`
                       my-2
@@ -581,35 +387,177 @@ function Layout(props) {
                       dark:bg-slate-400
                     `}
                   >
-                    <Link
-                      to={`/user/${props.dataUser._id}/new`}
-                      onClick={() => props.handleAuthorizedToAdd()}
+                    <button
+                      className='rounded-3xl h-full w-full'
+                      onClick={e => props.toggleTheme(e.target.innerText)}
                     >
-                      {plusIcon}
+                      {lightIcon}
+                    </button>
+                  </li>
+                  <li
+                    className={`
+                      my-2
+                      flex
+                      rounded-full
+                      items-center
+                      aspect-square
+                      bg-slate-200
+                      cursor-pointer
+                      justify-center
+                      dark:bg-slate-400
+                    `}
+                  >
+                    <button
+                      className='rounded-3xl h-full w-full'
+                      onClick={e => props.toggleTheme(e.target.innerText)}
+                    >
+                      {darkIcon}
+                    </button>
+                  </li>
+                  <li
+                    className={`
+                      my-2
+                      flex
+                      rounded-full
+                      items-center
+                      aspect-square
+                      bg-slate-200
+                      cursor-pointer
+                      justify-center
+                      dark:bg-slate-400
+                    `}
+                  >
+                    <button
+                      className='rounded-3xl h-full w-full'
+                      onClick={e => props.toggleTheme(e.target.innerText)}
+                    >
+                      {systemIcon}
+                    </button>
+                  </li>
+                  <li
+                    className={`
+                      my-2
+                      flex
+                      rounded-full
+                      items-center
+                      aspect-square
+                      bg-slate-200
+                      cursor-pointer
+                      justify-center
+                      dark:bg-slate-400
+                    `}
+                  >
+                    {userIsLogout(props.dataUser) ?
+                      <Link
+                        className={`
+                          flex
+                          h-full
+                          w-full
+                          rounded-3xl
+                          items-center
+                          justify-center
+                        `}
+                        to='user/login'
+                      >
+                        {keyIcon}
+                      </Link>
+                      :
+                      <button
+                        className='rounded-3xl h-full w-full'
+                        onClick={() => handleLogout()}
+                      >
+                        {disconnectIcon}
+                      </button>
+                    }
+                  </li>
+                  {userIsLogged(props.dataUser) &&
+                    <li
+                      className={`
+                        mt-2
+                        flex
+                        rounded-full
+                        items-center
+                        aspect-square
+                        bg-slate-200
+                        cursor-pointer
+                        justify-center
+                        dark:bg-slate-400
+                      `}
+                    >
+                      <button
+                        className='rounded-3xl h-full w-full'
+                        onClick={() => console.log('afficher la page settings user')}
+                      >
+                        {wheelIcon}
+                      </button>
+                    </li>
+                }
+                
+                  {userIsLogged(props.dataUser) &&
+                    <li
+                      className={`
+                        my-2
+                        flex
+                        rounded-full
+                        items-center
+                        aspect-square
+                        bg-slate-200
+                        cursor-pointer
+                        justify-center
+                        dark:bg-slate-400
+                      `}
+                    >
+                      <Link
+                        className={`
+                          flex
+                          h-full
+                          w-full
+                          rounded-3xl
+                          items-center
+                          justify-center
+                        `}
+                        to={`/user/${props.dataUser._id}/new`}
+                        onClick={() => props.handleAuthorizedToAdd()}
+                      >
+                        {plusIcon}
+                      </Link>
+                    </li>
+                  }
+                  <li
+                    className={`
+                      mt-2
+                      flex
+                      rounded-full
+                      items-center
+                      aspect-square
+                      bg-slate-200
+                      cursor-pointer
+                      justify-center
+                      dark:bg-slate-400
+                    `}
+                  >
+                    <Link
+                      className={`
+                        flex
+                        h-full
+                        w-full
+                        rounded-3xl
+                        items-center
+                        justify-center
+                      `}
+                      to={userIsLogout(props.dataUser) ?
+                        '/user/register'
+                        :
+                        `/user/${props.dataUser._id}`
+                      }
+                    >
+                      {userIcon}
                     </Link>
                   </li>
-                }
-              </>
-            }
-            <li
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`
-                flex
-                rounded-full
-                items-center
-                aspect-square
-                bg-slate-200
-                cursor-pointer
-                justify-center
-                dark:bg-slate-400
-              `}
-            >
-              <button>
-                {wheelIcon}
-              </button>
-            </li>
-          </ul>
-          {/* {menu &&
+                </>
+              }
+            </ul>
+            {/* {menu &&
             <Ul className='dark:text-white text-black'>
               <Li>
                 <Lien
@@ -645,9 +593,411 @@ function Layout(props) {
               </Li>
             </Ul>
           } */}
-        </nav>
+          </nav>
+        </div>
+        <ul
+          className={`
+            pt-1
+            flex
+            px-3
+            pb-2
+            mt-3
+            right-3
+            flex-row
+            flex-wrap
+            items-end
+            rounded-3xl
+            dark:text-white
+            ${props.darkMode ? '' : styleOf.biggerShadow}
+            ${isButtonFilterActive ? 'dark:bg-slate-800 bg-white' : 'hidden'}
+            ${isMenuOpen && !isFocused ? styleOf.reducedWidthFilters : ''}
+          `}
+        >
+          {Boolean(filterPricePlaceholderElements.length) &&
+            <li className='mr-3'>
+              <FilterButton statusFilter={true} filterButtonName='Prix'>
+                {filterPricePlaceholderElements.map((placeholder, index) =>
+                  <FilterInput
+                    key={index}
+                    type='number'
+                    placeholder={placeholder}
+                    handleChangeInput={handleChangePriceInput}
+                  />
+                )}
+              </FilterButton>
+            </li>
+          }
+          {Boolean(filterLocationPlaceholderElements.length) &&
+            <li>
+              <FilterButton statusFilter={true} filterButtonName='Lieu'>
+                {filterLocationPlaceholderElements.map((placeholder, index) =>
+                  <FilterInput
+                    key={index}
+                    type='text'
+                    placeholder={placeholder}
+                    handleChangeInput={handleChangeLocationInput}
+                  />
+                )}
+              </FilterButton>
+            </li>
+          }
+          {Boolean(filterElementsRadio.length) &&
+            <li>
+              <FilterButton statusFilter={false} filterButtonName='Super user'>
+                {filterElementsRadio.map((radioName, index) =>
+                  <FilterRadio
+                    key={index}
+                    radioName={radioName}
+                    groupName='superUserRadioGroup'
+                  />
+                )}
+              </FilterButton>
+            </li>
+          }
+          {Boolean(filterElementsCheckbox.length) &&
+            <li>
+              <FilterButton statusFilter={false} filterButtonName='Notes'>
+                {filterElementsCheckbox.map((checkboxName, index) =>
+                  <FilterCheckbox
+                    key={index}
+                    checkboxName={checkboxName}
+                    groupName='ratingCheckboxGroup'
+                  />
+                )}
+              </FilterButton>
+            </li>
+          }
+          {Boolean(filterElementsRadio.length) &&
+            <li>
+              <FilterButton statusFilter={false} filterButtonName='Photos'>
+                {filterElementsRadio.map((radioName, index) =>
+                  <FilterRadio
+                    key={index}
+                    radioName={radioName}
+                    groupName='photoRadioGroup'
+                  />
+                )}
+              </FilterButton>
+            </li>
+          }
+          {/* <span
+            className={`
+              px-1
+              ml-1
+              rounded-full
+              bg-orange-400
+              ${styleOf.filtersNb}
+            `}
+          >
+            2
+          </span> */}
+          <div
+            className={`
+              h-4
+              flex
+              w-full
+              items-center
+              justify-center
+              overflow-hidden
+            `}
+          >
+            <IconHorizontalRule />
+          </div>
+        </ul>
+        {/* {config.api_url === 'http://localhost:3306' && (
+          <div className=''>
+            <button
+              className={`
+                bg-white
+                px-4
+                rounded-full
+                shadow-xl
+
+                dark:text-yellow-100
+                dark:bg-black
+              `}
+              onClick={handleDbLocationIsOnline}
+            >
+              {dbLocationIsOnline ? 'online' : 'local'}
+            </button>
+          </div>
+        )} */}
+
+      </header>
+      <main
+        className={`
+          pt-3
+          min-h-screen
+          ${isFocused ? 'blur-2xl' : ''}
+        `}
+      >
+        {props.children}
       </main>
-      <footer className='p-6 text-center dark:bg-slate-900 dark:text-white'>© 2023 serve.ac</footer>
+      <nav
+        className={`
+          flex
+          z-10
+          fixed
+          w-fit
+          m-auto
+          left-3
+          right-3
+          bottom-3
+          justify-center
+          ${props.rightHand ? '' : ''}
+        `}
+      >
+        <ul
+          className={`
+            p-1
+            h-10
+            flex
+            w-fit
+            bg-white
+            rounded-full
+            dark:bg-black
+            ${styleOf.biggerShadow}
+          `}
+        >
+
+          {/* <li
+            className={`
+              hidden
+              rounded-full
+              items-center
+              aspect-square
+              justify-center
+            `}
+          >
+            <button
+              disabled={props.layoutOneColumn ? false : true}
+              onClick={() => props.toggleDirectionCard('toggle')}
+            >
+              {cardIcon}
+            </button>
+          </li> */}
+          {/* <li
+            className={`
+              my-2
+              hidden
+              rounded-full
+              items-center
+              aspect-square
+              justify-center
+            `}
+          >
+            <button
+              disabled={true}
+              onClick={() => props.toggleLayout('toggle')}
+            >
+              {props.layoutOneColumn ? rowLayoutIcon : columnLayoutIcon}
+            </button>
+          </li> */}
+          {/* <li
+            className={`
+              my-2
+              hidden
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button onClick={() => props.toggleHand()}>
+              {props.rightHand ? leftHandIcon : rightHandIcon}
+            </button>
+          </li> */}
+          {/* <li
+            className={`
+              w-8
+              mr-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button
+              className='rounded-3xl h-full w-full'
+              onClick={e => props.toggleTheme(e.target.innerText)}
+            >
+              {lightIcon}
+            </button>
+          </li> */}
+          {/* <li
+            className={`
+              w-8
+              mx-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button 
+              className='rounded-3xl h-full w-full'
+              onClick={e => props.toggleTheme(e.target.innerText)}
+            >
+              {darkIcon}
+            </button>
+          </li> */}
+          {/* <li
+            className={`
+              w-8
+              mx-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button
+              className='rounded-3xl h-full w-full'
+              onClick={e => props.toggleTheme(e.target.innerText)}
+            >
+              {systemIcon}
+            </button>
+          </li> */}
+          {/* <li
+            className={`
+              w-8
+              mr-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            {userIsLogout(props.dataUser) ?
+              <Link 
+                className={`
+                  flex
+                  h-full
+                  w-full
+                  rounded-3xl
+                  items-center
+                  justify-center
+                `}
+                to='user/login'
+              >
+                {keyIcon}
+              </Link>
+              :
+              <button 
+                className='rounded-3xl h-full w-full'
+                onClick={() => handleLogout()}
+              >
+                {disconnectIcon}
+              </button>
+            }
+          </li> */}
+          <li
+            className={`
+              w-8
+              mr-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <Link 
+              className={`
+                flex
+                h-full
+                w-full
+                rounded-3xl
+                items-center
+                justify-center
+              `}
+              to={userIsLogout(props.dataUser) ?
+                '/user/register'
+                :
+                `/user/${props.dataUser._id}`
+              }
+            >
+              {userIcon}
+            </Link>
+          </li>
+          <li
+            className={`
+              w-8
+              ml-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button
+              className='rounded-3xl h-full w-full'
+              onClick={() => console.log('afficher la page des favoris')}
+            >
+              {heartIcon}
+            </button>
+          </li>
+          <li
+            className={`
+              w-8
+              ml-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button
+              className='rounded-3xl h-full w-full'
+              onClick={() => console.log('afficher la messagerie')}
+            >
+              {messageIcon}
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <footer
+        className={`
+          pt-6
+          pb-16
+          text-center
+          dark:text-white
+          dark:bg-slate-900
+          ${isFocused ? 'blur-2xl' : ''}
+        `}
+      >
+        © 2023 serve.ac
+      </footer>
 
       {/* <footer className="m-1 6 text-center">
         {footerLists.map((footerList, index) =>
@@ -665,5 +1015,9 @@ const mapStateToProps = (store) => {
   }
 }
 
-export default connect(mapStateToProps)(Layout)
+const mapDispatchToProps = {
+  logoutUserAction
+}
 
+export default connect(mapStateToProps, mapDispatchToProps)(Layout)
+//export default Layout
