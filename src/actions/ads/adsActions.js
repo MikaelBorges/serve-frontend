@@ -1,9 +1,10 @@
-import { UPDATE } from './actions-types'
+import { FETCH_ADS_ACTION } from './actions-types'
 
-export const fetchAds = (ads) => {
+export const fetchAdsAction = (ads) => {
+  console.log('(ADS ACTION) ads', ads)
   return function(dispatch) {
     dispatch({
-      type: UPDATE,
+      type: FETCH_ADS_ACTION,
       payload: ads
     })
   }

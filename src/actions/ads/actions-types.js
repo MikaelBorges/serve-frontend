@@ -1,1 +1,1 @@
-export const UPDATE = 'UPDATE'
+export const FETCH_ADS_ACTION = 'FETCH_ADS_ACTION'
