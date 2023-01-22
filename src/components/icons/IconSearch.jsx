@@ -2,7 +2,7 @@
 function IconSearch(props) {
   return (
     <svg
-      className="dark:text-white min-w-min"
+      className="dark:text-white"
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"

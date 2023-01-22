@@ -2,11 +2,10 @@
 function IconFiltering(props) {
   return (
     <svg
-      className="relative "
       viewBox="0 0 21 21"
       fill="currentColor"
-      height="1.5rem"
-      width="1.5rem"
+      height="1.2rem"
+      width="1.2rem"
       {...props}
     >
       <g

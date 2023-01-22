@@ -2,7 +2,7 @@
 function IconHorizontalRule(props) {
   return (
     <svg
-      className="text-slate-300 relative top-1"
+      className="text-slate-300 relative top-1 dark:text-slate-600"
       viewBox="0 0 16 16"
       fill="currentColor"
       height="4rem"

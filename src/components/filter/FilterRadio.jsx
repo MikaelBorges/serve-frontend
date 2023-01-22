@@ -1,21 +1,22 @@
 function FilterRadio({radioName, groupName}) {
 
   const handleClickRadio = (e) => {
-    console.log('first')
     e.stopPropagation()
+    console.log('clic on radio')
   }
 
   return (
     <label
-      htmlFor={radioName}
       className='ml-3 cursor-pointer'
-      onClick={(e) => handleClickRadio(e)}
+      onClick={(e) => e.stopPropagation()}
+      htmlFor={`${groupName}-${radioName}`}
     >
       <input
         type='radio'
-        id={radioName}
         name={groupName}
         className='cursor-pointer'
+        id={`${groupName}-${radioName}`}
+        onClick={(e) => handleClickRadio(e)}
       />
       {radioName}
     </label>

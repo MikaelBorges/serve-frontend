@@ -5,3 +5,11 @@
 .filterButton {
   min-height: 2rem;
 }
+
+.biggerShadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.reducedWidthFilters {
+  width: calc(100% - 3.1rem);
+}

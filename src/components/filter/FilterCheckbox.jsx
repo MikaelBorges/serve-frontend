@@ -2,19 +2,21 @@ function FilterCheckbox({checkboxName, groupName}) {
 
   const handleClickCheckbox = (e) => {
     e.stopPropagation()
+    console.log('clic on checkbox')
   }
 
   return (
     <label
-      htmlFor={checkboxName}
       className='ml-3 cursor-pointer'
-      onClick={(e) => handleClickCheckbox(e)}
+      onClick={(e) => e.stopPropagation()}
+      htmlFor={`${groupName}-${checkboxName}`}
     >
       <input
         type='checkbox'
         name={groupName}
-        id={checkboxName}
         className='cursor-pointer'
+        id={`${groupName}-${checkboxName}`}
+        onClick={(e) => handleClickCheckbox(e)}
       />
       {checkboxName}
     </label>

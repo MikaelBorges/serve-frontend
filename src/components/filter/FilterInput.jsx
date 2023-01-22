@@ -2,23 +2,24 @@ function FilterInput({placeholder, handleChangeInput, type}) {
 
   const handleClickInput = (e) => {
     e.stopPropagation()
+    console.log('clic on input')
   }
 
   return (
     <input
       type={type}
+      name={placeholder}
       placeholder={placeholder}
       onClick={(e) => handleClickInput(e)}
       onChange={(e) => handleChangeInput(e)}
-      name={placeholder}
       className={`
         h-5
-        w-20
         ml-3
         border-b-2
-        bg-slate-100
+        bg-white
         border-slate-400
         dark:bg-slate-800
+        ${type === 'text' ? 'w-20' : 'w-12'}
       `}
     />
   )
