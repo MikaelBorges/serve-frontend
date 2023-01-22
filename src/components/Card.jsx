@@ -52,35 +52,35 @@ function Card(props) {
 
         handleViewReviews = e => {
           e.stopPropagation()
-          console.log('voir les avis')
+          console.warn('voir les avis')
         },
 
         handleShowAd = () => {
-          console.log("afficher l'annonce")
+          console.warn("afficher l'annonce")
         },
 
         handleShowLocation = e => {
           e.stopPropagation()
-          console.log('afficher la carte')
+          console.warn('afficher la carte')
         },
 
         handleShowPriceDetails = e => {
           e.stopPropagation()
-          console.log('proposer un prix de prestation')
+          console.warn('proposer un prix de prestation')
         },
 
         handleRateUser = e => {
           e.stopPropagation()
-          console.log('noter')
+          console.warn('noter')
         },
 
         handleModifyAd = e => {
           e.stopPropagation()
-          console.log('modifier annonce')
+          console.warn('modifier annonce')
         },
 
         handleShowUserProfile = e => {
-          console.log('handleShowUserProfile')
+          console.warn('handleShowUserProfile')
           e.stopPropagation()
           if (!weAreOnUserPage) {
             if (urlOnBrowser !== userPage) {
@@ -102,23 +102,23 @@ function Card(props) {
           deleteAd(adToDelete)
           .then(res => {
             if(res.status === 200) {
-              //console.log('res.data.message', res.data.message)
+              //console.warn('res.data.message', res.data.message)
               props.openPopup(res.data.message)
               //window.location.reload(false)
             }
             else {
-              console.log('res.data.message', res.data.message)
+              console.warn('res.data.message', res.data.message)
             }
           })
           .catch(err => {
-            console.log('err', err)
+            console.warn('err', err)
           })
 
         },
 
         showStatistics = e => {
           e.stopPropagation()
-          console.log('montrer les stats')
+          console.warn('montrer les stats')
         }
 
   useEffect(() => {

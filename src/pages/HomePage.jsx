@@ -28,7 +28,7 @@ function HomePage(props) {
           evenAds.length = 0
           /* setOddAds([])
           setEvenAds([]) */
-          // console.log('début du classement')
+          // console.warn('début du classement')
           ads.forEach((ad, index) => {
             const isAdEven = (index % 2 === 0) ? true : false
             if (isAdEven) {
@@ -43,7 +43,7 @@ function HomePage(props) {
             setEvenAds(evenAds)
             setAreAdsArranged(true)
           }
-          console.log('(HOME) ads rangé')
+          console.warn('(HOME) ads rangé')
         },
 
         generateMasonryBreakpointsUntilThisMaxValue = (maxBreakpointValue) => {
@@ -71,9 +71,9 @@ function HomePage(props) {
           minPrice = search.get('minPrice'),
           maxPrice = search.get('maxPrice')
 
-    console.log('minPrice', minPrice)
-    console.log('maxPrice', maxPrice)
-    console.log('location', location)
+    console.warn('minPrice', minPrice)
+    console.warn('maxPrice', maxPrice)
+    console.warn('location', location)
 
     const filterAds = ads
     .filter(ad => ad.location === location)
@@ -87,15 +87,15 @@ function HomePage(props) {
         const filteredLocationAds = ads.filter(ad => ad.location === location)
         if(filteredLocationAds.length) setFilteredAds(filteredLocationAds)
       } else {
-        //console.log('location', location)
+        //console.warn('location', location)
         //const filteredLocationAds = filteredAds.filter(ad => ad.location !== location)
-        //console.log('filteredLocationAds', filteredLocationAds)
+        //console.warn('filteredLocationAds', filteredLocationAds)
         //if(filteredLocationAds.length) setFilteredAds(filteredLocationAds)
         //setFilteredAds(ads)
       }
       if(minPrice) {
         const filteredMinPriceAds = ads.filter(ad => +ad.price >= +minPrice)
-        console.log('filteredMinPriceAds', filteredMinPriceAds)
+        console.warn('filteredMinPriceAds', filteredMinPriceAds)
         setFilteredAds(filteredMinPriceAds)
       } else {
 
@@ -118,16 +118,16 @@ function HomePage(props) {
   }, [params]) */
 
   /* useEffect(() => {
-    // console.log('useEffect favs')
-    // console.log('favs', favs)
+    // console.warn('useEffect favs')
+    // console.warn('favs', favs)
     // if(favs) arrangeAds()
   }, [favs]); */
 
   useEffect(() => {
-    console.log('(HOME) useEffect props.clickedAd', props.clickedAd)
+    console.warn('(HOME) useEffect props.clickedAd', props.clickedAd)
     if(Object.keys(props.clickedAd).length > 0) {
-      console.log('rentre ici car clickedAd.length > 0 ')
-      console.log('mettre à jour le coeur', props.clickedAd)
+      console.warn('rentre ici car clickedAd.length > 0 ')
+      console.warn('mettre à jour le coeur', props.clickedAd)
 
       // Note : Phase de recherche de l'annonce à mettre à jour (ses nb favoris)
       let item = {},
@@ -135,25 +135,25 @@ function HomePage(props) {
           indexSaved = 0,
           favoritesToUpdate = 0
 
-      console.log('ads', ads)
+      console.warn('ads', ads)
 
       ads.forEach((ad, index, arr) => {
-        console.log('ad._id', ad._id)
-        console.log('props.clickedAd.adId', props.clickedAd.adId)
+        console.warn('ad._id', ad._id)
+        console.warn('props.clickedAd.adId', props.clickedAd.adId)
         if(ad._id === props.clickedAd.adId) {
           indexSaved = index
-          console.log('ad trouvé', index)
+          console.warn('ad trouvé', index)
           items = [...ads]
           item = {...items[index]}
-          // console.log('index', index)
-          // console.log('item', item)
+          // console.warn('index', index)
+          // console.warn('item', item)
           favoritesToUpdate = props.clickedAd.newFavNumber
-          // console.log('item', item)
-          console.log('favoritesToUpdate', favoritesToUpdate)
+          // console.warn('item', item)
+          console.warn('favoritesToUpdate', favoritesToUpdate)
           arr.length = index + 1 // Tip > sortir de la boucle
         }
         else {
-          console.log('pas trouvé')
+          console.warn('pas trouvé')
         }
       })
 
@@ -161,8 +161,8 @@ function HomePage(props) {
       // Note : dont celle qui contient son nb favoris mis à jour
       item.favoritesNb = favoritesToUpdate
       items[indexSaved] = item
-      console.log('item', item)
-      console.log('items', items)
+      console.warn('item', item)
+      console.warn('items', items)
       setAreAdsArranged(false)
       setAds(items)
       setFilteredAds(items)
@@ -186,7 +186,7 @@ function HomePage(props) {
       setFilteredAds(res.ads)
       props.fetchAdsAction(res.ads)
     })
-    .catch(err => console.log(err))
+    .catch(err => console.warn(err))
   }, []);
 
   /* useEffect(() => {
@@ -204,18 +204,18 @@ function HomePage(props) {
   }, [props.minPrice, props.maxPrice]); */
 
   /* useEffect(() => {
-    console.log('props.locationTyped', props.locationTyped)
-    console.log('filteredAds', filteredAds)
+    console.warn('props.locationTyped', props.locationTyped)
+    console.warn('filteredAds', filteredAds)
     const locationFilteredAds = filteredAds.filter(ad => ad.location === props.locationTyped)
-    console.log('locationFilteredAds', locationFilteredAds)
+    console.warn('locationFilteredAds', locationFilteredAds)
     if(locationFilteredAds.length) setFilteredAds(locationFilteredAds)
   }, [props.locationTyped]); */
 
   useEffect(() => {
-    console.log('(HOME) useEffect ads', ads)
-    //console.log('(HOME) areAdsArranged', areAdsArranged)
+    console.warn('(HOME) useEffect ads', ads)
+    //console.warn('(HOME) areAdsArranged', areAdsArranged)
     if(!areAdsArranged && ads.length > 0) {
-      //console.log('(HOME) arrangement ads')
+      //console.warn('(HOME) arrangement ads')
       arrangeAds()
     }
   }, [ads]);
@@ -279,7 +279,7 @@ function HomePage(props) {
 }
 
 /* const mapStateToProps = (state, ownProps) => {
-  console.log('(HOME) state', state)
+  console.warn('(HOME) state', state)
   return {
     store: state
   }

@@ -2,7 +2,7 @@ function FilterCheckbox({checkboxName, groupName}) {
 
   const handleClickCheckbox = (e) => {
     e.stopPropagation()
-    console.log('clic on checkbox')
+    console.warn('clic on checkbox')
   }
 
   return (

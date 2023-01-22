@@ -15,10 +15,10 @@ function LoginPage(props) {
 
         onSubmitForm = e => {
           e.preventDefault()
-          /* console.log('EMAIL ENTRé')
-          console.log(e.target.email.value)
-          console.log('MDP ENTRé')
-          console.log(e.target.password.value) */
+          /* console.warn('EMAIL ENTRé')
+          console.warn(e.target.email.value)
+          console.warn('MDP ENTRé')
+          console.warn(e.target.password.value) */
 
           let data = {
             email: e.target.email.value,
@@ -37,16 +37,16 @@ function LoginPage(props) {
               navigate('/')
             }
             else {
-              console.log('RES (LOGIN PAGE) :')
-              console.log(res)
-              console.log('RES.RESPONSE.DATA.MESSAGE (LOGIN PAGE) :')
-              console.log(res.response.data.message)
+              console.warn('RES (LOGIN PAGE) :')
+              console.warn(res)
+              console.warn('RES.RESPONSE.DATA.MESSAGE (LOGIN PAGE) :')
+              console.warn(res.response.data.message)
               setError(res.response.data.message)
             }
           })
           .catch(err => {
-              console.log('err: rentré dans le catch LoginPage.jsx')
-              console.log(err)
+              console.warn('err: rentré dans le catch LoginPage.jsx')
+              console.warn(err)
               setError(err)
           })
         }
@@ -129,7 +129,7 @@ function LoginPage(props) {
 }
 
 const mapStateToProps = (store, ownProps) => {
-  console.log('(LOGIN PAGE) store', store)
+  console.warn('(LOGIN PAGE) store', store)
   return {
     userInfo: store.user,
     allAds: store.ads.fetchedAds

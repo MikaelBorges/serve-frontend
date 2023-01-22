@@ -2,7 +2,7 @@ function FilterRadio({radioName, groupName}) {
 
   const handleClickRadio = (e) => {
     e.stopPropagation()
-    console.log('clic on radio')
+    console.warn('clic on radio')
   }
 
   return (

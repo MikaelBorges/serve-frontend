@@ -24,11 +24,11 @@ export function addToFavorites(ad) {
 export function registerUser(datas) {
   return axios.post(`${config.api_url}/user/register`, datas)
   .then(res => {
-    //console.log('res (user.js)', res)
+    //console.warn('res (user.js)', res)
     return res
   })
   .catch(err => {
-    console.log('err', err)
+    console.warn('err', err)
     return err
   })
 }
@@ -40,25 +40,25 @@ export function loginUser(datas) {
     return res
   })
   .catch(err => {
-    console.log('err: rentré dans le catch user.js')
-    console.log(err)
+    console.warn('err: rentré dans le catch user.js')
+    console.warn(err)
     return err
   })
 }
 
 export function logoutUser(datas) {
-  /* console.log('DATAS LOGOUT')
-  console.log(datas)
-  console.log('preparation appel de la route') */
+  /* console.warn('DATAS LOGOUT')
+  console.warn(datas)
+  console.warn('preparation appel de la route') */
   return axios.post(`${config.api_url}/user/logout`, datas)
   .then(res => {
-    /* console.log('RES LOGOUT')
-    console.log(res) */
+    /* console.warn('RES LOGOUT')
+    console.warn(res) */
     return res
   })
   .catch(err => {
-    console.log('erreur: rentre dans le catch de user')
-    console.log(err)
+    console.warn('erreur: rentre dans le catch de user')
+    console.warn(err)
     return err
   })
 }

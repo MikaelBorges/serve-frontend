@@ -5,8 +5,8 @@ const initState = {
 }
 
 const AdsReducer = (state = initState, action) => {
-  console.log('(ADS REDUCER) action', action)
-  console.log('(ADS REDUCER) state', state)
+  console.warn('(ADS REDUCER) action', action)
+  console.warn('(ADS REDUCER) state', state)
   switch (action.type) {
     case FETCH_ADS_ACTION :
       return {
@@ -23,8 +23,8 @@ const AdsReducer = (state = initState, action) => {
 }
 
 /* const AdsReducer = (state = initState, action) => {
-  console.log('(ADS REDUCER) action', action)
-  console.log('(ADS REDUCER) state', state)
+  console.warn('(ADS REDUCER) action', action)
+  console.warn('(ADS REDUCER) state', state)
   switch (action.type) {
     case FETCH_ADS_ACTION:
       return [

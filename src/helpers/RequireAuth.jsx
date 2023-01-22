@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 const RequireAuth = ({child, auth, dataUser, userInfo}) => {
-  console.log('child', child)
-  console.log('auth', auth)
-  console.log('dataUser', dataUser)
+  console.warn('child', child)
+  console.warn('auth', auth)
+  console.warn('dataUser', dataUser)
   //const user = useSelector(selectUser);
   //je récup le params de la route demandée
   const params = useParams();
-  console.log('params', params)
+  console.warn('params', params)
   //const Child = props.child;
 
   // gestion des state
@@ -19,7 +19,7 @@ const RequireAuth = ({child, auth, dataUser, userInfo}) => {
   useEffect(() => {
     //récupération du token dans le localStorage
     const token = window.localStorage.getItem("serve-token")
-    console.log('token', token)
+    console.warn('token', token)
 
     //si le token est null et que la route est protégée
     if (token === null && auth) {

@@ -77,7 +77,7 @@ function Layout(props) {
     console.warn('parsed jwt', parsedJwt)
   } */
 
-  // console.log('props.dataUser', props.dataUser)
+  // console.warn('props.dataUser', props.dataUser)
 
   /* function handleDbLocationIsOnline() {
     if(goOnline) {
@@ -90,8 +90,8 @@ function Layout(props) {
     }
 
     setDbLocationIsOnline(goOnline)
-    console.log('NEW CONFIG :')
-    console.log(config.api_url)
+    console.warn('NEW CONFIG :')
+    console.warn(config.api_url)
 
     props.displayUser()
   } */
@@ -125,7 +125,7 @@ function Layout(props) {
   }
 
   function handleLogout() {
-    /* console.log('handleLogout')
+    /* console.warn('handleLogout')
     props.dataUser === undefined ? '/user/login' : '/logout'
     navigate("/", { state: { user: undefined } }) */
     let data = { _id : props.dataUser._id }
@@ -134,10 +134,10 @@ function Layout(props) {
       if (res.status === 200) {
         console.warn('RES (LAYOUT) :', res.data.message)
 
-        /* console.log('res.status === 200')
+        /* console.warn('res.status === 200')
         window.localStorage.setItem("saas-token", res.token);
         let user = res.data.user
-        console.log('user LoginPage', user)
+        console.warn('user LoginPage', user)
         user.token = res.token
         dispatch(setUser(user))
         setRedirect(true);
@@ -154,14 +154,14 @@ function Layout(props) {
         if(window.location.pathname !== '/') navigate('/')
       }
       else {
-        console.log('res.msg')
-        console.log(res.msg)
+        console.warn('res.msg')
+        console.warn(res.msg)
         setError(res.msg)
       }
     })
     .catch(err => {
-      console.log('erreur: rentre dans le catch du Layout')
-      console.log(err)
+      console.warn('erreur: rentre dans le catch du Layout')
+      console.warn(err)
       // setError(err)
     })
   }
@@ -244,7 +244,7 @@ function Layout(props) {
     setIsFocused(false)
   }
 
-  // if(props.dataUser) console.log('in layout',props.dataUser._id)
+  // if(props.dataUser) console.warn('in layout',props.dataUser._id)
 
   return (
     <div className='min-h-screen dark:bg-slate-900'>
@@ -486,7 +486,7 @@ function Layout(props) {
                     >
                       <button
                         className='rounded-3xl h-full w-full'
-                        onClick={() => console.log('afficher la page settings user')}
+                        onClick={() => console.warn('afficher la page settings user')}
                       >
                         {wheelIcon}
                       </button>
@@ -958,7 +958,7 @@ function Layout(props) {
           >
             <button
               className='rounded-3xl h-full w-full'
-              onClick={() => console.log('afficher la page des favoris')}
+              onClick={() => console.warn('afficher la page des favoris')}
             >
               {heartIcon}
             </button>
@@ -979,7 +979,7 @@ function Layout(props) {
           >
             <button
               className='rounded-3xl h-full w-full'
-              onClick={() => console.log('afficher la messagerie')}
+              onClick={() => console.warn('afficher la messagerie')}
             >
               {messageIcon}
             </button>

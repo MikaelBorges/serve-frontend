@@ -8,7 +8,7 @@ function NewAdPage(props) {
   const [info, setInfo] = useState(null)
   const [error, setError] = useState(null)
 
-  // console.log('props NewAdPage', props)
+  // console.warn('props NewAdPage', props)
   // const navigate = useNavigate()
 
   const [title, setName] = useState('')
@@ -27,24 +27,24 @@ function NewAdPage(props) {
 
   useEffect(() => {
 
-    /* console.log('props.dataUser', props.dataUser)
+    /* console.warn('props.dataUser', props.dataUser)
     if(Object.keys(props.dataUser).length === 0 && props.dataUser.constructor === Object) {
-      console.log('REDIRECTION')
+      console.warn('REDIRECTION')
     } else {
-      console.log('NE RIEN FAIRE')
+      console.warn('NE RIEN FAIRE')
     } */
 
-    console.log('composant newAd chargé')
+    console.warn('composant newAd chargé')
   }, []);
 
   /* useEffect(() => {
-    console.log('newAd useEffect [dataUserInLocalStorage]')
-    console.log('(newAd) props.dataUser', props.dataUser)
-    console.log('(newAd) props.dataUserInLS', props.dataUserInLS)
-    console.log('Object.keys(props.dataUser).length', Object.keys(props.dataUser).length)
-    console.log('props.dataUser.constructor', props.dataUser.constructor)
+    console.warn('newAd useEffect [dataUserInLocalStorage]')
+    console.warn('(newAd) props.dataUser', props.dataUser)
+    console.warn('(newAd) props.dataUserInLS', props.dataUserInLS)
+    console.warn('Object.keys(props.dataUser).length', Object.keys(props.dataUser).length)
+    console.warn('props.dataUser.constructor', props.dataUser.constructor)
     if(Object.keys(props.dataUser).length === 0 && props.dataUser.constructor === Object) {
-      console.log('REDIRECTION')
+      console.warn('REDIRECTION')
     }
   }, [props.dataUser]); */
 
@@ -80,22 +80,22 @@ function NewAdPage(props) {
     }
     newAd(data)
     .then(res => {
-      // console.log('res Register page', res)
+      // console.warn('res Register page', res)
       if(res.status === 200) {
-        // console.log('res', res)
+        // console.warn('res', res)
         setInfo(res.data.message)
       }
       else {
-        console.log('RES :')
-        console.log(res)
-        console.log('RES.RESPONSE.DATA.MESSAGE :')
-        console.log(res.response.data.message)
+        console.warn('RES :')
+        console.warn(res)
+        console.warn('RES.RESPONSE.DATA.MESSAGE :')
+        console.warn(res.response.data.message)
         setError(res.response.data.message)
       }
     })
     .catch(err => {
-      console.log('err: rentré dans le catch NewAdPage.jsx')
-      console.log(err)
+      console.warn('err: rentré dans le catch NewAdPage.jsx')
+      console.warn(err)
       setError(err)
     })
   }

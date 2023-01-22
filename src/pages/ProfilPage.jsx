@@ -34,19 +34,19 @@ function ProfilPage(props) {
         },
 
         handleDeleteAd = e => {
-          console.log('supprimer')
-          // console.log('e', e)
+          console.warn('supprimer')
+          // console.warn('e', e)
           // deleteAd(userId, adId)
           /* .then((res)=>{
-              // console.log('res', res)
+              // console.warn('res', res)
               setAds(res)
           })
-          .catch(err => console.log('err', err)) */
+          .catch(err => console.warn('err', err)) */
         },
 
         handleModifyAd = e => {
-          // console.log('e', e)
-          console.log('modifier')
+          // console.warn('e', e)
+          console.warn('modifier')
         },
 
         handleChangeMainCheckbox = e => {
@@ -55,12 +55,12 @@ function ProfilPage(props) {
         },
 
         checkAllCheckboxes = () => {
-          console.log('checkAllCheckboxes')
+          console.warn('checkAllCheckboxes')
           //setAllCardsChecked(true)
         },
 
         uncheckAllCheckboxes = () => {
-          console.log('uncheckAllCheckboxes')
+          console.warn('uncheckAllCheckboxes')
           //setAllCardsChecked(false)
         },
 
@@ -91,18 +91,18 @@ function ProfilPage(props) {
         }
 
   useEffect(() => {
-    console.log('(PROFIL) useEffect props.dataUser', props.dataUser)
+    console.warn('(PROFIL) useEffect props.dataUser', props.dataUser)
     if(userIsLogged(props.dataUser) && (props.dataUser._id === userIdPage)) {
-      console.log('(PROFIL) utiliser les props ')
+      console.warn('(PROFIL) utiliser les props ')
       setIsVisitor(false)
       loadUserAds(userIdPage, false)
       .then(res => {
         setAds(res.adsOfUser)
         setNoAds(res.noAds)
       })
-      .catch(err => console.log('err', err))
+      .catch(err => console.warn('err', err))
     } else {
-      console.log('(PROFIL) utiliser les datas du serveur')
+      console.warn('(PROFIL) utiliser les datas du serveur')
       setIsVisitor(true)
       loadUserAds(userIdPage, true)
       .then(res => {
@@ -110,15 +110,15 @@ function ProfilPage(props) {
         setNoAds(res.noAds)
         setLiteInfosOfUser(res.liteInfos)
       })
-      .catch(err => console.log('err', err))
+      .catch(err => console.warn('err', err))
     }
   }, [props.dataUser, userIdPage]);
 
   useEffect(() => {
-    console.log('(PROFIL) useEffect props.clickedAd', props.clickedAd)
+    console.warn('(PROFIL) useEffect props.clickedAd', props.clickedAd)
     if(Object.keys(props.clickedAd).length > 0) {
-      console.log('rentre ici car clickedAd.length > 0 ')
-      console.log('mettre à jour le coeur', props.clickedAd)
+      console.warn('rentre ici car clickedAd.length > 0 ')
+      console.warn('mettre à jour le coeur', props.clickedAd)
 
       // Phase de recherche :
       let item = {},
@@ -126,25 +126,25 @@ function ProfilPage(props) {
           indexSaved = 0,
           favoritesToUpdate = 0
 
-      console.log('ads', ads)
+      console.warn('ads', ads)
 
       ads.forEach((ad, index, arr) => {
-        console.log('ad._id', ad._id)
-        console.log('props.clickedAd.adId', props.clickedAd.adId)
+        console.warn('ad._id', ad._id)
+        console.warn('props.clickedAd.adId', props.clickedAd.adId)
         if(ad._id === props.clickedAd.adId) {
           indexSaved = index
-          console.log('ad trouvé', index)
+          console.warn('ad trouvé', index)
           items = [...ads]
           item = {...items[index]}
-          // console.log('index', index)
-          // console.log('item', item)
+          // console.warn('index', index)
+          // console.warn('item', item)
           favoritesToUpdate = props.clickedAd.newFavNumber
-          // console.log('item', item)
-          console.log('favoritesToUpdate', favoritesToUpdate)
+          // console.warn('item', item)
+          console.warn('favoritesToUpdate', favoritesToUpdate)
           arr.length = index + 1 // Tip > sortir de la boucle
         }
         else {
-          console.log('pas trouvé')
+          console.warn('pas trouvé')
         }
       })
 
@@ -152,8 +152,8 @@ function ProfilPage(props) {
       // Note : dont celle qui contient son nb favoris mis à jour
       item.favoritesNb = favoritesToUpdate
       items[indexSaved] = item
-      console.log('item', item)
-      console.log('items', items)
+      console.warn('item', item)
+      console.warn('items', items)
       // setAreAdsArranged(false)
       setAds(items)
       props.resetClickedAd()
@@ -165,15 +165,15 @@ function ProfilPage(props) {
   }, [])
 
   /* useEffect(() => {
-    console.log('(PROFIL) useEffect[userIdPage]', userIdPage)
+    console.warn('(PROFIL) useEffect[userIdPage]', userIdPage)
   }, [userIdPage]) */
 
   /* useEffect(() => {
-    console.log('(PROFIL) useEffect[userIdPage]', userIdPage)
+    console.warn('(PROFIL) useEffect[userIdPage]', userIdPage)
   }, [userIdPage]) */
 
   /* useEffect(() => {
-    // console.log('isVisitor', isVisitor)
+    // console.warn('isVisitor', isVisitor)
 
     // loadUserAds(userIdPage, isVisitor)
     // .then(res => {
@@ -181,7 +181,7 @@ function ProfilPage(props) {
     //   if(!liteInfosLoaded) setLiteInfosOfUser(res.liteInfos)
     //   setLiteInfosLoaded(true)
     // })
-    // .catch(err => console.log('err', err))
+    // .catch(err => console.warn('err', err))
 
   }, [isVisitor]); */
 
@@ -197,8 +197,8 @@ function ProfilPage(props) {
     </Image>
   </CloudinaryContext> */
 
-  //console.log('userIdPage', userIdPage)
-  //console.log('props.dataUser._id', props.dataUser._id)
+  //console.warn('userIdPage', userIdPage)
+  //console.warn('props.dataUser._id', props.dataUser._id)
   //if(props.dataUser._id !== userIdPage) return <Navigate to='/' />
 
   return (
@@ -218,7 +218,7 @@ function ProfilPage(props) {
                   bg-gray-300
                   dark:text-white
                 `}
-                onClick={() => console.log('Changer mon mot de passe')}
+                onClick={() => console.warn('Changer mon mot de passe')}
               >
                 Changer mon mot de passe
               </button>
@@ -231,7 +231,7 @@ function ProfilPage(props) {
                   bg-gray-300
                   dark:text-white
                 `}
-                onClick={() => console.log('Changer mon e-mail')}
+                onClick={() => console.warn('Changer mon e-mail')}
               >
                 Changer mon e-mail
               </button>
@@ -243,7 +243,7 @@ function ProfilPage(props) {
                   bg-gray-300
                   dark:text-white
                 `}
-                onClick={() => console.log('Supprimer mon compte')}
+                onClick={() => console.warn('Supprimer mon compte')}
               >
                 Supprimer mon compte
               </button>

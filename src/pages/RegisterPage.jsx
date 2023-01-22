@@ -36,22 +36,22 @@ function RegisterPage(props) {
           }
           registerUser(data)
           .then((res) => {
-              //console.log('res Register page', res)
+              //console.warn('res Register page', res)
               if (res.status === 200) {
-                  //console.log('res', res)
+                  //console.warn('res', res)
                   setInfo(res.data.message)
               }
               else {
-                  console.log('RES (LOGIN PAGE) :')
-                  console.log(res)
-                  console.log('RES.RESPONSE.DATA.MESSAGE (LOGIN PAGE) :')
-                  console.log(res.response.data.message)
+                  console.warn('RES (LOGIN PAGE) :')
+                  console.warn(res)
+                  console.warn('RES.RESPONSE.DATA.MESSAGE (LOGIN PAGE) :')
+                  console.warn(res.response.data.message)
                   setError(res.response.data.message);
               }
           })
           .catch((err) => {
-              console.log('err: rentré dans le catch RegisterPage.jsx')
-              console.log(err)
+              console.warn('err: rentré dans le catch RegisterPage.jsx')
+              console.warn(err)
               setError(err)
           })
         },
@@ -61,7 +61,7 @@ function RegisterPage(props) {
           setMsg(null)
           //si l'envoi est réussit
           if (resultEvent.event === 'success') {
-            console.log('result info', resultEvent.info)
+            console.warn('result info', resultEvent.info)
 
             /* let datas = {
               imageUser : resultEvent.info.public_id,
@@ -72,9 +72,9 @@ function RegisterPage(props) {
               if(res.status === 200) {
                 getOneCoach(coach.infos.id)
                 .then(response => {
-                  console.log('getOneCoach', response)
+                  console.warn('getOneCoach', response)
                   let myCoach = response.result
-                  console.log(myCoach)
+                  console.warn(myCoach)
                   myCoach.token = localStorage.getItem('coachme-token')
                   dispatch(connectCoach(myCoach))
                   setImg(response.result.imageUrl)
@@ -85,11 +85,11 @@ function RegisterPage(props) {
                 setMsg("L'image n'a pas été modifiée");
               }
             })
-            .catch(err => console.log('Echec modification image!')) */
+            .catch(err => console.warn('Echec modification image!')) */
           } else {
-            console.log('Erreur envoi fichier')
+            console.warn('Erreur envoi fichier')
           }
-          console.log('RESULT EVENT', resultEvent)
+          console.warn('RESULT EVENT', resultEvent)
         },
 
         // fonction d'affichage de notre interface de chargement d'images/videos de cloudinary
@@ -104,8 +104,8 @@ function RegisterPage(props) {
               cropping: false, // recadrage
             },
             (error, result) => {
-              console.log('error showWidget', error);
-              console.log('result showWidget', result);
+              console.warn('error showWidget', error);
+              console.warn('result showWidget', result);
               checkUploadResult(result); //appel de notre callback
             }
           )
@@ -114,8 +114,8 @@ function RegisterPage(props) {
         }
 
   /* useEffect(() => {
-    console.log('register useEffect')
-    console.log('props.dataUser', props.dataUser)
+    console.warn('register useEffect')
+    console.warn('props.dataUser', props.dataUser)
     if(Object.keys(props.dataUser).length !== 0 || props.dataUser.constructor !== Object) navigate('/')
   }, [props.dataUser]); */
 
@@ -129,7 +129,7 @@ function RegisterPage(props) {
   }, [email, password]);
 
   useEffect(() => {
-    console.log('composant register chargé')
+    console.warn('composant register chargé')
   }, []);
 
 

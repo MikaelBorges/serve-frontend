@@ -36,7 +36,7 @@ function App() {
         [localStorageChecked, setLocalStorageChecked] = useState(false)
 
         function resetClickedAd() {
-          console.log('faire le reset')
+          console.warn('faire le reset')
           setClickedAd({})
         }
 
@@ -118,7 +118,7 @@ function App() {
         }
 
         function displayUser() {
-          console.log('dataUser', dataUser)
+          console.warn('dataUser', dataUser)
         }
 
         function handleAuthorizedToAdd() {
@@ -132,48 +132,48 @@ function App() {
           }
           addToFavorites(ad)
           .then(res => {
-            // console.log('res', res)
+            // console.warn('res', res)
 
             if(res.status === 200) {
-              // console.log('200')
+              // console.warn('200')
               setClickedAd({adId: adId, newFavNumber: res.data.newFavNumber})
-              console.log('setClickedAd setted')
-              console.log('res.data.newFavNumber', res.data.newFavNumber)
-              console.log('adId', adId)
+              console.warn('setClickedAd setted')
+              console.warn('res.data.newFavNumber', res.data.newFavNumber)
+              console.warn('adId', adId)
               // loadAds()
               // .then(res => {
-                // console.log('RES :', res)
+                // console.warn('RES :', res)
                 // setAds(res.ads)
                 // setAreAdsArranged(false)
                 // setFavs(true)
               // })
-              // .catch(err => console.log(err))
+              // .catch(err => console.warn(err))
             }
 
           })
-          .catch(err => console.log(err))
+          .catch(err => console.warn(err))
         }
 
         function handleAddToFavorites(e, ad) {
           e.stopPropagation()
-          // console.log('ad', ad)
-          // console.log('dataUser._id', dataUser._id)
+          // console.warn('ad', ad)
+          // console.warn('dataUser._id', dataUser._id)
 
           if(!userIsLogout(dataUser) && (dataUser._id !== ad.userId)) {
-            // console.log('fav éligible !')
+            // console.warn('fav éligible !')
             checkIfAddToFavorites(ad._id)
           }/* 
           else{
-            console.log('fav not ok...')
+            console.warn('fav not ok...')
           } */
 
 
 
           // if((props.dataUser._id !== undefined) && (props.dataUser._id !== props.ad.userId)) {
-            // console.log('ajouter !')
+            // console.warn('ajouter !')
             // props.checkIfAddToFavorites(props.ad._id)
-            // console.log('props.dataUser._id', props.dataUser._id)
-            // console.log('props.ad.userId', props.ad.userId)
+            // console.warn('props.dataUser._id', props.dataUser._id)
+            // console.warn('props.ad.userId', props.ad.userId)
             // if(props.dataUser._id !== props.ad.userId) {
               // const ad = {
                 // adId: props.ad._id,
@@ -181,12 +181,12 @@ function App() {
               // }
               // addToFavorites(ad)
               // .then(res => {
-                // console.log('res', res)
+                // console.warn('res', res)
               // })
-              // .catch(err => console.log(err))
+              // .catch(err => console.warn(err))
             // }
           // } else {
-            // console.log("déco ou c'est ma propre annonce")
+            // console.warn("déco ou c'est ma propre annonce")
           // }
         }
 
@@ -250,17 +250,17 @@ function App() {
     }
 
     const userDataInLS = window.localStorage.getItem('user')
-    //console.log('(APP) check si le local storage a des infos')
+    //console.warn('(APP) check si le local storage a des infos')
     if (userDataInLS) {
-      //console.log('(APP) JSON.parse(userDataInLS)', JSON.parse(userDataInLS))
+      //console.warn('(APP) JSON.parse(userDataInLS)', JSON.parse(userDataInLS))
       setDataUser(JSON.parse(userDataInLS))
-      console.log('(APP) le local storage a alimenté le state dataUser')
-      console.log('(APP) dataUser', dataUser)
+      console.warn('(APP) le local storage a alimenté le state dataUser')
+      console.warn('(APP) dataUser', dataUser)
       setUserId(JSON.parse(userDataInLS)._id)
       setUrlUserId(`/user/${JSON.parse(userDataInLS)._id}`)
       setUrlNewAd(`/user/${JSON.parse(userDataInLS)._id}/new`)
     } else {
-      console.log('pas de user data dans le local storage')
+      console.warn('pas de user data dans le local storage')
     }
     setLocalStorageChecked(true)
   }, []);
@@ -383,7 +383,7 @@ function App() {
 }
 
 /* const mapStateToProps = (store) => {
-  console.log('(APP) store', store)
+  console.warn('(APP) store', store)
   return {
     userInfo: store.user
   }

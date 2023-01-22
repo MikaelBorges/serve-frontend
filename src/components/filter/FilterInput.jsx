@@ -2,7 +2,7 @@ function FilterInput({placeholder, handleChangeInput, type}) {
 
   const handleClickInput = (e) => {
     e.stopPropagation()
-    console.log('clic on input')
+    console.warn('clic on input')
   }
 
   return (
