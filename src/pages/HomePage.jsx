@@ -1,16 +1,18 @@
-import { loadAds } from './api/ads'
-import Card from './components/Card'
+import { loadAds } from '../api/ads'
+import Card from '../components/Card'
 import { useState, useEffect } from 'react'
 import styleOf from './HomePage.module.scss'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Masonry from 'react-masonry-css'
 
 import { connect } from 'react-redux'
-import { fetchAds } from './actions/ads/adsActions'
+import { fetchAdsAction } from '../actions/ads/adsActions'
 
 function HomePage(props) {
   const [search, setSearch] = useSearchParams()
   //console.warn('search base', search.get('location'))
+
+  //console.warn('props', props)
 
   const navigate = useNavigate(),
         [ads, setAds] = useState([]),
@@ -109,16 +111,16 @@ function HomePage(props) {
   }, [search])
 
   /* useEffect(() => {
-    console.warn('params! changed', params)
-    //const [searchParams, setSearchParams] = useSearchParams()
-    //const location = searchParams.get('location')
-    //console.warn(location)
+    // console.warn('params! changed', params)
+    // const [searchParams, setSearchParams] = useSearchParams()
+    // const location = searchParams.get('location')
+    // console.warn(location)
   }, [params]) */
 
   /* useEffect(() => {
     // console.log('useEffect favs')
     // console.log('favs', favs)
-    if(favs) arrangeAds()
+    // if(favs) arrangeAds()
   }, [favs]); */
 
   useEffect(() => {
@@ -182,7 +184,7 @@ function HomePage(props) {
     .then(res => {
       setAds(res.ads)
       setFilteredAds(res.ads)
-      props.fetchAds(res.ads)
+      props.fetchAdsAction(res.ads)
     })
     .catch(err => console.log(err))
   }, []);
@@ -284,8 +286,9 @@ function HomePage(props) {
 } */
 
 const mapStateToProps = (store, ownProps) => {
-  console.log('(HOME) store', store)
+  console.warn('(HOME) store', store)
   return {
+    userInfo: store.user,
     allAds: store.ads.fetchedAds
   }
 }
@@ -300,12 +303,12 @@ const mapStateToProps = (store, ownProps) => {
 
 /* const mapDispatchToProps = dispatch => {
   return {
-    fetchAds: ads => dispatch({type: 'UPDATE', payload: ads})
+    fetchAdsAction: ads => dispatch({type: 'FETCH_ADS_ACTION', payload: ads})
   }
 } */
 
 const mapDispatchToProps = {
-  fetchAds
+  fetchAdsAction
 }
 
 // export default connect(mapStateToProps)(HomePage);

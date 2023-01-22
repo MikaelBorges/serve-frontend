@@ -1,14 +1,14 @@
-import { registerUser } from './api/user'
+import { registerUser } from '../api/user'
 import { useState, useEffect } from 'react'
 import styleOf from './Register.module.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 
 import {
   Image,
   Transformation,
   CloudinaryContext
 } from 'cloudinary-react'
-import { changeImg } from './api/coach'
+import { changeImg } from '../api/coach'
 
 function RegisterPage(props) {
 
@@ -131,6 +131,9 @@ function RegisterPage(props) {
   useEffect(() => {
     console.log('composant register chargé')
   }, []);
+
+
+  if(props.dataUser._id) return <Navigate to='/' />
 
   return (
     <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>

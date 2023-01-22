@@ -1,10 +1,10 @@
-import { newAd } from './api/ads'
+import { newAd } from '../api/ads'
 import { useState, useEffect } from 'react'
 import styleOf from './NewAdPage.module.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate, useParams } from 'react-router-dom'
 
 function NewAdPage(props) {
-
+  const { id } = useParams()
   const [info, setInfo] = useState(null)
   const [error, setError] = useState(null)
 
@@ -24,9 +24,6 @@ function NewAdPage(props) {
       setDisabled(true)
     }
   }, [title, price, description, location]);
-
-
-
 
   useEffect(() => {
 
@@ -53,13 +50,6 @@ function NewAdPage(props) {
 
   // [dataUserInLocalStorage, setDataUserInLocalStorage] = useState(false),
 
-
-
-
-
-
-
-
   const onSubmitForm = e => {
     e.preventDefault()
     const arrayOfUrlImages = [
@@ -74,19 +64,19 @@ function NewAdPage(props) {
     if (isAtMinimumOneImage) filteredArrayOfUrlImages = arrayOfUrlImages.filter(img => img !== '')
 
     const data = {
-      title: e.target.titre.value,
-      description: e.target.description.value,
-      price: e.target.price.value,
       userId: props.dataUser._id,
-      firstname: props.dataUser.firstname,
-      lastname: props.dataUser.lastname,
-      superUser: props.dataUser.superUser,
-      reviewsNb: props.dataUser.reviewsNb,
+      title: e.target.titre.value,
+      price: e.target.price.value,
       starsNb: props.dataUser.starsNb,
-      imageUser: props.dataUser.imageUser,
       imageAd: e.target.imageAd.value,
       location: e.target.location.value,
-      imagesAd: filteredArrayOfUrlImages
+      lastname: props.dataUser.lastname,
+      imagesAd: filteredArrayOfUrlImages,
+      firstname: props.dataUser.firstname,
+      superUser: props.dataUser.superUser,
+      reviewsNb: props.dataUser.reviewsNb,
+      imageUser: props.dataUser.imageUser,
+      description: e.target.description.value
     }
     newAd(data)
     .then(res => {
@@ -109,6 +99,10 @@ function NewAdPage(props) {
       setError(err)
     })
   }
+
+  //if(!props.dataUser._id || props.dataUser._id !== id) return <Navigate to='/' />
+  const idOfUserInLS = JSON.parse(window.localStorage.getItem('user'))?._id
+  if(!idOfUserInLS || idOfUserInLS !== id) return <Navigate to='/' />
 
   return (
     <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>

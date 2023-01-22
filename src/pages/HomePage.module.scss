@@ -1,26 +1,10 @@
-.adsColumnContainer {
-  width: calc(50% - 0.75rem);
-}
-
 .limitTextTo {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  /* display: box; */
   -webkit-box-orient: vertical;
   box-orient: vertical;
 }
-
-/* .titleUser {
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  letter-spacing: -0.08rem;
-}
-
-.descriptionUser {
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-} */
 
 .imagePartHorizontalAd {
   width: 45%;
@@ -56,12 +40,4 @@
   > li:not(:last-child) {
     margin-bottom: 1.5rem;
   }
-
-  /* &:nth-child(2n) {
-    padding-top: 40px;
-  } */
 }
-
-/* .my-masonry-grid_column > li:not(:last-child) {
-  margin-bottom: 1.5rem;
-} */

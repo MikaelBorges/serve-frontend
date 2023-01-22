@@ -1,10 +1,10 @@
-import Card from './components/Card'
-import { loadUserAds } from './api/ads'
+import Card from '../components/Card'
+import { loadUserAds } from '../api/ads'
 import { useState, useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
-import { userIsLogged } from './functions/user'
+import { userIsLogged } from '../functions/user'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
-import { lightIcon, goodEveningIcon, binIcon, validIcon } from './constants/icons'
+import { lightIcon, goodEveningIcon, binIcon, validIcon } from '../constants/icons'
 
 import styleOf from './ProfilPage.module.scss'
 import Masonry from 'react-masonry-css'
@@ -197,8 +197,9 @@ function ProfilPage(props) {
     </Image>
   </CloudinaryContext> */
 
-
-  /* if(dataUser.id !== userIdPage) return <Navigate to='/' /> */
+  //console.log('userIdPage', userIdPage)
+  //console.log('props.dataUser._id', props.dataUser._id)
+  //if(props.dataUser._id !== userIdPage) return <Navigate to='/' />
 
   return (
     <section className='dark:bg-slate-900'>
@@ -372,6 +373,7 @@ function ProfilPage(props) {
 }
 
 const mapStateToProps = (store) => {
+  console.warn('(PROFIL) store', store)
   return {
     userInfo: store.user
   }
