@@ -16,17 +16,22 @@ import { lightIcon, darkIcon, systemIcon } from './constants/icons'
 
 function App() {
   const [userId, setUserId] = useState('')
-  const [clickedAd, setClickedAd] = useState({})
   const [theme, setTheme] = useState('light')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [dataUser, setDataUser] = useState({})
+  const [clickedAd, setClickedAd] = useState({})
   const [darkMode, setDarkMode] = useState(false)
   const [rightHand, setRightHand] = useState(true)
   const [locationTyped, setLocationTyped] = useState('')
   const [horizontalCard, setHorizontalCard] = useState(false)
   const [layoutOneColumn, setLayoutOneColumn] = useState(false)
   const [authorizedToAdd, setAuthorizedToAdd] = useState(false)
+  const [areCardsVertical, setAreCardsVertical] = useState(false)
+
+  const handleAreCardsVertical = () => {
+    setAreCardsVertical(!areCardsVertical)
+  }
 
   const resetClickedAd = () => {
     setClickedAd({})
@@ -211,6 +216,7 @@ function App() {
       changeMaxPrice={changeMaxPrice}
       horizontalCard={horizontalCard}
       layoutOneColumn={layoutOneColumn}
+      handleAreCardsVertical={handleAreCardsVertical}
       changeLocationTyped={changeLocationTyped}
       toggleDirectionCard={toggleDirectionCard}
       handleAuthorizedToAdd={handleAuthorizedToAdd}
@@ -230,6 +236,7 @@ function App() {
               resetClickedAd={resetClickedAd}
               horizontalCard={horizontalCard}
               layoutOneColumn={layoutOneColumn}
+              areCardsVertical={areCardsVertical}
               handleAddToFavorites={handleAddToFavorites}
             />
           }
@@ -267,6 +274,7 @@ function App() {
               resetClickedAd={resetClickedAd}
               horizontalCard={horizontalCard}
               layoutOneColumn={layoutOneColumn}
+              areCardsVertical={areCardsVertical}
               toggleDirectionCard={toggleDirectionCard}
               handleAddToFavorites={handleAddToFavorites}
             />

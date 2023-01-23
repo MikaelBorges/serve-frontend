@@ -13,12 +13,12 @@ import './swiper-custom.scss'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import { deleteAd } from '../api/ads'
+import PictureUser from './PictureUser'
 import styleOf from './Card.module.scss'
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import PictureUser from './PictureUser'
 import { Pagination, Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Card(props) {
   const navigate = useNavigate()
@@ -125,71 +125,82 @@ function Card(props) {
   return (
     <li
       className={`
+        ${props.areCardsVertical ? '' : 'flex h-36'}
         rounded-3xl
         bg-slate-200
         overflow-hidden
         dark:bg-slate-700
-        ${props.layoutOneColumn ? 'flex' : ''}
-        ${props.horizontalCard ? '' : 'flex-col'}
+        ${props.layoutOneColumn ? '' : ''}
+        ${props.horizontalCard ? '' : ''}
         ${props.layoutOneColumn && props.horizontalCard ?
           styleOf.horizontalCard : ''
         }
       `}
     >
-      <Swiper
-        pagination={{type: "progressbar"}}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className={`${styleOf.mySwiper} dark:bg-slate-700 bg-slate-200 aspect-square`}
-      >
-        {props.ad.imagesWork.map((imageWork, index) =>
-          <SwiperSlide className={styleOf.swiperSlide} key={`${props.ad._id}-${index}`}>
-            <img alt='image du service' src={imageWork} />
-          </SwiperSlide>
-        )}
-      </Swiper>
+      <div className='aspect-square'>
+        <Swiper
+          navigation={true}
+          pagination={{type: "progressbar"}}
+          modules={[Pagination, Navigation]}
+          className={`
+            bg-slate-200
+            ${styleOf.mySwiper}
+            dark:bg-slate-700
+          `}
+        >
+          {props.ad.imagesWork.map((imageWork, index) =>
+            <SwiperSlide
+              className={styleOf.swiperSlide}
+              key={`${props.ad._id}-${index}`}
+            >
+              <img alt='image du service' src={imageWork} />
+            </SwiperSlide>
+          )}
+        </Swiper>
+      </div>
       <div
-        onClick={() => handleShowAd()}>
+        onClick={() => handleShowAd()}
+        className={`${props.areCardsVertical ? '' : 'w-full'}`}
+      >
         <div className='flex justify-between items-center'>
-          <h3
-            className={`
-              mt-1
-              px-2
-              w-fit
-              h-fit
-              mx-1.5
-              dark:mt-1
-              dark:mx-1
-              dark:px-4
-              font-bold
-              leading-4
-              dark:leading-4
-              dark:text-black
-              ${styleOf.limitTextTo}
-              ${styleOf.twoLinesMax}
-              ${styleOf.letterSpacingThinner}
-              ${props.darkMode ? styleOf.highlightedTextForDarkMode : styleOf.highlightedText}
-              ${props.layoutOneColumn && !props.horizontalCard ?
-                'leading-7' : ''
-              }
-            `}
-          >
-            {props.ad.title}
-          </h3>
-          <div
-            className={`
-              bg-slate-600
-              dark:bg-slate-500
-              ${styleOf.badgeContainer}
-              ${props.layoutOneColumn && props.horizontalCard ?
-                'rounded-bl-xl' : 'rounded-bl-2xl'
-              }
-            `}
-          >
-            {props.ad.superUser &&
-              <div className={`mt-1 mx-2 mb-2 ${styleOf.superUserBadge}`}>{crownIcon}</div>
+          <div className='flex items-center'>
+            {!props.areCardsVertical &&
+            <Link to={`/user/${props.ad.userId}`}>
+              <PictureUser
+                imageUser={props.ad.imageUser}
+                layoutOneColumn={props.layoutOneColumn}
+              />
+            </Link>
             }
+            <h3
+              className={`
+                mt-1
+                px-2
+                w-fit
+                h-fit
+                mx-1.5
+                dark:mt-1
+                dark:mx-1
+                dark:px-4
+                font-bold
+                leading-4
+                dark:leading-4
+                dark:text-black
+                ${styleOf.limitTextTo}
+                ${styleOf.twoLinesMax}
+                ${styleOf.letterSpacingThinner}
+                ${props.darkMode ? styleOf.highlightedTextForDarkMode : styleOf.highlightedText}
+                ${props.layoutOneColumn && !props.horizontalCard ?
+                  'leading-7' : ''
+                }
+              `}
+            >
+              {props.ad.title}
+            </h3>
           </div>
+          {props.ad.superUser &&
+          <div className='mt-1 mx-2 mb-2'>{crownIcon}</div>
+          }
         </div>
         <div
           className={`
@@ -207,6 +218,7 @@ function Card(props) {
             }
           `}
         >
+          {props.areCardsVertical &&
           <div className='pb-3'>
             <div
               className={`
@@ -215,7 +227,8 @@ function Card(props) {
                 min-w-0
               `}
             >
-              <a
+              {props.areCardsVertical &&
+              <Link
                 className={`
                   flex
                   py-1
@@ -230,7 +243,7 @@ function Card(props) {
                   dark:bg-slate-600
                   ${styleOf.userButton}
                 `}
-                onClick={e => handleShowUserProfile(e)}
+                to={`/user/${props.ad.userId}`}
               >
                 <PictureUser
                   imageUser={props.ad.imageUser}
@@ -267,7 +280,8 @@ function Card(props) {
                     {props.ad.lastname}
                   </div>
                 </h4>
-              </a>
+              </Link>
+              }
             </div>
             <span className='text-sm'>{displayStars(props.ad.starsNb)}</span>
             <button
@@ -314,57 +328,87 @@ function Card(props) {
               </button>
             </div>
           </div>
+          }
           <p
             className={`
               mb-3
               ${styleOf.limitTextTo}
-              ${styleOf.descriptionUser}
+              ${props.areCardsVertical ? styleOf.fiveLinesMax : styleOf.oneLineMax}
             `}
           >
             {props.ad.description}
           </p>
-          <p
-            className={`
-              text-gray-400
-              ${props.layoutOneColumn && !props.horizontalCard ?
-                'text-lg' : 'text-xs'
-              }
-            `}
-          >
-            le {props.ad.dateOfPublication}
-          </p>
-          <div
-            className={`
-              pb-3
-              flex
-              justify-between
-              ${props.layoutOneColumn && !props.horizontalCard ?
-                'text-lg' : 'text-xs'
-              }
-            `}
-          >
-            <div className='text-right text-gray-400'>
-              à {props.ad.timeOfPublication}
-            </div>
-            <button
+          {props.areCardsVertical &&
+          <>
+            <p
               className={`
-                px-2
-                text-xs
-                font-bold
-                rounded-3xl
-                text-white
+                text-gray-400
+                ${props.layoutOneColumn && !props.horizontalCard ?
+                  'text-lg' : 'text-xs'
+                }
+              `}
+            >
+              le {props.ad.dateOfPublication}
+            </p>
+            <div
+              className={`
+                pb-3
+                flex
+                justify-between
+                ${props.layoutOneColumn && !props.horizontalCard ?
+                  'text-lg' : 'text-xs'
+                }
+              `}
+            >
+              <div className='text-right text-gray-400'>
+                à {props.ad.timeOfPublication}
+              </div>
+              {/* <button
+                className={`
+                  px-2
+                  text-xs
+                  font-bold
+                  rounded-3xl
+                  text-white
+                  bg-fuchsia-500
+                  dark:bg-slate-600
+                  dark:text-yellow-100
+                  ${styleOf.letterSpacingThinner}
+                `}
+                onClick={e => handleShowPriceDetails(e)}
+              >
+                {props.ad.price} €/h
+              </button> */}
+            </div>
+          </>
+          }
+          <div className='flex justify-between'>
+          <button
+              className={`
+                px-3
+                py-2
+                flex
+                text-xl
+                items-center
+                rounded-full
                 bg-fuchsia-500
                 dark:bg-slate-600
                 dark:text-yellow-100
-                ${styleOf.letterSpacingThinner}
               `}
-              onClick={e => handleShowPriceDetails(e)}
+              onClick={e => handleViewReviews(e)}
             >
-              {props.ad.price} €/h
+              <div
+                className={`
+                text-white
+                  ${props.layoutOneColumn && !props.horizontalCard ?
+                    'text-xl' : 'text-base'
+                  }
+                `}
+              >
+                {props.ad.price} €/h
+              </div>
             </button>
-          </div>
-          <div className='flex justify-between'>
-            <button
+            {/* <button
               className={`
                 px-3
                 py-2
@@ -389,7 +433,7 @@ function Card(props) {
               >
                 {props.ad.reviewsNb}
               </div>
-            </button>
+            </button> */}
             <button
               className={`
                 px-2

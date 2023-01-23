@@ -17,6 +17,14 @@
   padding-right: 0.8rem;
 }
 
+.oneLineMax {
+  line-clamp: 1;
+  -o-line-clamp: 1;
+  -ms-line-clamp: 1;
+  -moz-line-clamp: 1;
+  -webkit-line-clamp: 1; /* number of lines to show */
+}
+
 .twoLinesMax {
   line-clamp: 2;
   -o-line-clamp: 2;
@@ -29,7 +37,7 @@
   letter-spacing: -0.08rem;
 }
 
-.descriptionUser {
+.fiveLinesMax {
   line-clamp: 5;
   -o-line-clamp: 5;
   -ms-line-clamp: 5;
@@ -46,13 +54,13 @@
 }
 
 .horizontalCard {
-  height: 25rem;
+  //height: 25rem;
 }
 
-/* .badgeContainer {
-  top: 0;
-  right: 0;
-} */
+.badgeContainer {
+  /* top: 0;
+  right: 0; */
+}
 
 /* .widthOfCard {
   width: calc(100% - 12px);

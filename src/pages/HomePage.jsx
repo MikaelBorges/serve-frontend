@@ -14,6 +14,39 @@ function HomePage(props) {
   const [filteredAds, setFilteredAds] = useState([])
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
 
+  /* const generateMasonryBreakpointsFor = (verticalCards) => {
+    let pas
+    let columns = 7
+    let breakpointsObject
+    let startValueForBigScreens = 1565
+    let maxBreakpointValue = 3000
+    if(verticalCards) {
+      pas = 200
+      columns = 7
+      breakpointsObject = {
+        374: 1,
+        567: 2,
+        767: 3,
+        1023: 4,
+        1179: 5,
+        1365: 6
+      }
+    }
+    else {
+      pas = 500
+      columns = 3
+      breakpointsObject = {
+        567: 1,
+        1023: 2
+      }
+    }
+    for (let bp = startValueForBigScreens; bp < maxBreakpointValue; bp += pas) {
+      breakpointsObject[bp] = columns // TIP > obligé d'utiliser la notation crochets pour définir des clés d'objet par le contenu de variable 
+      ++columns
+    }
+    breakpointsObject.default = columns
+    setBreakpointsColumnsMasonry(breakpointsObject)
+  } */
   const generateMasonryBreakpointsUntilThisMaxValue = (maxBreakpointValue) => {
     let columns = 7,
     breakpointsObject = {
@@ -143,34 +176,58 @@ function HomePage(props) {
   }, [props.locationTyped]); */
 
   return (
-    <section className='flex flex-col space-y-12 px-3'>
+    <section className={`flex flex-col space-y-12 ${styleOf.sectionHomepage}`}>
       {Boolean(filteredAds.length) &&
-        <ul className='mt-px'>
-          <Masonry
-            role='list'
-            className={styleOf.myMasonryGrid}
-            breakpointCols={breakpointsColumnsMasonry}
-            columnClassName={styleOf.myMasonryGridColumn}
-          >
-            {filteredAds.map(ad =>
-              <Card
-                ad={ad}
-                key={ad._id}
-                role='listitem'
-                darkMode={props.darkMode}
-                horizontalCard={props.horizontalCard}
-                layoutOneColumn={props.layoutOneColumn}
-                handleAddToFavorites={props.handleAddToFavorites}
-              />
-            )}
-          </Masonry>
-        </ul>
+      <ul
+        className={`
+          mt-px
+          ${props.areCardsVertical ? '' : 'grid gap-4 md:grid-cols-2 xl:grid-cols-3'}
+        `}
+        >
+        {props.areCardsVertical &&
+        <Masonry
+          role='list'
+          className={styleOf.myMasonryGrid}
+          breakpointCols={breakpointsColumnsMasonry}
+          columnClassName={styleOf.myMasonryGridColumn}
+        >
+          {filteredAds.map(ad =>
+            <Card
+              ad={ad}
+              key={ad._id}
+              role='listitem'
+              darkMode={props.darkMode}
+              horizontalCard={props.horizontalCard}
+              layoutOneColumn={props.layoutOneColumn}
+              areCardsVertical={props.areCardsVertical}
+              handleAddToFavorites={props.handleAddToFavorites}
+            />
+          )}
+        </Masonry>
+        }
+        {!props.areCardsVertical && filteredAds.map(ad =>
+        <Card
+          ad={ad}
+          key={ad._id}
+          role='listitem'
+          darkMode={props.darkMode}
+          horizontalCard={props.horizontalCard}
+          layoutOneColumn={props.layoutOneColumn}
+          areCardsVertical={props.areCardsVertical}
+          handleAddToFavorites={props.handleAddToFavorites}
+        />
+        )}
+      </ul>
       }
       {!Boolean(filteredAds.length) && Boolean(ads.length) &&
-        <h1 className='text-3xl dark:text-white'>Pas de résultats</h1>
+      <h1 className='text-3xl dark:text-white'>Pas de résultats</h1>
       }
       {!Boolean(ads.length) &&
-        <img className='w-20' src='https://i.stack.imgur.com/y3Hm3.gif' alt='chargement' />
+      <img
+        className='w-20'
+        alt='chargement'
+        src='https://i.stack.imgur.com/y3Hm3.gif'
+      />
       }
     </section>
   )

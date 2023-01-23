@@ -49,7 +49,7 @@ function Layout(props) {
   const [search, setSearch] = useSearchParams()
   const [isFocused, setIsFocused] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isButtonFilterActive, setIsButtonFilterActive] = useState(true)
+  const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
 
   /* const parseJwt = (token) => {
     var base64Url = token.split('.')[1];
@@ -247,7 +247,7 @@ function Layout(props) {
                 placeholder:text-sm
               `}
               placeholder='recherchez'
-              //onFocus={() => setIsFocused(true)}
+              onFocus={() => setIsFocused(true)}
               onBlur={handleBlur}
             />
             <button
@@ -293,168 +293,101 @@ function Layout(props) {
                 </button>
               </li>
               {isMenuOpen &&
-                <>
-                  <li
-                    className={`
-                      my-2
-                      flex
-                      rounded-full
-                      items-center
-                      aspect-square
-                      bg-slate-200
-                      cursor-pointer
-                      justify-center
-                      dark:bg-slate-400
-                    `}
+              <>
+                {/* <li
+                  className={`
+                    my-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <button
+                    className='rounded-3xl h-full w-full'
+                    onClick={() => props.handleAreCardsVertical()}
                   >
-                    <button
-                      className='rounded-3xl h-full w-full'
-                      onClick={e => props.toggleTheme(e.target.innerText)}
-                    >
-                      {lightIcon}
-                    </button>
-                  </li>
-                  <li
-                    className={`
-                      my-2
-                      flex
-                      rounded-full
-                      items-center
-                      aspect-square
-                      bg-slate-200
-                      cursor-pointer
-                      justify-center
-                      dark:bg-slate-400
-                    `}
+                    {cardIcon}
+                  </button>
+                </li> */}
+                <li
+                  className={`
+                    my-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <button
+                    className='rounded-3xl h-full w-full'
+                    onClick={e => props.toggleTheme(e.target.innerText)}
                   >
-                    <button
-                      className='rounded-3xl h-full w-full'
-                      onClick={e => props.toggleTheme(e.target.innerText)}
-                    >
-                      {darkIcon}
-                    </button>
-                  </li>
-                  <li
-                    className={`
-                      my-2
-                      flex
-                      rounded-full
-                      items-center
-                      aspect-square
-                      bg-slate-200
-                      cursor-pointer
-                      justify-center
-                      dark:bg-slate-400
-                    `}
+                    {lightIcon}
+                  </button>
+                </li>
+                <li
+                  className={`
+                    my-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <button
+                    className='rounded-3xl h-full w-full'
+                    onClick={e => props.toggleTheme(e.target.innerText)}
                   >
-                    <button
-                      className='rounded-3xl h-full w-full'
-                      onClick={e => props.toggleTheme(e.target.innerText)}
-                    >
-                      {systemIcon}
-                    </button>
-                  </li>
-                  <li
-                    className={`
-                      my-2
-                      flex
-                      rounded-full
-                      items-center
-                      aspect-square
-                      bg-slate-200
-                      cursor-pointer
-                      justify-center
-                      dark:bg-slate-400
-                    `}
+                    {darkIcon}
+                  </button>
+                </li>
+                <li
+                  className={`
+                    my-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <button
+                    className='rounded-3xl h-full w-full'
+                    onClick={e => props.toggleTheme(e.target.innerText)}
                   >
-                    {userIsLogout(props.dataUser) ?
-                      <Link
-                        className={`
-                          flex
-                          h-full
-                          w-full
-                          rounded-3xl
-                          items-center
-                          justify-center
-                        `}
-                        to='user/login'
-                      >
-                        {keyIcon}
-                      </Link>
-                      :
-                      <button
-                        className='rounded-3xl h-full w-full'
-                        onClick={() => handleLogout()}
-                      >
-                        {disconnectIcon}
-                      </button>
-                    }
-                  </li>
-                  {userIsLogged(props.dataUser) &&
-                    <li
-                      className={`
-                        mt-2
-                        flex
-                        rounded-full
-                        items-center
-                        aspect-square
-                        bg-slate-200
-                        cursor-pointer
-                        justify-center
-                        dark:bg-slate-400
-                      `}
-                    >
-                      <button
-                        className='rounded-3xl h-full w-full'
-                        onClick={() => console.warn('afficher la page settings user')}
-                      >
-                        {wheelIcon}
-                      </button>
-                    </li>
-                  }
-                  {userIsLogged(props.dataUser) &&
-                    <li
-                      className={`
-                        my-2
-                        flex
-                        rounded-full
-                        items-center
-                        aspect-square
-                        bg-slate-200
-                        cursor-pointer
-                        justify-center
-                        dark:bg-slate-400
-                      `}
-                    >
-                      <Link
-                        className={`
-                          flex
-                          h-full
-                          w-full
-                          rounded-3xl
-                          items-center
-                          justify-center
-                        `}
-                        to={`/user/${props.dataUser._id}/new`}
-                        onClick={() => props.handleAuthorizedToAdd()}
-                      >
-                        {plusIcon}
-                      </Link>
-                    </li>
-                  }
-                  <li
-                    className={`
-                      mt-2
-                      flex
-                      rounded-full
-                      items-center
-                      aspect-square
-                      bg-slate-200
-                      cursor-pointer
-                      justify-center
-                      dark:bg-slate-400
-                    `}
-                  >
+                    {systemIcon}
+                  </button>
+                </li>
+                <li
+                  className={`
+                    my-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  {userIsLogout(props.dataUser) ?
                     <Link
                       className={`
                         flex
@@ -464,16 +397,103 @@ function Layout(props) {
                         items-center
                         justify-center
                       `}
-                      to={userIsLogout(props.dataUser) ?
-                        '/user/register'
-                        :
-                        `/user/${props.dataUser._id}`
-                      }
+                      to='user/login'
                     >
-                      {userIcon}
+                      {keyIcon}
                     </Link>
-                  </li>
-                </>
+                    :
+                    <button
+                      className='rounded-3xl h-full w-full'
+                      onClick={() => handleLogout()}
+                    >
+                      {disconnectIcon}
+                    </button>
+                  }
+                </li>
+                {userIsLogged(props.dataUser) &&
+                <li
+                  className={`
+                    mt-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <button
+                    className='rounded-3xl h-full w-full'
+                    onClick={() => console.warn('afficher la page settings user')}
+                  >
+                    {wheelIcon}
+                  </button>
+                </li>
+                }
+                {userIsLogged(props.dataUser) &&
+                <li
+                  className={`
+                    my-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <Link
+                    className={`
+                      flex
+                      h-full
+                      w-full
+                      rounded-3xl
+                      items-center
+                      justify-center
+                    `}
+                    to={`/user/${props.dataUser._id}/new`}
+                    onClick={() => props.handleAuthorizedToAdd()}
+                  >
+                    {plusIcon}
+                  </Link>
+                </li>
+                }
+                <li
+                  className={`
+                    mt-2
+                    flex
+                    rounded-full
+                    items-center
+                    aspect-square
+                    bg-slate-200
+                    cursor-pointer
+                    justify-center
+                    dark:bg-slate-400
+                  `}
+                >
+                  <Link
+                    className={`
+                      flex
+                      h-full
+                      w-full
+                      rounded-3xl
+                      items-center
+                      justify-center
+                    `}
+                    to={userIsLogout(props.dataUser) ?
+                      '/user/register'
+                      :
+                      `/user/${props.dataUser._id}`
+                    }
+                  >
+                    {userIcon}
+                  </Link>
+                </li>
+              </>
               }
             </ul>
           </nav>
@@ -497,71 +517,71 @@ function Layout(props) {
           `}
         >
           {Boolean(filterPricePlaceholderElements.length) &&
-            <li className='mr-3'>
-              <FilterButton statusFilter={true} filterButtonName='Prix'>
-                {filterPricePlaceholderElements.map((placeholder, index) =>
-                  <FilterInput
-                    key={index}
-                    type='number'
-                    placeholder={placeholder}
-                    handleChangeInput={handleChangePriceInput}
-                  />
-                )}
-              </FilterButton>
-            </li>
+          <li className='mr-3'>
+            <FilterButton statusFilter={true} filterButtonName='Prix'>
+              {filterPricePlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  key={index}
+                  type='number'
+                  placeholder={placeholder}
+                  handleChangeInput={handleChangePriceInput}
+                />
+              )}
+            </FilterButton>
+          </li>
           }
           {Boolean(filterLocationPlaceholderElements.length) &&
-            <li>
-              <FilterButton statusFilter={true} filterButtonName='Lieu'>
-                {filterLocationPlaceholderElements.map((placeholder, index) =>
-                  <FilterInput
-                    key={index}
-                    type='text'
-                    placeholder={placeholder}
-                    handleChangeInput={handleChangeLocationInput}
-                  />
-                )}
-              </FilterButton>
-            </li>
+          <li>
+            <FilterButton statusFilter={true} filterButtonName='Lieu'>
+              {filterLocationPlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  key={index}
+                  type='text'
+                  placeholder={placeholder}
+                  handleChangeInput={handleChangeLocationInput}
+                />
+              )}
+            </FilterButton>
+          </li>
           }
           {Boolean(filterElementsRadio.length) &&
-            <li>
-              <FilterButton statusFilter={false} filterButtonName='Super user'>
-                {filterElementsRadio.map((radioName, index) =>
-                  <FilterRadio
-                    key={index}
-                    radioName={radioName}
-                    groupName='superUserRadioGroup'
-                  />
-                )}
-              </FilterButton>
-            </li>
+          <li>
+            <FilterButton statusFilter={false} filterButtonName='Super user'>
+              {filterElementsRadio.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='superUserRadioGroup'
+                />
+              )}
+            </FilterButton>
+          </li>
           }
           {Boolean(filterElementsCheckbox.length) &&
-            <li>
-              <FilterButton statusFilter={false} filterButtonName='Notes'>
-                {filterElementsCheckbox.map((checkboxName, index) =>
-                  <FilterCheckbox
-                    key={index}
-                    checkboxName={checkboxName}
-                    groupName='ratingCheckboxGroup'
-                  />
-                )}
-              </FilterButton>
-            </li>
+          <li>
+            <FilterButton statusFilter={false} filterButtonName='Notes'>
+              {filterElementsCheckbox.map((checkboxName, index) =>
+                <FilterCheckbox
+                  key={index}
+                  checkboxName={checkboxName}
+                  groupName='ratingCheckboxGroup'
+                />
+              )}
+            </FilterButton>
+          </li>
           }
           {Boolean(filterElementsRadio.length) &&
-            <li>
-              <FilterButton statusFilter={false} filterButtonName='Photos'>
-                {filterElementsRadio.map((radioName, index) =>
-                  <FilterRadio
-                    key={index}
-                    radioName={radioName}
-                    groupName='photoRadioGroup'
-                  />
-                )}
-              </FilterButton>
-            </li>
+          <li>
+            <FilterButton statusFilter={false} filterButtonName='Photos'>
+              {filterElementsRadio.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='photoRadioGroup'
+                />
+              )}
+            </FilterButton>
+          </li>
           }
           <div
             className={`
@@ -613,22 +633,7 @@ function Layout(props) {
           `}
         >
 
-          {/* <li
-            className={`
-              hidden
-              rounded-full
-              items-center
-              aspect-square
-              justify-center
-            `}
-          >
-            <button
-              disabled={props.layoutOneColumn ? false : true}
-              onClick={() => props.toggleDirectionCard('toggle')}
-            >
-              {cardIcon}
-            </button>
-          </li> */}
+          
           {/* <li
             className={`
               my-2
@@ -763,7 +768,7 @@ function Layout(props) {
               </button>
             }
           </li> */}
-          <li
+          {/* <li
             className={`
               w-8
               mr-1
@@ -794,11 +799,10 @@ function Layout(props) {
             >
               {userIcon}
             </Link>
-          </li>
+          </li> */}
           <li
             className={`
               w-8
-              ml-1
               flex
               rounded-full
               items-center
@@ -835,6 +839,27 @@ function Layout(props) {
               onClick={() => console.warn('afficher la messagerie')}
             >
               {messageIcon}
+            </button>
+          </li>
+          <li
+            className={`
+              w-8
+              ml-1
+              flex
+              rounded-full
+              items-center
+              aspect-square
+              bg-slate-200
+              cursor-pointer
+              justify-center
+              dark:bg-slate-400
+            `}
+          >
+            <button
+              className='rounded-3xl h-full w-full'
+              onClick={() => props.handleAreCardsVertical()}
+            >
+              {cardIcon}
             </button>
           </li>
         </ul>

@@ -288,6 +288,7 @@ function ProfilPage(props) {
                 horizontalCard={props.horizontalCard}
                 layoutOneColumn={props.layoutOneColumn}
                 showCheckboxsDraft={showCheckboxsDraft}
+                areCardsVertical={props.areCardsVertical}
                 handleAddToFavorites={props.handleAddToFavorites}
               />
             )}
