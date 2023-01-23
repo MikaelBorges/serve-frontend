@@ -1,18 +1,14 @@
 import { newAd } from '../api/ads'
 import { useState, useEffect } from 'react'
 import styleOf from './NewAdPage.module.scss'
-import { useNavigate, Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 
 function NewAdPage(props) {
   const { id } = useParams()
-  const [info, setInfo] = useState(null)
-  const [error, setError] = useState(null)
-
-  // console.warn('props NewAdPage', props)
-  // const navigate = useNavigate()
-
   const [title, setName] = useState('')
   const [price, setPrice] = useState('')
+  const [info, setInfo] = useState(null)
+  const [error, setError] = useState(null)
   const [location, setLocation] = useState('')
   const [disabled, setDisabled] = useState(true)
   const [description, setDescription] = useState('')
@@ -23,42 +19,17 @@ function NewAdPage(props) {
     } else {
       setDisabled(true)
     }
-  }, [title, price, description, location]);
-
-  useEffect(() => {
-
-    /* console.warn('props.dataUser', props.dataUser)
-    if(Object.keys(props.dataUser).length === 0 && props.dataUser.constructor === Object) {
-      console.warn('REDIRECTION')
-    } else {
-      console.warn('NE RIEN FAIRE')
-    } */
-
-    console.warn('composant newAd chargé')
-  }, []);
-
-  /* useEffect(() => {
-    console.warn('newAd useEffect [dataUserInLocalStorage]')
-    console.warn('(newAd) props.dataUser', props.dataUser)
-    console.warn('(newAd) props.dataUserInLS', props.dataUserInLS)
-    console.warn('Object.keys(props.dataUser).length', Object.keys(props.dataUser).length)
-    console.warn('props.dataUser.constructor', props.dataUser.constructor)
-    if(Object.keys(props.dataUser).length === 0 && props.dataUser.constructor === Object) {
-      console.warn('REDIRECTION')
-    }
-  }, [props.dataUser]); */
-
-  // [dataUserInLocalStorage, setDataUserInLocalStorage] = useState(false),
+  }, [title, price, description, location])
 
   const onSubmitForm = e => {
     e.preventDefault()
     const arrayOfUrlImages = [
-            e.target.imageAd.value,
-            e.target.imageAd2.value,
-            e.target.imageAd3.value
-          ],
-          elementDifferentOfEmptyString = url => url !== '',
-          isAtMinimumOneImage = arrayOfUrlImages.some(elementDifferentOfEmptyString)
+      e.target.imageAd.value,
+      e.target.imageAd2.value,
+      e.target.imageAd3.value
+    ]
+    const elementDifferentOfEmptyString = url => url !== ''
+    const isAtMinimumOneImage = arrayOfUrlImages.some(elementDifferentOfEmptyString)
 
     let filteredArrayOfUrlImages = ['https://travauxcasa.com/public/artiza/images/default.png']
     if (isAtMinimumOneImage) filteredArrayOfUrlImages = arrayOfUrlImages.filter(img => img !== '')
@@ -80,16 +51,10 @@ function NewAdPage(props) {
     }
     newAd(data)
     .then(res => {
-      // console.warn('res Register page', res)
       if(res.status === 200) {
-        // console.warn('res', res)
         setInfo(res.data.message)
       }
       else {
-        console.warn('RES :')
-        console.warn(res)
-        console.warn('RES.RESPONSE.DATA.MESSAGE :')
-        console.warn(res.response.data.message)
         setError(res.response.data.message)
       }
     })
@@ -100,7 +65,6 @@ function NewAdPage(props) {
     })
   }
 
-  //if(!props.dataUser._id || props.dataUser._id !== id) return <Navigate to='/' />
   const idOfUserInLS = JSON.parse(window.localStorage.getItem('user'))?._id
   if(!idOfUserInLS || idOfUserInLS !== id) return <Navigate to='/' />
 

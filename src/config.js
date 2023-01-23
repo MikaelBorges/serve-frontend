@@ -6,8 +6,3 @@ export let config = {
   // api_url: 'https://mikaelborges-serve.herokuapp.com',
 }
 
-export function changeConfig(newUrlApi) {
-  config = {
-    api_url: newUrlApi,
-  }
-}

@@ -5,8 +5,6 @@ const initState = {
 }
 
 const AdsReducer = (state = initState, action) => {
-  console.warn('(ADS REDUCER) action', action)
-  console.warn('(ADS REDUCER) state', state)
   switch (action.type) {
     case FETCH_ADS_ACTION :
       return {
@@ -16,23 +14,9 @@ const AdsReducer = (state = initState, action) => {
         ]
       }
     break
-
     default: return state
     break
   }
 }
-
-/* const AdsReducer = (state = initState, action) => {
-  console.warn('(ADS REDUCER) action', action)
-  console.warn('(ADS REDUCER) state', state)
-  switch (action.type) {
-    case FETCH_ADS_ACTION:
-      return [
-        ...state,
-        ...action.payload
-      ]
-    default: return state
-  }
-} */
 
 export default AdsReducer

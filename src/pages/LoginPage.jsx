@@ -15,10 +15,6 @@ function LoginPage(props) {
 
         onSubmitForm = e => {
           e.preventDefault()
-          /* console.warn('EMAIL ENTRé')
-          console.warn(e.target.email.value)
-          console.warn('MDP ENTRé')
-          console.warn(e.target.password.value) */
 
           let data = {
             email: e.target.email.value,
@@ -28,7 +24,6 @@ function LoginPage(props) {
           loginUser(data)
           .then(res => {
             if(res.status === 200) {
-              console.warn('res >', res)
               window.localStorage.setItem('serve-token', res.data.token)
               window.localStorage.setItem('user', JSON.stringify(res.data.session.user))
 
@@ -37,10 +32,6 @@ function LoginPage(props) {
               navigate('/')
             }
             else {
-              console.warn('RES (LOGIN PAGE) :')
-              console.warn(res)
-              console.warn('RES.RESPONSE.DATA.MESSAGE (LOGIN PAGE) :')
-              console.warn(res.response.data.message)
               setError(res.response.data.message)
             }
           })
@@ -62,7 +53,6 @@ function LoginPage(props) {
 
   //if(props.userInfo.isLogged) {
   if(props.dataUser._id) {
-    console.warn('redirection vers la home')
     return <Navigate to='/' />
   }
 
@@ -129,7 +119,6 @@ function LoginPage(props) {
 }
 
 const mapStateToProps = (store, ownProps) => {
-  console.warn('(LOGIN PAGE) store', store)
   return {
     userInfo: store.user,
     allAds: store.ads.fetchedAds

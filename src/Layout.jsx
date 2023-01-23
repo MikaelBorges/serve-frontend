@@ -15,32 +15,25 @@ import {
   disconnectIcon,
   columnLayoutIcon
 } from './constants/icons'
-import { useState, useRef } from 'react'
-import { config } from './config'
-import { logoutUser } from './api/user'
-import { Ul, Li } from './components/tests-components/Ul'
-import { Lien } from './components/tests-components/Lien'
-import styleOf from './Layout.module.scss'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { userIsLogout, userIsLogged } from './functions/user'
-import logo3D from './assets/images/logos/gitlab-5562373-4642718.png'
-import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
-import logoRoundLight from './assets/images/logos/square.png'
-import logo from './assets/images/logos/gitlab_tile_logo_icon_170092.png'
 import { debounce } from 'lodash'
-import FilterButton from './components/filter/FilterButton'
-import FilterRadio from './components/filter/FilterRadio'
-import FilterCheckbox from './components/filter/FilterCheckbox'
-import FilterInput from './components/filter/FilterInput'
-import IconSearch from './components/icons/IconSearch'
-import IconFiltering from './components/icons/IconFiltering'
-import IconCross from './components/icons/IconCross'
-import IconHorizontalRule from './components/icons/IconHorizontalRule'
-import PictureUser from './components/PictureUser'
-import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
-
 import { connect } from 'react-redux'
+import { logoutUser } from './api/user'
+import { useState, useRef } from 'react'
+import styleOf from './Layout.module.scss'
+import PictureUser from './components/PictureUser'
+import IconCross from './components/icons/IconCross'
+import FilterRadio from './components/filter/FilterRadio'
+import FilterInput from './components/filter/FilterInput'
+import FilterButton from './components/filter/FilterButton'
+import IconFiltering from './components/icons/IconFiltering'
+import { userIsLogout, userIsLogged } from './functions/user'
+import logoRoundLight from './assets/images/logos/square.png'
 import { logoutUserAction } from './actions/user/userActions'
+import FilterCheckbox from './components/filter/FilterCheckbox'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import IconHorizontalRule from './components/icons/IconHorizontalRule'
+import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
+import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
 const filterElementsRadio = []
 //const filterElementsRadio = ['oui', 'non']
@@ -51,18 +44,14 @@ const filterElementsCheckbox = []
 
 function Layout(props) {
   const inputRef = useRef(null)
-  const navigate = useNavigate(),
-        [error, setError] = useState(null),
-        // [menu, setMenu] = useState(false),
-        [search, setSearch] = useSearchParams(),
-        [isFocused, setIsFocused] = useState(false),
-        [isMenuOpen, setIsMenuOpen] = useState(false),
-        // [isPriceFilterOpen, setIsPriceFilterOpen] = useState(false),
-        [dbLocationIsOnline, setDbLocationIsOnline] = useState(false),
-        [isButtonFilterActive, setIsButtonFilterActive] = useState(true),
-        [isLocationFilterOpen, setIsLocationFilterOpen] = useState(false)
+  const navigate = useNavigate()
+  const [error, setError] = useState(null)
+  const [search, setSearch] = useSearchParams()
+  const [isFocused, setIsFocused] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isButtonFilterActive, setIsButtonFilterActive] = useState(true)
 
-  /* function parseJwt(token) {
+  /* const parseJwt = (token) => {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
@@ -70,43 +59,10 @@ function Layout(props) {
     }).join(''));
     return JSON.parse(jsonPayload);
   }
-
   const token = window.localStorage.getItem("serve-token")
   if(token) {
     const parsedJwt = parseJwt(token)
     console.warn('parsed jwt', parsedJwt)
-  } */
-
-  // console.warn('props.dataUser', props.dataUser)
-
-  /* function handleDbLocationIsOnline() {
-    if(goOnline) {
-      changeConfig('https://mikaelborges-serve.herokuapp.com')
-      setDbLocationIsOnline(goOnline)
-    }
-    else {
-      changeConfig('http://localhost:3306')
-      setDbLocationIsOnline(!goOnline)
-    }
-
-    setDbLocationIsOnline(goOnline)
-    console.warn('NEW CONFIG :')
-    console.warn(config.api_url)
-
-    props.displayUser()
-  } */
-
-  /* function initState () {
-    if (config.api_url === 'http://localhost:3306') {
-      return false
-    }
-    else {
-      return true
-    }
-  } */
-
-  /* function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
   } */
 
   let themeButtonIcon
@@ -124,27 +80,11 @@ function Layout(props) {
       console.error("Problème dans props.theme et du coup dans le state theme de l'app")
   }
 
-  function handleLogout() {
-    /* console.warn('handleLogout')
-    props.dataUser === undefined ? '/user/login' : '/logout'
-    navigate("/", { state: { user: undefined } }) */
+  const handleLogout = () => {
     let data = { _id : props.dataUser._id }
     logoutUser(data)
     .then(res => {
       if (res.status === 200) {
-        console.warn('RES (LAYOUT) :', res.data.message)
-
-        /* console.warn('res.status === 200')
-        window.localStorage.setItem("saas-token", res.token);
-        let user = res.data.user
-        console.warn('user LoginPage', user)
-        user.token = res.token
-        dispatch(setUser(user))
-        setRedirect(true);
-        navigate("/", { state: { user: user } }); */
-
-        // props.updateCorrectDataUser({})
-
         window.localStorage.removeItem('user')
         window.localStorage.removeItem('serve-token')
 
@@ -154,8 +94,6 @@ function Layout(props) {
         if(window.location.pathname !== '/') navigate('/')
       }
       else {
-        console.warn('res.msg')
-        console.warn(res.msg)
         setError(res.msg)
       }
     })
@@ -166,7 +104,7 @@ function Layout(props) {
     })
   }
 
-  /* function handleClickPriceFilter() {
+  /* const handleClickPriceFilter = () => {
     setIsPriceFilterOpen(!isPriceFilterOpen)
   }
 
@@ -174,7 +112,7 @@ function Layout(props) {
     e.stopPropagation()
   } */
 
-  /* function handleChangeMinPriceFilter(e) {
+  /* const handleChangeMinPriceFilter = (e) => {
     const price = e.target.value
     if (price.length) search.set('minPrice', price)
     else search.delete('minPrice')
@@ -183,7 +121,7 @@ function Layout(props) {
     props.changeMinPrice(e.target.value)
   } */
 
-  function handleChangePriceInput(e) {
+  const handleChangePriceInput = (e) => {
     const name = e.target.name,
           price = e.target.value
 
@@ -204,7 +142,7 @@ function Layout(props) {
     setSearch(search)
   }
 
-  /* function handleChangeMaxPriceFilter(e) {
+  /* const handleChangeMaxPriceFilter = (e) => {
     const price = e.target.value
     if (price.length) search.set('maxPrice', price)
     else search.delete('maxPrice')
@@ -213,38 +151,31 @@ function Layout(props) {
     props.changeMaxPrice(e.target.value)
   } */
 
-  /* function handleClickLocationFilter() {
-    setIsLocationFilterOpen(!isLocationFilterOpen)
-  } */
-
-  /* function handleClickLocationInput(e) {
+  /* const handleClickLocationInput = (e) => {
     e.stopPropagation()
   } */
 
-  function handleChangeLocationInput(e) {
+  const handleChangeLocationInput = (e) => {
     const text = e.target.value
     if (text.length) search.set('location', text)
     else search.delete('location')
     setSearch(search)
     //setSearch(search, { replace: true })
     //navigate(`/?location=${e.target.value}`)
-
     //props.changeLocationTyped(e.target.value)
   }
 
-  function handleClickFilterButton() {
+  const handleClickFilterButton = () => {
     setIsButtonFilterActive(!isButtonFilterActive)
   }
 
-  function handleClickIconCross() {
+  const handleClickIconCross = () => {
     inputRef.current.value = ''
   }
 
-  function handleBlur() {
+  const handleBlur = () => {
     setIsFocused(false)
   }
-
-  // if(props.dataUser) console.warn('in layout',props.dataUser._id)
 
   return (
     <div className='min-h-screen dark:bg-slate-900'>
@@ -256,7 +187,6 @@ function Layout(props) {
           w-full
           sticky
         `}
-        //${isButtonFilterActive ? 'dark:bg-slate-800 bg-slate-100' : ''}
       >
         <div
           className={`
@@ -267,7 +197,11 @@ function Layout(props) {
           `}
         >
           <Link to='/' className='contents'>
-            <img src={props.darkMode ? logoRoundDark : logoRoundLight} alt='logo' className='max-w-none h-full' />
+            <img
+              alt='logo'
+              className='max-w-none h-full'
+              src={props.darkMode ? logoRoundDark : logoRoundLight}
+            />
           </Link>
           <div
             className={`
@@ -322,20 +256,6 @@ function Layout(props) {
               <IconCross />
             </button>
           </div>
-          {/* <button
-            className={`
-              px-2
-              mr-2.5
-              bg-white
-              rounded-full
-              dark:text-white
-              dark:bg-slate-800
-              ${props.darkMode ? '' : styleOf.biggerShadow}
-            `}
-            onClick={handleClickFilterButton}
-          >
-            <IconFiltering />
-          </button> */}
           <nav className={`aspect-square ${isFocused ? 'blur-2xl' : ''}`}>
             <ul
               className={`
@@ -491,8 +411,7 @@ function Layout(props) {
                         {wheelIcon}
                       </button>
                     </li>
-                }
-                
+                  }
                   {userIsLogged(props.dataUser) &&
                     <li
                       className={`
@@ -557,42 +476,6 @@ function Layout(props) {
                 </>
               }
             </ul>
-            {/* {menu &&
-            <Ul className='dark:text-white text-black'>
-              <Li>
-                <Lien
-                  url={'/projects'}
-                  target='_self'
-                  className={`
-                    hover:bg-slate-100
-                    dark:bg-slate-1000
-                    hover:dark:bg-black
-                    dark:border-white
-                    dark:border
-                    hover:dark:border-pink-600
-                    hover:dark:text-pink-600
-                    rounded-full
-                    focus:outline-none
-                    p-4
-                    shadow-xl
-                  `}
-                  // className={`
-                    // block
-                    // w-fit
-                    // shadow-xl
-                  // `}
-                >
-                  Projets
-                </Lien>
-              </Li>
-              <Li className='text-gray-400'>
-                Contact
-              </Li>
-              <Li className='text-gray-400'>
-                À propos
-              </Li>
-            </Ul>
-          } */}
           </nav>
         </div>
         <ul
@@ -609,8 +492,8 @@ function Layout(props) {
             rounded-3xl
             dark:text-white
             ${props.darkMode ? '' : styleOf.biggerShadow}
-            ${isButtonFilterActive ? 'dark:bg-slate-800 bg-white' : 'hidden'}
             ${isMenuOpen && !isFocused ? styleOf.reducedWidthFilters : ''}
+            ${isButtonFilterActive ? 'dark:bg-slate-800 bg-white' : 'hidden'}
           `}
         >
           {Boolean(filterPricePlaceholderElements.length) &&
@@ -680,17 +563,6 @@ function Layout(props) {
               </FilterButton>
             </li>
           }
-          {/* <span
-            className={`
-              px-1
-              ml-1
-              rounded-full
-              bg-orange-400
-              ${styleOf.filtersNb}
-            `}
-          >
-            2
-          </span> */}
           <div
             className={`
               h-4
@@ -704,25 +576,6 @@ function Layout(props) {
             <IconHorizontalRule />
           </div>
         </ul>
-        {/* {config.api_url === 'http://localhost:3306' && (
-          <div className=''>
-            <button
-              className={`
-                bg-white
-                px-4
-                rounded-full
-                shadow-xl
-
-                dark:text-yellow-100
-                dark:bg-black
-              `}
-              onClick={handleDbLocationIsOnline}
-            >
-              {dbLocationIsOnline ? 'online' : 'local'}
-            </button>
-          </div>
-        )} */}
-
       </header>
       <main
         className={`
@@ -998,15 +851,8 @@ function Layout(props) {
       >
         © 2023 serve.ac
       </footer>
-
-      {/* <footer className="m-1 6 text-center">
-        {footerLists.map((footerList, index) =>
-          <FooterList footerList={footerList} key={index} />
-        )}
-      </footer> */}
-
     </div>
-  );
+  )
 }
 
 const mapStateToProps = (store) => {

@@ -13,87 +13,74 @@ import { connect } from 'react-redux'
 
 function ProfilPage(props) {
 
-  const { userIdPage } = useParams(),
-        hour = new Date().getHours(),
-        [ads, setAds] = useState([]),
-        [imgUrl, setImgUrl] = useState(''),
-        [noAds, setNoAds] = useState(false),
-        [isVisitor, setIsVisitor] = useState(false),
-        [isPopupOpen, setIsPopupOpen] = useState(false),
-        [liteInfosOfUser, setLiteInfosOfUser]= useState({}),
-        [allCardsChecked, setAllCardsChecked] = useState(false),
-        [showCheckboxsDraft, setshowCheckboxsDraft] = useState(false),
-        [responseMessageFromCard, setResponseMessageFromCard] = useState(''),
-        [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({}),
+  const { userIdPage } = useParams()
+  const hour = new Date().getHours()
+  const [ads, setAds] = useState([])
+  const [imgUrl, setImgUrl] = useState('')
+  const [noAds, setNoAds] = useState(false)
+  const [isVisitor, setIsVisitor] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [liteInfosOfUser, setLiteInfosOfUser]= useState({})
+  const [allCardsChecked, setAllCardsChecked] = useState(false)
+  const [showCheckboxsDraft, setshowCheckboxsDraft] = useState(false)
+  const [responseMessageFromCard, setResponseMessageFromCard] = useState('')
+  const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
 
-        wayToGreet = () => {
-          return hour > 6 && hour < 20 ?
-            `Bonjour ${props.dataUser.firstname} ${lightIcon}`
-            :
-            `Bonsoir ${props.dataUser.firstname} ${goodEveningIcon}`
-        },
+  const wayToGreet = () => {
+    return hour > 6 && hour < 20 ?
+      `Bonjour ${props.dataUser.firstname} ${lightIcon}`
+      :
+      `Bonsoir ${props.dataUser.firstname} ${goodEveningIcon}`
+  }
 
-        handleDeleteAd = e => {
-          console.warn('supprimer')
-          // console.warn('e', e)
-          // deleteAd(userId, adId)
-          /* .then((res)=>{
-              // console.warn('res', res)
-              setAds(res)
-          })
-          .catch(err => console.warn('err', err)) */
-        },
+  const handleDeleteAd = e => {
+    console.warn('supprimer')
+  }
 
-        handleModifyAd = e => {
-          // console.warn('e', e)
-          console.warn('modifier')
-        },
+  const handleModifyAd = e => {
+    console.warn('modifier')
+  }
 
-        handleChangeMainCheckbox = e => {
-          e.stopPropagation()
-          //setAllCardsChecked(e.target.checked)
-        },
+  const handleChangeMainCheckbox = e => {
+    e.stopPropagation()
+  }
 
-        checkAllCheckboxes = () => {
-          console.warn('checkAllCheckboxes')
-          //setAllCardsChecked(true)
-        },
+  const checkAllCheckboxes = () => {
+    console.warn('checkAllCheckboxes')
+  }
 
-        uncheckAllCheckboxes = () => {
-          console.warn('uncheckAllCheckboxes')
-          //setAllCardsChecked(false)
-        },
+  const uncheckAllCheckboxes = () => {
+    console.warn('uncheckAllCheckboxes')
+  }
 
-        openPopup = message => {
-          setIsPopupOpen(true)
-          setResponseMessageFromCard(message)
-          window.location.reload(false)
-        },
+  const openPopup = message => {
+    setIsPopupOpen(true)
+    setResponseMessageFromCard(message)
+    window.location.reload(false)
+  }
 
-        generateMasonryBreakpointsUntilThisMaxValue = (maxBreakpointValue) => {
-          let columns = 7,
-          breakpointsObject = {
-            374: 1,
-            567: 2,
-            767: 3,
-            1023: 4,
-            1179: 5,
-            1365: 6
-          }
+  const generateMasonryBreakpointsUntilThisMaxValue = (maxBreakpointValue) => {
+    let columns = 7,
+    breakpointsObject = {
+      374: 1,
+      567: 2,
+      767: 3,
+      1023: 4,
+      1179: 5,
+      1365: 6
+    }
 
-          for (let bp = 1565; bp < maxBreakpointValue; bp += 200) {
-            breakpointsObject[bp] = columns // TIP > obligé d'utiliser la notation crochets pour définir des clés d'objet par le contenu de variable 
-            ++columns
-          }
-          breakpointsObject.default = columns
+    for (let bp = 1565; bp < maxBreakpointValue; bp += 200) {
+      breakpointsObject[bp] = columns // TIP > obligé d'utiliser la notation crochets pour définir des clés d'objet par le contenu de variable 
+      ++columns
+    }
+    breakpointsObject.default = columns
 
-          setBreakpointsColumnsMasonry(breakpointsObject)
-        }
+    setBreakpointsColumnsMasonry(breakpointsObject)
+  }
 
   useEffect(() => {
-    console.warn('(PROFIL) useEffect props.dataUser', props.dataUser)
     if(userIsLogged(props.dataUser) && (props.dataUser._id === userIdPage)) {
-      console.warn('(PROFIL) utiliser les props ')
       setIsVisitor(false)
       loadUserAds(userIdPage, false)
       .then(res => {
@@ -102,7 +89,6 @@ function ProfilPage(props) {
       })
       .catch(err => console.warn('err', err))
     } else {
-      console.warn('(PROFIL) utiliser les datas du serveur')
       setIsVisitor(true)
       loadUserAds(userIdPage, true)
       .then(res => {
@@ -115,36 +101,21 @@ function ProfilPage(props) {
   }, [props.dataUser, userIdPage]);
 
   useEffect(() => {
-    console.warn('(PROFIL) useEffect props.clickedAd', props.clickedAd)
     if(Object.keys(props.clickedAd).length > 0) {
-      console.warn('rentre ici car clickedAd.length > 0 ')
-      console.warn('mettre à jour le coeur', props.clickedAd)
 
       // Phase de recherche :
-      let item = {},
-          items = [],
-          indexSaved = 0,
-          favoritesToUpdate = 0
-
-      console.warn('ads', ads)
+      let item = {}
+      let items = []
+      let indexSaved = 0
+      let favoritesToUpdate = 0
 
       ads.forEach((ad, index, arr) => {
-        console.warn('ad._id', ad._id)
-        console.warn('props.clickedAd.adId', props.clickedAd.adId)
         if(ad._id === props.clickedAd.adId) {
           indexSaved = index
-          console.warn('ad trouvé', index)
           items = [...ads]
           item = {...items[index]}
-          // console.warn('index', index)
-          // console.warn('item', item)
           favoritesToUpdate = props.clickedAd.newFavNumber
-          // console.warn('item', item)
-          console.warn('favoritesToUpdate', favoritesToUpdate)
           arr.length = index + 1 // Tip > sortir de la boucle
-        }
-        else {
-          console.warn('pas trouvé')
         }
       })
 
@@ -152,8 +123,6 @@ function ProfilPage(props) {
       // Note : dont celle qui contient son nb favoris mis à jour
       item.favoritesNb = favoritesToUpdate
       items[indexSaved] = item
-      console.warn('item', item)
-      console.warn('items', items)
       // setAreAdsArranged(false)
       setAds(items)
       props.resetClickedAd()
@@ -163,14 +132,6 @@ function ProfilPage(props) {
   useEffect(() => {
     generateMasonryBreakpointsUntilThisMaxValue(3000)
   }, [])
-
-  /* useEffect(() => {
-    console.warn('(PROFIL) useEffect[userIdPage]', userIdPage)
-  }, [userIdPage]) */
-
-  /* useEffect(() => {
-    console.warn('(PROFIL) useEffect[userIdPage]', userIdPage)
-  }, [userIdPage]) */
 
   /* useEffect(() => {
     // console.warn('isVisitor', isVisitor)
@@ -298,8 +259,6 @@ function ProfilPage(props) {
                     name='check-all'
                     onClick={e => handleChangeMainCheckbox(e)}
                     onChange={e => handleChangeMainCheckbox(e)}
-                    //className='w-8 h-8 rounded-full'
-                    //className={"before:block before:w-6 before:h-6 dark:before:bg-slate-600 before:bg-slate-200 before:rounded-full"}
                   />
                 </div>
               </div>
@@ -373,7 +332,6 @@ function ProfilPage(props) {
 }
 
 const mapStateToProps = (store) => {
-  console.warn('(PROFIL) store', store)
   return {
     userInfo: store.user
   }

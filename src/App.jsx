@@ -1,210 +1,151 @@
-import './assets/fonts/Gilroy/gilroy.css'
 import Layout from './Layout'
+import { connect } from 'react-redux'
 import HomePage from './pages/HomePage'
+import './assets/fonts/Gilroy/gilroy.css'
 import LoginPage from './pages/LoginPage'
 import NewAdPage from './pages/NewAdPage'
 import ProfilPage from './pages/ProfilPage'
-import RegisterPage from './pages/RegisterPage'
 import { addToFavorites } from './api/user'
 import { useState, useEffect } from 'react'
+import RegisterPage from './pages/RegisterPage'
 import RequireAuth from './helpers/RequireAuth'
 import UserSettings from './pages/UserSettings'
-import { Route, Routes, useLocation } from 'react-router-dom'
 import { userIsLogout } from './functions/user'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { lightIcon, darkIcon, systemIcon } from './constants/icons'
 
-import { connect } from 'react-redux'
-
 function App() {
-  const [userId, setUserId] = useState(''),
-        [urlNewAd, setUrlNewAd] = useState(''),
-        [clickedAd, setClickedAd] = useState({}),
-        [urlUserId, setUrlUserId] = useState(''),
+  const [userId, setUserId] = useState('')
+  const [clickedAd, setClickedAd] = useState({})
+  const [theme, setTheme] = useState('light')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
+  const [dataUser, setDataUser] = useState({})
+  const [darkMode, setDarkMode] = useState(false)
+  const [rightHand, setRightHand] = useState(true)
+  const [locationTyped, setLocationTyped] = useState('')
+  const [horizontalCard, setHorizontalCard] = useState(false)
+  const [layoutOneColumn, setLayoutOneColumn] = useState(false)
+  const [authorizedToAdd, setAuthorizedToAdd] = useState(false)
 
-        { pathname } = useLocation(),
-        [path, setPath] = useState(''),
-        [theme, setTheme] = useState('light'),
-        [minPrice, setMinPrice] = useState(''),
-        [maxPrice, setMaxPrice] = useState(''),
-        [dataUser, setDataUser] = useState({}),
-        [darkMode, setDarkMode] = useState(false),
-        [rightHand, setRightHand] = useState(true),
-        [locationTyped, setLocationTyped] = useState(''),
-        [horizontalCard, setHorizontalCard] = useState(false),
-        [layoutOneColumn, setLayoutOneColumn] = useState(false),
-        [authorizedToAdd, setAuthorizedToAdd] = useState(false),
-        [localStorageChecked, setLocalStorageChecked] = useState(false)
+  const resetClickedAd = () => {
+    setClickedAd({})
+  }
 
-        function resetClickedAd() {
-          console.warn('faire le reset')
-          setClickedAd({})
+  const toggleDirectionCard = (horizontalDirection) => {
+    window.localStorage.setItem('horizontalCard', !horizontalCard)
+    switch(horizontalDirection) {
+      case 'toggle':
+        setHorizontalCard(!horizontalCard)
+        break
+      case true:
+        setHorizontalCard(true)
+        break
+      case false:
+        setHorizontalCard(false)
+        break
+      default:
+        console.error('Problème dans la sélection du style des annonces');
+    }
+  }
+
+  const toggleLayout = (layoutSelected) => {
+    switch(layoutSelected) {
+      case 'toggle':
+        setLayoutOneColumn(!layoutOneColumn)
+        window.localStorage.setItem('layoutOneColumn', !layoutOneColumn)
+        break
+      case true:
+        setLayoutOneColumn(true)
+        break
+      case false:
+        setLayoutOneColumn(false)
+        break
+      default:
+        console.error("Problème dans la sélection du layout de l'app");
+    }
+  }
+
+  const toggleHand = () => {
+    setRightHand(!rightHand)
+  }
+
+  const toggleTheme = (themeSelected) => {
+    switch(themeSelected) {
+      case lightIcon:
+        setTheme('light');
+        localStorage.theme = 'light';
+        setDarkMode(false);
+        document.documentElement.classList.remove('dark');
+        break;
+      case darkIcon:
+        setTheme('dark');
+        localStorage.theme = 'dark';
+        setDarkMode(true);
+        document.documentElement.classList.add('dark');
+        break;
+      case systemIcon:
+        setTheme('system');
+        localStorage.removeItem('theme');
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          setDarkMode(true);
+          document.documentElement.classList.add('dark');
         }
-
-        function toggleDirectionCard(horizontalDirection) {
-          window.localStorage.setItem('horizontalCard', !horizontalCard)
-          switch(horizontalDirection) {
-            case 'toggle':
-              setHorizontalCard(!horizontalCard)
-              break
-            case true:
-              setHorizontalCard(true)
-              break
-            case false:
-              setHorizontalCard(false)
-              break
-            default:
-              console.error('Problème dans la sélection du style des annonces');
-          }
+        else {
+          setDarkMode(false);
+          document.documentElement.classList.remove('dark');
         }
+        break;
+      default:
+        console.error('Problème dans la sélection du thème');
+    }
+  }
 
-        function toggleLayout(layoutSelected) {
-          switch(layoutSelected) {
-            case 'toggle':
-              setLayoutOneColumn(!layoutOneColumn)
-              window.localStorage.setItem('layoutOneColumn', !layoutOneColumn)
-              break
-            case true:
-              setLayoutOneColumn(true)
-              break
-            case false:
-              setLayoutOneColumn(false)
-              break
-            default:
-              console.error("Problème dans la sélection du layout de l'app");
-          }
-        }
+  const updateUser = (data) => {
+    setDataUser(data)
+  }
 
-        function toggleHand() {
-          setRightHand(!rightHand)
-        }
+  const handleAuthorizedToAdd = () => {
+    setAuthorizedToAdd(true)
+  }
 
-        function toggleTheme(themeSelected) {
-          switch(themeSelected) {
-            case lightIcon:
-              setTheme('light');
-              localStorage.theme = 'light';
-              setDarkMode(false);
-              document.documentElement.classList.remove('dark');
-              break;
-            case darkIcon:
-              setTheme('dark');
-              localStorage.theme = 'dark';
-              setDarkMode(true);
-              document.documentElement.classList.add('dark');
-              break;
-            case systemIcon:
-              setTheme('system');
-              localStorage.removeItem('theme');
-              if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                setDarkMode(true);
-                document.documentElement.classList.add('dark');
-              }
-              else {
-                setDarkMode(false);
-                document.documentElement.classList.remove('dark');
-              }
-              break;
-            default:
-              console.error('Problème dans la sélection du thème');
-          }
-        }
+  const checkIfAddToFavorites = (adId) => {
+    const ad = {
+      adId: adId,
+      userId: dataUser._id,
+    }
+    addToFavorites(ad)
+    .then(res => {
+      if(res.status === 200) {
+        setClickedAd({adId: adId, newFavNumber: res.data.newFavNumber})
+      }
+    })
+    .catch(err => console.warn(err))
+  }
 
-        function updateUser(data) {
-          setDataUser(data)
-          if (data) {
-            setUrlUserId(`/user/${data._id}`)
-            setUrlNewAd(`/user/${data._id}/new`)
-          }
-        }
+  const handleAddToFavorites = (e, ad) => {
+    e.stopPropagation()
 
-        function displayUser() {
-          console.warn('dataUser', dataUser)
-        }
+    if(!userIsLogout(dataUser) && (dataUser._id !== ad.userId)) {
+      checkIfAddToFavorites(ad._id)
+    }
+  }
 
-        function handleAuthorizedToAdd() {
-          setAuthorizedToAdd(true)
-        }
+  const changeMinPrice = (minPrice) => {
+    setMinPrice(minPrice)
+  }
 
-        function checkIfAddToFavorites(adId) {
-          const ad = {
-            adId: adId,
-            userId: dataUser._id,
-          }
-          addToFavorites(ad)
-          .then(res => {
-            // console.warn('res', res)
+  const changeMaxPrice = (maxPrice) => {
+    setMaxPrice(maxPrice)
+  }
 
-            if(res.status === 200) {
-              // console.warn('200')
-              setClickedAd({adId: adId, newFavNumber: res.data.newFavNumber})
-              console.warn('setClickedAd setted')
-              console.warn('res.data.newFavNumber', res.data.newFavNumber)
-              console.warn('adId', adId)
-              // loadAds()
-              // .then(res => {
-                // console.warn('RES :', res)
-                // setAds(res.ads)
-                // setAreAdsArranged(false)
-                // setFavs(true)
-              // })
-              // .catch(err => console.warn(err))
-            }
-
-          })
-          .catch(err => console.warn(err))
-        }
-
-        function handleAddToFavorites(e, ad) {
-          e.stopPropagation()
-          // console.warn('ad', ad)
-          // console.warn('dataUser._id', dataUser._id)
-
-          if(!userIsLogout(dataUser) && (dataUser._id !== ad.userId)) {
-            // console.warn('fav éligible !')
-            checkIfAddToFavorites(ad._id)
-          }/* 
-          else{
-            console.warn('fav not ok...')
-          } */
-
-
-
-          // if((props.dataUser._id !== undefined) && (props.dataUser._id !== props.ad.userId)) {
-            // console.warn('ajouter !')
-            // props.checkIfAddToFavorites(props.ad._id)
-            // console.warn('props.dataUser._id', props.dataUser._id)
-            // console.warn('props.ad.userId', props.ad.userId)
-            // if(props.dataUser._id !== props.ad.userId) {
-              // const ad = {
-                // adId: props.ad._id,
-                // userId: props.dataUser._id,
-              // }
-              // addToFavorites(ad)
-              // .then(res => {
-                // console.warn('res', res)
-              // })
-              // .catch(err => console.warn(err))
-            // }
-          // } else {
-            // console.warn("déco ou c'est ma propre annonce")
-          // }
-        }
-
-        function changeMinPrice(minPrice) {
-          setMinPrice(minPrice)
-        }
-
-        function changeMaxPrice(maxPrice) {
-          setMaxPrice(maxPrice)
-        }
-
-        function changeLocationTyped(locationTyped) {
-          setLocationTyped(locationTyped)
-        }
+  const changeLocationTyped = (locationTyped) => {
+    setLocationTyped(locationTyped)
+  }
 
   useEffect(() => {
-    const horizontalCardInLS = window.localStorage.getItem('horizontalCard'),
-          layoutOneColumnInLS = window.localStorage.getItem('layoutOneColumn')
+    const horizontalCardInLS = window.localStorage.getItem('horizontalCard')
+    const layoutOneColumnInLS = window.localStorage.getItem('layoutOneColumn')
 
     if(layoutOneColumnInLS === 'true') setLayoutOneColumn(true)
     if(horizontalCardInLS === 'true') setHorizontalCard(true)
@@ -250,19 +191,10 @@ function App() {
     }
 
     const userDataInLS = window.localStorage.getItem('user')
-    //console.warn('(APP) check si le local storage a des infos')
     if (userDataInLS) {
-      //console.warn('(APP) JSON.parse(userDataInLS)', JSON.parse(userDataInLS))
       setDataUser(JSON.parse(userDataInLS))
-      console.warn('(APP) le local storage a alimenté le state dataUser')
-      console.warn('(APP) dataUser', dataUser)
       setUserId(JSON.parse(userDataInLS)._id)
-      setUrlUserId(`/user/${JSON.parse(userDataInLS)._id}`)
-      setUrlNewAd(`/user/${JSON.parse(userDataInLS)._id}/new`)
-    } else {
-      console.warn('pas de user data dans le local storage')
     }
-    setLocalStorageChecked(true)
   }, []);
 
   return (
@@ -273,7 +205,6 @@ function App() {
       rightHand={rightHand}
       toggleHand={toggleHand}
       updateUser={updateUser}
-      displayUser={displayUser}
       toggleTheme={toggleTheme}
       toggleLayout={toggleLayout}
       changeMinPrice={changeMinPrice}
@@ -355,27 +286,6 @@ function App() {
               dataUser={dataUser}
             />
           }
-          /* element={
-            pathname === `/user/${JSON.parse(window.localStorage.getItem('user'))?._id}/new`
-            ||
-            pathname === `/user/${JSON.parse(window.localStorage.getItem('user'))?._id}/new/`
-            ?
-            <NewAdPage
-              darkMode={darkMode}
-              dataUser={dataUser}
-            />
-            :
-            <HomePage
-              refreshUrl
-              darkMode={darkMode}
-              clickedAd={clickedAd}
-              updateUser={updateUser}
-              resetClickedAd={resetClickedAd}
-              horizontalCard={horizontalCard}
-              layoutOneColumn={layoutOneColumn}
-              handleAddToFavorites={handleAddToFavorites}
-            />
-          } */
         />
       </Routes>
     </Layout>

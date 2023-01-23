@@ -22,15 +22,13 @@ const loadFromLocalStorage = () => {
 };
 
 const persistedStore = loadFromLocalStorage();
-console.warn('persistedStore', persistedStore)
+console.log('store loaded from local storage', persistedStore)
 
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
-//const store = createStore(rootReducer, {}, composedEnhancer)
-//const store = createStore(rootReducer, /* {}, */ composedEnhancer)
 const store = createStore(rootReducer, persistedStore, composedEnhancer)
 
 store.subscribe(() => {
-  console.warn('store.getState()', store.getState())
+  console.log('store saved in local storage', store.getState())
   saveToLocalStorage(store.getState())
 })
 

@@ -6,8 +6,6 @@ const initState = {
 }
 
 const UserReducer = (state = initState, action) => {
-  console.warn('(USER REDUCER) action', action)
-  console.warn('(USER REDUCER) state', state)
   switch (action.type) {
     case LOGIN_USER_ACTION :
       return {

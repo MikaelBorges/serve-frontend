@@ -24,7 +24,6 @@ export function addToFavorites(ad) {
 export function registerUser(datas) {
   return axios.post(`${config.api_url}/user/register`, datas)
   .then(res => {
-    //console.warn('res (user.js)', res)
     return res
   })
   .catch(err => {
@@ -47,13 +46,8 @@ export function loginUser(datas) {
 }
 
 export function logoutUser(datas) {
-  /* console.warn('DATAS LOGOUT')
-  console.warn(datas)
-  console.warn('preparation appel de la route') */
   return axios.post(`${config.api_url}/user/logout`, datas)
   .then(res => {
-    /* console.warn('RES LOGOUT')
-    console.warn(res) */
     return res
   })
   .catch(err => {

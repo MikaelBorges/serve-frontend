@@ -4,22 +4,17 @@ import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 const RequireAuth = ({child, auth, dataUser, userInfo}) => {
-  console.warn('child', child)
-  console.warn('auth', auth)
-  console.warn('dataUser', dataUser)
   //const user = useSelector(selectUser);
   //je récup le params de la route demandée
-  const params = useParams();
-  console.warn('params', params)
-  //const Child = props.child;
+  const params = useParams()
+  //const Child = props.child
 
   // gestion des state
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     //récupération du token dans le localStorage
-    const token = window.localStorage.getItem("serve-token")
-    console.warn('token', token)
+    const token = window.localStorage.getItem('serve-token')
 
     //si le token est null et que la route est protégée
     if (token === null && auth) {

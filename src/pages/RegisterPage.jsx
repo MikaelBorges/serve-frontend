@@ -12,106 +12,97 @@ import { changeImg } from '../api/coach'
 
 function RegisterPage(props) {
 
-  const navigate = useNavigate(),
-        [img, setImg] = useState(null),
-        [msg, setMsg] = useState(null),
-        [email, setEmail] = useState(''),
-        [phone, setPhone] = useState(''),
-        [info, setInfo] = useState(null),
-        [error, setError] = useState(null),
-        [lastname, setLastname] = useState(''),
-        [password, setPassword] = useState(''),
-        [firstname, setFirstname] = useState(''),
-        [disabled, setDisabled] = useState(true),
+  const navigate = useNavigate()
+  const [img, setImg] = useState(null)
+  const [msg, setMsg] = useState(null)
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [info, setInfo] = useState(null)
+  const [error, setError] = useState(null)
+  const [lastname, setLastname] = useState('')
+  const [password, setPassword] = useState('')
+  const [firstname, setFirstname] = useState('')
+  const [disabled, setDisabled] = useState(true)
 
-        onSubmitForm = e => {
-          e.preventDefault()
-          let data = {
-            phone: e.target.phone.value,
-            image: e.target.image.value,
-            email: e.target.email.value,
-            lastname: e.target.lastname.value,
-            password: e.target.password.value,
-            firstname: e.target.firstname.value
-          }
-          registerUser(data)
-          .then((res) => {
-              //console.warn('res Register page', res)
-              if (res.status === 200) {
-                  //console.warn('res', res)
-                  setInfo(res.data.message)
-              }
-              else {
-                  console.warn('RES (LOGIN PAGE) :')
-                  console.warn(res)
-                  console.warn('RES.RESPONSE.DATA.MESSAGE (LOGIN PAGE) :')
-                  console.warn(res.response.data.message)
-                  setError(res.response.data.message);
-              }
-          })
-          .catch((err) => {
-              console.warn('err: rentré dans le catch RegisterPage.jsx')
-              console.warn(err)
-              setError(err)
-          })
-        },
-
-        // fonction callback de cloudinary déclenché lors de l'envoi un fichier
-        checkUploadResult = resultEvent => {
-          setMsg(null)
-          //si l'envoi est réussit
-          if (resultEvent.event === 'success') {
-            console.warn('result info', resultEvent.info)
-
-            /* let datas = {
-              imageUser : resultEvent.info.public_id,
-              // id: coach.infos.id
-            }
-            changeImg(datas)
-            .then((res)=>{
-              if(res.status === 200) {
-                getOneCoach(coach.infos.id)
-                .then(response => {
-                  console.warn('getOneCoach', response)
-                  let myCoach = response.result
-                  console.warn(myCoach)
-                  myCoach.token = localStorage.getItem('coachme-token')
-                  dispatch(connectCoach(myCoach))
-                  setImg(response.result.imageUrl)
-                })
-
-                setMsg('Votre profil a bien été édité');
-              } else {
-                setMsg("L'image n'a pas été modifiée");
-              }
-            })
-            .catch(err => console.warn('Echec modification image!')) */
-          } else {
-            console.warn('Erreur envoi fichier')
-          }
-          console.warn('RESULT EVENT', resultEvent)
-        },
-
-        // fonction d'affichage de notre interface de chargement d'images/videos de cloudinary
-        showWidget = e => {
-          e.preventDefault()
-          //paramètrage de l'interface
-          let widget = window.cloudinary.createUploadWidget(
-            {
-              cloudName: 'mika4ever', // nom de mon cloud
-              uploadPreset: 'samples', // dossier ou l'on veut envoyer
-              maxImageWidth: 800, // on peut paramètrer la taille max de l'image
-              cropping: false, // recadrage
-            },
-            (error, result) => {
-              console.warn('error showWidget', error);
-              console.warn('result showWidget', result);
-              checkUploadResult(result); //appel de notre callback
-            }
-          )
-          // ouverture de notre interface
-          widget.open()
+  const onSubmitForm = e => {
+    e.preventDefault()
+    let data = {
+      phone: e.target.phone.value,
+      image: e.target.image.value,
+      email: e.target.email.value,
+      lastname: e.target.lastname.value,
+      password: e.target.password.value,
+      firstname: e.target.firstname.value
+    }
+    registerUser(data)
+    .then((res) => {
+        if (res.status === 200) {
+            setInfo(res.data.message)
         }
+        else {
+            setError(res.response.data.message);
+        }
+    })
+    .catch((err) => {
+        console.warn('err: rentré dans le catch RegisterPage.jsx')
+        console.warn(err)
+        setError(err)
+    })
+  }
+
+  // fonction callback de cloudinary déclenché lors de l'envoi un fichier
+  const checkUploadResult = resultEvent => {
+    setMsg(null)
+    //si l'envoi est réussit
+    if (resultEvent.event === 'success') {
+
+      /* let datas = {
+        imageUser : resultEvent.info.public_id,
+        // id: coach.infos.id
+      }
+      changeImg(datas)
+      .then((res)=>{
+        if(res.status === 200) {
+          getOneCoach(coach.infos.id)
+          .then(response => {
+            let myCoach = response.result
+            myCoach.token = localStorage.getItem('coachme-token')
+            dispatch(connectCoach(myCoach))
+            setImg(response.result.imageUrl)
+          })
+
+          setMsg('Votre profil a bien été édité');
+        } else {
+          setMsg("L'image n'a pas été modifiée");
+        }
+      })
+      .catch(err => console.warn('Echec modification image!')) */
+    } else {
+      console.warn('Erreur envoi fichier')
+    }
+    console.warn('RESULT EVENT', resultEvent)
+  }
+
+  // fonction d'affichage de notre interface de chargement d'images/videos de cloudinary
+  const showWidget = e => {
+    e.preventDefault()
+    //paramètrage de l'interface
+    let widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'mika4ever', // nom de mon cloud
+        uploadPreset: 'samples', // dossier ou l'on veut envoyer
+        maxImageWidth: 800, // on peut paramètrer la taille max de l'image
+        cropping: false, // recadrage
+      },
+      (error, result) => {
+        console.warn('error showWidget', error);
+        console.warn('result showWidget', result);
+        checkUploadResult(result); //appel de notre callback
+      }
+    )
+    // ouverture de notre interface
+    widget.open()
+  }
 
   /* useEffect(() => {
     console.warn('register useEffect')
@@ -131,7 +122,6 @@ function RegisterPage(props) {
   useEffect(() => {
     console.warn('composant register chargé')
   }, []);
-
 
   if(props.dataUser._id) return <Navigate to='/' />
 

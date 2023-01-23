@@ -21,105 +21,100 @@ import { Pagination, Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 function Card(props) {
-  const navigate = useNavigate(),
-        urlOnBrowser = window.location.pathname,
-        [isItChecked, setIsItChecked] = useState(false),
-        [isSubscribed, setIsSubscribed] = useState(false),
-        userPage = `/projects/serve/user/${props.ad.userId}`,
-        [weAreOnUserPage, setWeAreOnUserPage] = useState(false),
-        userPageWithSlash = `/projects/serve/user/${props.ad.userId}/`,
+  const navigate = useNavigate()
+  const urlOnBrowser = window.location.pathname
+  const [isItChecked, setIsItChecked] = useState(false)
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const userPage = `/projects/serve/user/${props.ad.userId}`
+  const [weAreOnUserPage, setWeAreOnUserPage] = useState(false)
+  const userPageWithSlash = `/projects/serve/user/${props.ad.userId}/`
 
-        handleChangeCheckbox = e => {
-          e.stopPropagation()
+  const handleChangeCheckbox = e => {
+    e.stopPropagation()
 
-          /* if(props.allCardsChecked) {
-            props.uncheckAllCheckboxes()
-          } */
+    /* if(props.allCardsChecked) {
+      props.uncheckAllCheckboxes()
+    } */
 
-          //setIsSubscribed(e.target.checked)
+    //setIsSubscribed(e.target.checked)
 
-          //props.allCardsChecked && (isSubscribed || props.allCardsChecked)
-        },
+    //props.allCardsChecked && (isSubscribed || props.allCardsChecked)
+  }
 
-        displayStars = starsNb => {
-          let stringOfStars = ''
-          while(starsNb) {
-            stringOfStars += starIcon
-            --starsNb
-          }
-          return stringOfStars
-        },
+  const displayStars = starsNb => {
+    let stringOfStars = ''
+    while(starsNb) {
+      stringOfStars += starIcon
+      --starsNb
+    }
+    return stringOfStars
+  }
 
-        handleViewReviews = e => {
-          e.stopPropagation()
-          console.warn('voir les avis')
-        },
+  const handleViewReviews = e => {
+    e.stopPropagation()
+    console.warn('voir les avis')
+  }
 
-        handleShowAd = () => {
-          console.warn("afficher l'annonce")
-        },
+  const handleShowAd = () => {
+    console.warn("afficher l'annonce")
+  }
 
-        handleShowLocation = e => {
-          e.stopPropagation()
-          console.warn('afficher la carte')
-        },
+  const handleShowLocation = e => {
+    e.stopPropagation()
+    console.warn('afficher la carte')
+  }
 
-        handleShowPriceDetails = e => {
-          e.stopPropagation()
-          console.warn('proposer un prix de prestation')
-        },
+  const handleShowPriceDetails = e => {
+    e.stopPropagation()
+    console.warn('proposer un prix de prestation')
+  }
 
-        handleRateUser = e => {
-          e.stopPropagation()
-          console.warn('noter')
-        },
+  const handleRateUser = e => {
+    e.stopPropagation()
+    console.warn('noter')
+  }
 
-        handleModifyAd = e => {
-          e.stopPropagation()
-          console.warn('modifier annonce')
-        },
+  const handleModifyAd = e => {
+    e.stopPropagation()
+    console.warn('modifier annonce')
+  }
 
-        handleShowUserProfile = e => {
-          console.warn('handleShowUserProfile')
-          e.stopPropagation()
-          if (!weAreOnUserPage) {
-            if (urlOnBrowser !== userPage) {
-              navigate(`/user/${props.ad.userId}`)
-            }
-            if (urlOnBrowser !== userPageWithSlash) {
-              navigate(`user/${props.ad.userId}`)
-            }
-          }
-        },
+  const handleShowUserProfile = e => {
+    console.warn('handleShowUserProfile')
+    e.stopPropagation()
+    if (!weAreOnUserPage) {
+      if (urlOnBrowser !== userPage) {
+        navigate(`/user/${props.ad.userId}`)
+      }
+      if (urlOnBrowser !== userPageWithSlash) {
+        navigate(`user/${props.ad.userId}`)
+      }
+    }
+  }
 
-        handleDeleteAd = (e, id) => {
-          e.stopPropagation()
+  const handleDeleteAd = (e, id) => {
+    e.stopPropagation()
 
-          const adToDelete = {
-            id: id
-          }
+    const adToDelete = {
+      id: id
+    }
 
-          deleteAd(adToDelete)
-          .then(res => {
-            if(res.status === 200) {
-              //console.warn('res.data.message', res.data.message)
-              props.openPopup(res.data.message)
-              //window.location.reload(false)
-            }
-            else {
-              console.warn('res.data.message', res.data.message)
-            }
-          })
-          .catch(err => {
-            console.warn('err', err)
-          })
+    deleteAd(adToDelete)
+    .then(res => {
+      if(res.status === 200) {
+        props.openPopup(res.data.message)
+      }
+    })
+    .catch(err => {
+      console.warn('err', err)
+    })
 
-        },
+  }
 
-        showStatistics = e => {
-          e.stopPropagation()
-          console.warn('montrer les stats')
-        }
+  const showStatistics = e => {
+    e.stopPropagation()
+    console.warn('montrer les stats')
+  }
 
   useEffect(() => {
     if (urlOnBrowser === userPage || urlOnBrowser === userPageWithSlash) {
