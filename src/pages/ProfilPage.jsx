@@ -163,8 +163,7 @@ function ProfilPage(props) {
   //if(props.dataUser._id !== userIdPage) return <Navigate to='/' />
 
   return (
-    <section className='dark:bg-slate-900'>
-
+    <section className={`${props.areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}`}>
       <div className='px-6'>
 
         {/* {!isVisitor &&
@@ -211,7 +210,7 @@ function ProfilPage(props) {
             </div>
           </>
         } */}
-        <div className='pb-4 flex justify-between'>
+        <div className='pb-3 flex justify-between'>
           <div className='flex flex-col justify-center'>
             <h2 className='text-3xl dark:text-white'>
               {/* {isVisitor && !noAds && Object.keys(liteInfosOfUser).length > 0 ?
@@ -269,7 +268,13 @@ function ProfilPage(props) {
       </div>
 
       {ads.length > 0 && !noAds &&
-        <ul className='px-3'>
+        <ul
+        className={`
+          mt-px
+          ${props.areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}
+        `}
+        >
+          {props.areCardsVertical &&
           <Masonry
             role='list'
             className={styleOf.myMasonryGrid}
@@ -277,22 +282,41 @@ function ProfilPage(props) {
             columnClassName={styleOf.myMasonryGridColumn}
           >
             {ads.map(ad =>
-              <Card
-                ad={ad}
-                key={ad._id}
-                role='listitem'
-                isVisitor={isVisitor}
-                openPopup={openPopup}
-                darkMode={props.darkMode}
-                allCardsChecked={allCardsChecked}
-                horizontalCard={props.horizontalCard}
-                layoutOneColumn={props.layoutOneColumn}
-                showCheckboxsDraft={showCheckboxsDraft}
-                areCardsVertical={props.areCardsVertical}
-                handleAddToFavorites={props.handleAddToFavorites}
-              />
+            <Card
+              ad={ad}
+              key={ad._id}
+              role='listitem'
+              isVisitor={isVisitor}
+              openPopup={openPopup}
+              darkMode={props.darkMode}
+              allCardsChecked={allCardsChecked}
+              horizontalCard={props.horizontalCard}
+              layoutOneColumn={props.layoutOneColumn}
+              showCheckboxsDraft={showCheckboxsDraft}
+              areCardsVertical={props.areCardsVertical}
+              handleAddToFavorites={props.handleAddToFavorites}
+            />
             )}
           </Masonry>
+        }
+
+        {!props.areCardsVertical && ads.map(ad =>
+        <Card
+          ad={ad}
+          key={ad._id}
+          role='listitem'
+          isVisitor={isVisitor}
+          openPopup={openPopup}
+          darkMode={props.darkMode}
+          allCardsChecked={allCardsChecked}
+          horizontalCard={props.horizontalCard}
+          layoutOneColumn={props.layoutOneColumn}
+          showCheckboxsDraft={showCheckboxsDraft}
+          areCardsVertical={props.areCardsVertical}
+          handleAddToFavorites={props.handleAddToFavorites}
+        />
+        )}
+
         </ul>
       }
       {ads.length === 0 && !noAds &&

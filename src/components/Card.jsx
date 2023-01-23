@@ -395,7 +395,6 @@ function Card(props) {
                 dark:bg-slate-600
                 dark:text-yellow-100
               `}
-              onClick={e => handleViewReviews(e)}
             >
               <div
                 className={`

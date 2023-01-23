@@ -5,6 +5,7 @@ const PictureUser = ({imageUser, layoutOneColumn}) => {
     <div
       className={`
         flex
+        m-auto
         flex-col
         cursor-pointer
         justify-center

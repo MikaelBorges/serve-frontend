@@ -37,8 +37,10 @@ import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4
 
 const filterElementsRadio = []
 //const filterElementsRadio = ['oui', 'non']
+
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
+
 //const filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
 const filterElementsCheckbox = []
 
@@ -599,7 +601,6 @@ function Layout(props) {
       </header>
       <main
         className={`
-          pt-3
           min-h-screen
           ${isFocused ? 'blur-2xl' : ''}
         `}
@@ -632,8 +633,6 @@ function Layout(props) {
             ${styleOf.biggerShadow}
           `}
         >
-
-          
           {/* <li
             className={`
               my-2

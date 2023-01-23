@@ -176,12 +176,12 @@ function HomePage(props) {
   }, [props.locationTyped]); */
 
   return (
-    <section className={`flex flex-col space-y-12 ${styleOf.sectionHomepage}`}>
+    <section className={`flex flex-col space-y-12 ${props.areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>
       {Boolean(filteredAds.length) &&
       <ul
         className={`
           mt-px
-          ${props.areCardsVertical ? '' : 'grid gap-4 md:grid-cols-2 xl:grid-cols-3'}
+          ${props.areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}
         `}
         >
         {props.areCardsVertical &&
