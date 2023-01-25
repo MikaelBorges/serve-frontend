@@ -125,7 +125,7 @@ function Card(props) {
   return (
     <li
       className={`
-        ${props.areCardsVertical ? '' : 'flex h-36'}
+        ${props.areCardsVertical ? '[&:not(:last-child)]:mb-3' : 'flex h-36'}
         rounded-3xl
         bg-slate-200
         overflow-hidden
@@ -160,7 +160,13 @@ function Card(props) {
       </div>
       <div
         onClick={() => handleShowAd()}
-        className={`${props.areCardsVertical ? '' : 'w-full'}`}
+        className={`
+          p-2
+          flex
+          flex-col
+          cursor-pointer
+          ${props.areCardsVertical ? '' : 'justify-between w-full'}
+        `}
       >
         <div className='flex justify-between items-center'>
           <div className='flex items-center'>
@@ -202,12 +208,10 @@ function Card(props) {
           <div className='mt-1 mx-2 mb-2'>{crownIcon}</div>
           }
         </div>
-        <div
+        {/* <div
           className={`
-            p-3
             flex
             flex-col
-            cursor-pointer
             justify-between
             dark:text-white
             ${props.layoutOneColumn && !props.horizontalCard ?
@@ -217,17 +221,19 @@ function Card(props) {
               styleOf.textPartHorizontalAd : ''
             }
           `}
-        >
+        > */}
           {props.areCardsVertical &&
-          <div className='pb-3'>
+          <div className='py-3'>
             <div
               className={`
                 flex
                 flex-1
                 min-w-0
+                items-center
+                dark:text-white
               `}
             >
-              {props.areCardsVertical &&
+              {/* {props.areCardsVertical &&
               <Link
                 className={`
                   flex
@@ -281,25 +287,34 @@ function Card(props) {
                   </div>
                 </h4>
               </Link>
+              } */}
+              {props.areCardsVertical &&
+              <Link to={`/user/${props.ad.userId}`}>
+                <PictureUser
+                  imageUser={props.ad.imageUser}
+                  layoutOneColumn={props.layoutOneColumn}
+                />
+              </Link>
               }
+              <div className='pl-2'>
+                <div className='text-sm'>{displayStars(props.ad.starsNb)}</div>
+                <button
+                  className={`
+                    px-2
+                    text-xs
+                    font-bold
+                    rounded-3xl
+                    bg-gray-100
+                    dark:bg-slate-600
+                    dark:text-yellow-100
+                    ${styleOf.letterSpacingThinner}
+                  `}
+                  onClick={e => handleRateUser(e)}
+                >
+                  noter
+                </button>
+              </div>
             </div>
-            <span className='text-sm'>{displayStars(props.ad.starsNb)}</span>
-            <button
-              className={`
-                px-2
-                ml-1
-                text-xs
-                font-bold
-                rounded-3xl
-                bg-gray-100
-                dark:bg-slate-600
-                dark:text-yellow-100
-                ${styleOf.letterSpacingThinner}
-              `}
-              onClick={e => handleRateUser(e)}
-            >
-              noter
-            </button>
             <div
               className={`
                 flex
@@ -331,14 +346,15 @@ function Card(props) {
           }
           <p
             className={`
-              mb-3
+              dark:text-white
               ${styleOf.limitTextTo}
+              ${props.areCardsVertical ? 'mb-3' : ''}
               ${props.areCardsVertical ? styleOf.fiveLinesMax : styleOf.oneLineMax}
             `}
           >
             {props.ad.description}
           </p>
-          {props.areCardsVertical &&
+          {false &&
           <>
             <p
               className={`
@@ -399,6 +415,7 @@ function Card(props) {
               <div
                 className={`
                 text-white
+                dark:text-yellow-100
                   ${props.layoutOneColumn && !props.horizontalCard ?
                     'text-xl' : 'text-base'
                   }
@@ -460,7 +477,8 @@ function Card(props) {
               </div>
             </button>
           </div>
-          {/* {weAreOnUserPage && !props.isVisitor &&
+        {/* </div> */}
+{/* {weAreOnUserPage && !props.isVisitor &&
             <div className='flex pt-3'>
               <button
                 className={`
@@ -536,8 +554,6 @@ function Card(props) {
               }
             </div>
           } */}
-        </div>
-
       </div>
     </li>
   )

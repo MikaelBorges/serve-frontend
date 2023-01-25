@@ -164,7 +164,7 @@ function ProfilPage(props) {
 
   return (
     <section className={`${props.areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}`}>
-      <div className='px-6'>
+      <div className='py-4'>
 
         {/* {!isVisitor &&
           <>
@@ -210,7 +210,7 @@ function ProfilPage(props) {
             </div>
           </>
         } */}
-        <div className='pb-3 flex justify-between'>
+        <div className='flex justify-between'>
           <div className='flex flex-col justify-center'>
             <h2 className='text-3xl dark:text-white'>
               {/* {isVisitor && !noAds && Object.keys(liteInfosOfUser).length > 0 ?
@@ -358,7 +358,7 @@ function ProfilPage(props) {
 
 const mapStateToProps = (store) => {
   return {
-    userInfo: store.user
+    user: store.user
   }
 }
 

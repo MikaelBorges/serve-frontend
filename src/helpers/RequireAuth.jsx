@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { connect } from 'react-redux'
 
-const RequireAuth = ({child, auth, dataUser, userInfo}) => {
+const RequireAuth = ({child, auth, dataUser, user}) => {
   //const user = useSelector(selectUser);
   //je récup le params de la route demandée
   const params = useParams()
@@ -24,7 +24,7 @@ const RequireAuth = ({child, auth, dataUser, userInfo}) => {
     }
     else {
       //si l'utilisateur est déconnecté dans le store de redux
-      if (userInfo.isLogged) {
+      if (user.isLogged) {
         console.warn('loggué')
       }
       else {
@@ -47,8 +47,7 @@ const RequireAuth = ({child, auth, dataUser, userInfo}) => {
 const mapStateToProps = (store, ownProps) => {
   console.warn('(REQUIRE AUTH) store', store)
   return {
-    userInfo: store.user,
-    allAds: store.ads.fetchedAds
+    user: store.user
   }
 }
 

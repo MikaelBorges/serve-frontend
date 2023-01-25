@@ -241,7 +241,7 @@ function HomePage(props) {
 
 const mapStateToProps = (store, ownProps) => {
   return {
-    userInfo: store.user,
+    user: store.user,
     allAds: store.ads.fetchedAds
   }
 }

@@ -21,6 +21,7 @@ import { logoutUser } from './api/user'
 import { useState, useRef } from 'react'
 import styleOf from './Layout.module.scss'
 import PictureUser from './components/PictureUser'
+import Notification from './components/Notification'
 import IconCross from './components/icons/IconCross'
 import FilterRadio from './components/filter/FilterRadio'
 import FilterInput from './components/filter/FilterInput'
@@ -35,14 +36,15 @@ import IconHorizontalRule from './components/icons/IconHorizontalRule'
 import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
 import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
-const filterElementsRadio = []
-//const filterElementsRadio = ['oui', 'non']
-
+//const filterElementsRadio = []
+const filterElementsRadio = ['oui', 'non']
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
+const filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
+// const filterElementsCheckbox = []
 
-//const filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
-const filterElementsCheckbox = []
+const headerMenu = [lightIcon, darkIcon, systemIcon, disconnectIcon, wheelIcon, plusIcon, userIcon]
+const dockMenu = [heartIcon, messageIcon, cardIcon]
 
 function Layout(props) {
   const inputRef = useRef(null)
@@ -52,6 +54,11 @@ function Layout(props) {
   const [isFocused, setIsFocused] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
+
+  const numberOfMessagesUnread = props.user.isLogged ? 2 : ''
+  //const numberOfFavoritesLiked = props.user.isLogged ? props.user.info.favorites.length : ''
+  let numberOfFavoritesLiked = ''
+  if(userIsLogged(props.dataUser)) numberOfFavoritesLiked = props.dataUser.favorites.length
 
   /* const parseJwt = (token) => {
     var base64Url = token.split('.')[1];
@@ -66,21 +73,6 @@ function Layout(props) {
     const parsedJwt = parseJwt(token)
     console.warn('parsed jwt', parsedJwt)
   } */
-
-  let themeButtonIcon
-  switch(props.theme) {
-    case 'light':
-      themeButtonIcon = lightIcon
-      break
-    case 'dark':
-      themeButtonIcon = darkIcon
-      break
-    case 'system':
-      themeButtonIcon = systemIcon
-      break
-    default:
-      console.error("Problème dans props.theme et du coup dans le state theme de l'app")
-  }
 
   const handleLogout = () => {
     let data = { _id : props.dataUser._id }
@@ -248,9 +240,9 @@ function Layout(props) {
                 dark:bg-slate-800
                 placeholder:text-sm
               `}
+              onBlur={handleBlur}
               placeholder='recherchez'
               onFocus={() => setIsFocused(true)}
-              onBlur={handleBlur}
             />
             <button
               onClick={handleClickIconCross}
@@ -318,7 +310,7 @@ function Layout(props) {
                 </li> */}
                 <li
                   className={`
-                    my-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -338,7 +330,7 @@ function Layout(props) {
                 </li>
                 <li
                   className={`
-                    my-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -358,7 +350,7 @@ function Layout(props) {
                 </li>
                 <li
                   className={`
-                    my-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -378,7 +370,7 @@ function Layout(props) {
                 </li>
                 <li
                   className={`
-                    my-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -415,7 +407,7 @@ function Layout(props) {
                 {userIsLogged(props.dataUser) &&
                 <li
                   className={`
-                    mt-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -437,7 +429,7 @@ function Layout(props) {
                 {userIsLogged(props.dataUser) &&
                 <li
                   className={`
-                    my-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -466,7 +458,7 @@ function Layout(props) {
                 }
                 <li
                   className={`
-                    mt-2
+                    mt-1
                     flex
                     rounded-full
                     items-center
@@ -609,7 +601,6 @@ function Layout(props) {
       </main>
       <nav
         className={`
-          flex
           z-10
           fixed
           w-fit
@@ -617,14 +608,12 @@ function Layout(props) {
           left-3
           right-3
           bottom-3
-          justify-center
           ${props.rightHand ? '' : ''}
         `}
       >
         <ul
           className={`
             p-1
-            h-10
             flex
             w-fit
             bg-white
@@ -801,7 +790,7 @@ function Layout(props) {
           </li> */}
           <li
             className={`
-              w-8
+              w-11
               flex
               rounded-full
               items-center
@@ -813,16 +802,43 @@ function Layout(props) {
             `}
           >
             <button
-              className='rounded-3xl h-full w-full'
+              /* className={`
+                h-full
+                w-full
+                relative
+                rounded-3xl
+                after:top-1
+                after:right-1
+                after:text-xs
+                after:absolute
+                after:text-white
+                after:rounded-full
+                after:bg-red-500
+                after:inline-block
+                [&:not(:first-child)]:ml-1
+                ${styleOf.minWidthNotification}
+                after:content-['${numberOfFavoritesLiked}']
+              `} */
+              className={`
+                h-full
+                w-full
+                relative
+                rounded-3xl
+                [&:not(:first-child)]:ml-1
+              `}
               onClick={() => console.warn('afficher la page des favoris')}
             >
               {heartIcon}
+              {Boolean(numberOfFavoritesLiked) &&
+              <Notification
+                notificationNumber={numberOfFavoritesLiked}
+              />
+              }
             </button>
           </li>
           <li
             className={`
-              w-8
-              ml-1
+              w-11
               flex
               rounded-full
               items-center
@@ -831,19 +847,30 @@ function Layout(props) {
               cursor-pointer
               justify-center
               dark:bg-slate-400
+              [&:not(:first-child)]:ml-1
             `}
           >
             <button
-              className='rounded-3xl h-full w-full'
+              className={`
+                h-full
+                w-full
+                relative
+                rounded-3xl
+                [&:not(:first-child)]:ml-1
+              `}
               onClick={() => console.warn('afficher la messagerie')}
             >
               {messageIcon}
+              {Boolean(numberOfMessagesUnread) &&
+              <Notification
+                notificationNumber={numberOfMessagesUnread}
+              />
+              }
             </button>
           </li>
           <li
             className={`
-              w-8
-              ml-1
+              w-11
               flex
               rounded-full
               items-center
@@ -852,6 +879,7 @@ function Layout(props) {
               cursor-pointer
               justify-center
               dark:bg-slate-400
+              [&:not(:first-child)]:ml-1
             `}
           >
             <button
@@ -866,7 +894,7 @@ function Layout(props) {
       <footer
         className={`
           pt-6
-          pb-16
+          pb-20
           text-center
           dark:text-white
           dark:bg-slate-900
@@ -881,7 +909,7 @@ function Layout(props) {
 
 const mapStateToProps = (store) => {
   return {
-    userInfo: store.user
+    user: store.user
   }
 }
 

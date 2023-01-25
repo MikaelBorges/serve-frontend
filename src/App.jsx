@@ -15,7 +15,6 @@ import { Route, Routes, useLocation } from 'react-router-dom'
 import { lightIcon, darkIcon, systemIcon } from './constants/icons'
 
 function App() {
-  const [userId, setUserId] = useState('')
   const [theme, setTheme] = useState('light')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
@@ -114,7 +113,7 @@ function App() {
     setAuthorizedToAdd(true)
   }
 
-  const checkIfAddToFavorites = (adId) => {
+  const toggleAddToFavorites = (adId) => {
     const ad = {
       adId: adId,
       userId: dataUser._id,
@@ -123,6 +122,26 @@ function App() {
     .then(res => {
       if(res.status === 200) {
         setClickedAd({adId: adId, newFavNumber: res.data.newFavNumber})
+
+        const dataUserCalc = {...dataUser}
+        console.log('adId', adId)
+        const index = dataUserCalc.favorites.indexOf(adId)
+        console.log('index', index)
+
+        if (index > -1) {
+          console.log('trouvé on le supprime')
+          dataUserCalc.favorites.splice(index, 1)
+        }
+        else {
+          console.log("pas trouvé on l'ajoute")
+          dataUserCalc.favorites.push(adId)
+        }
+
+        // console.log('dataUserCalc', dataUserCalc)
+        // setDataUser(dataUserCalc)
+
+        window.localStorage.setItem('user', JSON.stringify(dataUserCalc))
+
       }
     })
     .catch(err => console.warn(err))
@@ -132,7 +151,7 @@ function App() {
     e.stopPropagation()
 
     if(!userIsLogout(dataUser) && (dataUser._id !== ad.userId)) {
-      checkIfAddToFavorites(ad._id)
+      toggleAddToFavorites(ad._id)
     }
   }
 
@@ -198,7 +217,7 @@ function App() {
     const userDataInLS = window.localStorage.getItem('user')
     if (userDataInLS) {
       setDataUser(JSON.parse(userDataInLS))
-      setUserId(JSON.parse(userDataInLS)._id)
+      console.log('dataUser a été hydraté par le local storage')
     }
   }, []);
 
@@ -303,7 +322,7 @@ function App() {
 /* const mapStateToProps = (store) => {
   console.warn('(APP) store', store)
   return {
-    userInfo: store.user
+    user: store.user
   }
 } */
 

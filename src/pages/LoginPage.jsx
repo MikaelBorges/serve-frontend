@@ -7,40 +7,40 @@ import { loginUserAction } from '../actions/user/userActions'
 
 function LoginPage(props) {
 
-  const navigate = useNavigate(),
-        [email, setEmail] = useState(''),
-        [error, setError] = useState(null),
-        [password, setPassword] = useState(''),
-        [disabled, setDisabled] = useState(true),
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [error, setError] = useState(null)
+  const [password, setPassword] = useState('')
+  const [disabled, setDisabled] = useState(true)
 
-        onSubmitForm = e => {
-          e.preventDefault()
+  const onSubmitForm = e => {
+    e.preventDefault()
 
-          let data = {
-            email: e.target.email.value,
-            password: e.target.password.value,
-          }
+    let data = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    }
 
-          loginUser(data)
-          .then(res => {
-            if(res.status === 200) {
-              window.localStorage.setItem('serve-token', res.data.token)
-              window.localStorage.setItem('user', JSON.stringify(res.data.session.user))
+    loginUser(data)
+    .then(res => {
+      if(res.status === 200) {
+        window.localStorage.setItem('serve-token', res.data.token)
+        window.localStorage.setItem('user', JSON.stringify(res.data.session.user))
 
-              props.loginUserAction(res.data.session.user)
-              props.updateUser(res.data.session.user)
-              navigate('/')
-            }
-            else {
-              setError(res.response.data.message)
-            }
-          })
-          .catch(err => {
-              console.warn('err: rentré dans le catch LoginPage.jsx')
-              console.warn(err)
-              setError(err)
-          })
-        }
+        props.loginUserAction(res.data.session.user)
+        props.updateUser(res.data.session.user)
+        navigate('/')
+      }
+      else {
+        setError(res.response.data.message)
+      }
+    })
+    .catch(err => {
+      console.warn('err: rentré dans le catch LoginPage.jsx')
+      console.warn(err)
+      setError(err)
+    })
+  }
 
   useEffect(() => {
     if(email !== '' && password !== '') {
@@ -51,7 +51,7 @@ function LoginPage(props) {
     }
   }, [email, password]);
 
-  //if(props.userInfo.isLogged) {
+  //if(props.user.isLogged) {
   if(props.dataUser._id) {
     return <Navigate to='/' />
   }
@@ -120,8 +120,7 @@ function LoginPage(props) {
 
 const mapStateToProps = (store, ownProps) => {
   return {
-    userInfo: store.user,
-    allAds: store.ads.fetchedAds
+    user: store.user
   }
 }
 
