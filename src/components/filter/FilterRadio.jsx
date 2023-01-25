@@ -1,9 +1,4 @@
-function FilterRadio({radioName, groupName}) {
-
-  const handleClickRadio = (e) => {
-    e.stopPropagation()
-    console.warn('clic on radio')
-  }
+function FilterRadio({radioName, groupName, checked, handleChangeRadio}) {
 
   return (
     <label
@@ -14,13 +9,16 @@ function FilterRadio({radioName, groupName}) {
       <input
         type='radio'
         name={groupName}
+        value={radioName}
         className='cursor-pointer'
         id={`${groupName}-${radioName}`}
-        onClick={(e) => handleClickRadio(e)}
+        onClick={(e) => e.stopPropagation()}
+        onChange={(e) => handleChangeRadio(e)}
+        defaultChecked={checked === radioName ? 'checked' : ''}
       />
       {radioName}
     </label>
   )
 }
 
-export default FilterRadio;
+export default FilterRadio

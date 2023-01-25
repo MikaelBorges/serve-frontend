@@ -137,6 +137,7 @@ function Card(props) {
         }
       `}
     >
+      {Boolean(props.ad.imagesWork.length) &&
       <div className='aspect-square'>
         <Swiper
           navigation={true}
@@ -158,6 +159,7 @@ function Card(props) {
           )}
         </Swiper>
       </div>
+      }
       <div
         onClick={() => handleShowAd()}
         className={`

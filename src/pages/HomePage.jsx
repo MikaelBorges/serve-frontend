@@ -11,8 +11,23 @@ function HomePage(props) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   const [search, setSearch] = useSearchParams()
-  const [filteredAds, setFilteredAds] = useState([])
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
+
+  const location = search.get('location')
+  const minPrice = Number(search.get('minPrice') || 0)
+  const maxPrice = Number(search.get('maxPrice') || 0)
+  const superUser = search.get('superUser') ? true : false
+  const onlyWithPhotos = search.get('onlyWithPhotos') ? true : false
+
+  const filteredAds = ads
+  ?.filter(ad => minPrice ? minPrice >= ad.price : true)
+  ?.filter(ad => maxPrice ? ad.price <= maxPrice : true)
+  ?.filter(ad => superUser ? ad.superUser === superUser : true)
+  ?.filter(ad => onlyWithPhotos ? ad.imagesWork.length > 0 === onlyWithPhotos : true)
+  ?.filter(ad => location ? ad.location.toUpperCase().includes(location.toUpperCase()) : true)
+
+  /* console.log('minPrice', minPrice)
+  console.log('maxPrice', maxPrice) */
 
   /* const generateMasonryBreakpointsFor = (verticalCards) => {
     let pas
@@ -68,51 +83,10 @@ function HomePage(props) {
   }
 
   useEffect(() => {
-    const location = search.get('location')
-    const minPrice = search.get('minPrice')
-    const maxPrice = search.get('maxPrice')
-
-    /* console.warn('minPrice', minPrice)
-    console.warn('maxPrice', maxPrice)
-    console.warn('location', location) */
-
-    const filterAds = ads
-    .filter(ad => ad.location === location)
-    .filter(ad => +ad.price >= +minPrice)
-    .filter(ad => +ad.price <= +maxPrice)
-
-    setFilteredAds(filterAds)
-
-    /* if(location || minPrice || maxPrice) {
-      if(location) {
-        const filteredLocationAds = ads.filter(ad => ad.location === location)
-        if(filteredLocationAds.length) setFilteredAds(filteredLocationAds)
-      } else {
-        //console.warn('location', location)
-        //const filteredLocationAds = filteredAds.filter(ad => ad.location !== location)
-        //console.warn('filteredLocationAds', filteredLocationAds)
-        //if(filteredLocationAds.length) setFilteredAds(filteredLocationAds)
-        //setFilteredAds(ads)
-      }
-      if(minPrice) {
-        const filteredMinPriceAds = ads.filter(ad => +ad.price >= +minPrice)
-        console.warn('filteredMinPriceAds', filteredMinPriceAds)
-        setFilteredAds(filteredMinPriceAds)
-      } else {
-
-      }
-      if(maxPrice) {
-        const filteredMaxPriceAds = ads.filter(ad => +ad.price <= +maxPrice)
-        setFilteredAds(filteredMaxPriceAds)
-      } else {
-        
-      }
-    } */
-
-  }, [search])
-
-  useEffect(() => {
     if(Object.keys(props.clickedAd).length > 0) {
+
+      /* const dataUserCalc = {...dataUser}
+      const index = dataUserCalc.favorites.indexOf(adId) */
 
       // Note : Phase de recherche de l'annonce à mettre à jour (ses nb favoris)
       let item = {}
@@ -135,7 +109,6 @@ function HomePage(props) {
       item.favoritesNb = favoritesToUpdate
       items[indexSaved] = item
       setAds(items)
-      setFilteredAds(items)
       props.resetClickedAd()
     }
   }, [props.clickedAd]);
@@ -147,33 +120,10 @@ function HomePage(props) {
     loadAds()
     .then(res => {
       setAds(res.ads)
-      setFilteredAds(res.ads)
       props.fetchAdsAction(res.ads)
     })
     .catch(err => console.warn(err))
   }, []);
-
-  /* useEffect(() => {
-    let priceFilteredAds,
-        minPrice = props.minPrice,
-        maxPrice = props.maxPrice
-    if(props.minPrice) minPrice = +props.minPrice
-    if(props.maxPrice) maxPrice = +props.maxPrice
-
-    if(minPrice && !maxPrice) priceFilteredAds = filteredAds.filter(ad => +ad.price >= minPrice)
-    else if(!minPrice && maxPrice) priceFilteredAds = filteredAds.filter(ad => +ad.price <= maxPrice)
-    else if(minPrice && maxPrice) priceFilteredAds = filteredAds.filter(ad => +ad.price >= minPrice && +ad.price <= maxPrice)
-    else if(!minPrice && !maxPrice) priceFilteredAds = filteredAds
-    setFilteredAds(priceFilteredAds)
-  }, [props.minPrice, props.maxPrice]); */
-
-  /* useEffect(() => {
-    console.warn('props.locationTyped', props.locationTyped)
-    console.warn('filteredAds', filteredAds)
-    const locationFilteredAds = filteredAds.filter(ad => ad.location === props.locationTyped)
-    console.warn('locationFilteredAds', locationFilteredAds)
-    if(locationFilteredAds.length) setFilteredAds(locationFilteredAds)
-  }, [props.locationTyped]); */
 
   return (
     <section className={`flex flex-col space-y-12 ${props.areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>

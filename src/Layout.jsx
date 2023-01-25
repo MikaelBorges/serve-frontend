@@ -36,19 +36,29 @@ import IconHorizontalRule from './components/icons/IconHorizontalRule'
 import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
 import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
-//const filterElementsRadio = []
-const filterElementsRadio = ['oui', 'non']
+const superUserFilter = {
+  defaultSuperUserFilterRadioChecked: 'non',
+  superUserFilterRadioChoices: ['oui', 'non']
+}
+const photoAdsFilter = {
+  defaultPhotosAdsFilterRadioChecked: 'non',
+  photosAdsFilterRadioChoices: ['oui', 'non']
+}
+const defaultSuperUserFilterRadioChecked = superUserFilter.defaultSuperUserFilterRadioChecked
+const superUserFilterRadioChoices = superUserFilter.superUserFilterRadioChoices
+const photosAdsFilterRadioChoices = photoAdsFilter.photosAdsFilterRadioChoices
+const defaultPhotosAdsFilterRadioChecked = photoAdsFilter.defaultPhotosAdsFilterRadioChecked
+
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
 const filterElementsCheckbox = ['1⭐️', '2⭐️', '3⭐️', '4⭐️', '5⭐️']
-// const filterElementsCheckbox = []
 
 const headerMenu = [lightIcon, darkIcon, systemIcon, disconnectIcon, wheelIcon, plusIcon, userIcon]
 const dockMenu = [heartIcon, messageIcon, cardIcon]
 
 function Layout(props) {
-  const inputRef = useRef(null)
   const navigate = useNavigate()
+  const searchInputRef = useRef(null)
   const [error, setError] = useState(null)
   const [search, setSearch] = useSearchParams()
   const [isFocused, setIsFocused] = useState(false)
@@ -98,65 +108,27 @@ function Layout(props) {
     })
   }
 
-  /* const handleClickPriceFilter = () => {
-    setIsPriceFilterOpen(!isPriceFilterOpen)
-  }
-
-  function handleClickMinOrMaxPriceFilter(e) {
-    e.stopPropagation()
-  } */
-
-  /* const handleChangeMinPriceFilter = (e) => {
-    const price = e.target.value
-    if (price.length) search.set('minPrice', price)
-    else search.delete('minPrice')
-    setSearch(search)
-
-    props.changeMinPrice(e.target.value)
-  } */
-
   const handleChangePriceInput = (e) => {
-    const name = e.target.name,
-          price = e.target.value
+    const name = e.target.name
+    const price = e.target.value
 
     if (price.length) {
-      if(name === 'min') {
-        search.set('minPrice', price)
-      } else {
-        search.set('maxPrice', price)
-      }
-    } else {
-      if(name === 'min') {
-        search.delete('minPrice')
-      } else {
-        search.delete('maxPrice')
-      }
+      if(name === 'min') search.set('minPrice', price)
+      else search.set('maxPrice', price)
+    }
+    else {
+      if(name === 'min') search.delete('minPrice')
+      else search.delete('maxPrice')
     }
 
     setSearch(search)
   }
-
-  /* const handleChangeMaxPriceFilter = (e) => {
-    const price = e.target.value
-    if (price.length) search.set('maxPrice', price)
-    else search.delete('maxPrice')
-    setSearch(search)
-
-    props.changeMaxPrice(e.target.value)
-  } */
-
-  /* const handleClickLocationInput = (e) => {
-    e.stopPropagation()
-  } */
 
   const handleChangeLocationInput = (e) => {
     const text = e.target.value
     if (text.length) search.set('location', text)
     else search.delete('location')
     setSearch(search)
-    //setSearch(search, { replace: true })
-    //navigate(`/?location=${e.target.value}`)
-    //props.changeLocationTyped(e.target.value)
   }
 
   const handleClickFilterButton = () => {
@@ -164,12 +136,55 @@ function Layout(props) {
   }
 
   const handleClickIconCross = () => {
-    inputRef.current.value = ''
+    searchInputRef.current.value = ''
   }
 
   const handleBlur = () => {
     setIsFocused(false)
   }
+
+  const handleChangeRadio = (e) => {
+    const name = e.target.name
+    const radioValue = e.target.value
+    console.log('name', name)
+    console.log('radioValue', radioValue)
+
+    if(name === 'superUserRadioGroup') {
+      if(radioValue === 'oui') search.set('superUser', true)
+      else search.delete('superUser')
+    }
+    else {
+      if(radioValue === 'oui') search.set('onlyWithPhotos', true)
+      else search.delete('onlyWithPhotos')
+    }
+
+    setSearch(search)
+  }
+
+  /* const handleChangeCheckbox = (e) => {
+    const checkboxName = e.target.name
+    const checkboxValue = e.target.value
+
+    switch(checkboxName) {
+      case '1' : 
+      break
+      case '2' : 
+      break
+      case '3' : 
+      break
+      case '4' : 
+      break
+      case '5' : 
+      break
+      default : search.delete('superUser')
+      break
+    }
+
+    // if(checkboxValue === 'oui') search.set('superUser', radioValue)
+    // else search.delete('superUser')
+
+    setSearch(search)
+  } */
 
   return (
     <div className='min-h-screen dark:bg-slate-900'>
@@ -228,7 +243,7 @@ function Layout(props) {
             </button>
             <input
               type='text'
-              ref={inputRef}
+              ref={searchInputRef}
               id='searchInput'
               className={`
                 mx-2
@@ -512,48 +527,52 @@ function Layout(props) {
         >
           {Boolean(filterPricePlaceholderElements.length) &&
           <li className='mr-3'>
-            <FilterButton statusFilter={true} filterButtonName='Prix'>
+            <FilterButton filterButtonName='Prix'>
               {filterPricePlaceholderElements.map((placeholder, index) =>
                 <FilterInput
                   key={index}
                   type='number'
+                  name={placeholder}
                   placeholder={placeholder}
-                  handleChangeInput={handleChangePriceInput}
+                  onChange={handleChangePriceInput}
                 />
               )}
             </FilterButton>
           </li>
           }
           {Boolean(filterLocationPlaceholderElements.length) &&
-          <li>
-            <FilterButton statusFilter={true} filterButtonName='Lieu'>
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Lieu'>
               {filterLocationPlaceholderElements.map((placeholder, index) =>
                 <FilterInput
                   key={index}
                   type='text'
+                  name={placeholder}
                   placeholder={placeholder}
-                  handleChangeInput={handleChangeLocationInput}
+                  onChange={handleChangeLocationInput}
                 />
               )}
             </FilterButton>
           </li>
           }
-          {Boolean(filterElementsRadio.length) &&
-          <li>
-            <FilterButton statusFilter={false} filterButtonName='Super user'>
-              {filterElementsRadio.map((radioName, index) =>
+          {Boolean(superUserFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Super user'>
+              {superUserFilterRadioChoices.map((radioName, index) =>
                 <FilterRadio
                   key={index}
                   radioName={radioName}
                   groupName='superUserRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  checked={defaultSuperUserFilterRadioChecked}
                 />
               )}
             </FilterButton>
           </li>
           }
           {Boolean(filterElementsCheckbox.length) &&
-          <li>
-            <FilterButton statusFilter={false} filterButtonName='Notes'>
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Notes'>
               {filterElementsCheckbox.map((checkboxName, index) =>
                 <FilterCheckbox
                   key={index}
@@ -564,14 +583,16 @@ function Layout(props) {
             </FilterButton>
           </li>
           }
-          {Boolean(filterElementsRadio.length) &&
-          <li>
-            <FilterButton statusFilter={false} filterButtonName='Photos'>
-              {filterElementsRadio.map((radioName, index) =>
+          {Boolean(photosAdsFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Uniquement avec photos'>
+              {photosAdsFilterRadioChoices.map((radioName, index) =>
                 <FilterRadio
                   key={index}
                   radioName={radioName}
                   groupName='photoRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  checked={defaultPhotosAdsFilterRadioChecked}
                 />
               )}
             </FilterButton>

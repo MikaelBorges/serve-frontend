@@ -23,16 +23,20 @@ function NewAdPage(props) {
 
   const onSubmitForm = e => {
     e.preventDefault()
-    const arrayOfUrlImages = [
-      e.target.imageAd.value,
-      e.target.imageAd2.value,
-      e.target.imageAd3.value
-    ]
-    const elementDifferentOfEmptyString = url => url !== ''
-    const isAtMinimumOneImage = arrayOfUrlImages.some(elementDifferentOfEmptyString)
+    let arrayOfUrlImages
+    let filteredArrayOfUrlImages
 
-    let filteredArrayOfUrlImages = ['https://travauxcasa.com/public/artiza/images/default.png']
-    if (isAtMinimumOneImage) filteredArrayOfUrlImages = arrayOfUrlImages.filter(img => img !== '')
+    if(!e.target.imageAd.value && !e.target.imageAd2.value && !e.target.imageAd3.value) {
+      filteredArrayOfUrlImages = []
+    }
+    else {
+      arrayOfUrlImages = [
+        e.target.imageAd.value,
+        e.target.imageAd2.value,
+        e.target.imageAd3.value
+      ]
+      filteredArrayOfUrlImages = arrayOfUrlImages.filter(img => img !== '')
+    }
 
     const data = {
       userId: props.dataUser._id,

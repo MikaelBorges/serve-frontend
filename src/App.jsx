@@ -243,7 +243,7 @@ function App() {
       <Routes>
         <Route
           exact
-          path='/*'
+          path='/'
           element={
             <HomePage
               minPrice={minPrice}

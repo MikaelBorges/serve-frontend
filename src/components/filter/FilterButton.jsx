@@ -1,33 +1,32 @@
 import styleOf from './FilterButton.module.scss'
 import { useState } from 'react'
 
-function FilterButton({filterButtonName, children, statusFilter}) {
-  const [isFilterOpen, setIsFilterOpen] = useState(statusFilter)
-
-  const handleClickFilter = () => {
-    setIsFilterOpen(!isFilterOpen)
-  }
+function FilterButton({filterButtonName, children}) {
 
   return (
-    <button
+    <div
       className={`
         px-3
+        flex
         mt-1.5
         border
         rounded-3xl
+        items-center
         border-solid
         border-black
         dark:border-white
         ${styleOf.filterButton}
-      `}
-      onClick={handleClickFilter}
+    `}
     >
-      {filterButtonName}
-      <fieldset className={isFilterOpen ? 'inline-block' : 'hidden'}>
+      <span>
+        {filterButtonName}
+      </span>
+      <fieldset className='inline-block'>
         {children}
       </fieldset>
-    </button>
+    </div>
   )
 }
 
-export default FilterButton;
+
+export default FilterButton

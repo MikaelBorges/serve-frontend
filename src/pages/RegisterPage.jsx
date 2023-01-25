@@ -126,12 +126,21 @@ function RegisterPage(props) {
   if(props.dataUser._id) return <Navigate to='/' />
 
   return (
-    <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section
+      className={`
+        px-8
+        flex
+        flex-col
+        bg-white
+        space-y-12
+        min-h-screen
+        dark:bg-slate-900
+      `}
+    >
       <form
-        action='/user/register'
         method='post'
+        action='/user/register'
         onSubmit={e => onSubmitForm(e)}
-        className='c-form'
       >
 
         {/* {img !== null && <CloudinaryContext cloudName="mika4ever">

@@ -22,13 +22,13 @@ const loadFromLocalStorage = () => {
 };
 
 const persistedStore = loadFromLocalStorage();
-console.log('store loaded from local storage', persistedStore)
+console.log('redux store hydrated from local storage', persistedStore)
 
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
 const store = createStore(rootReducer, persistedStore, composedEnhancer)
 
 store.subscribe(() => {
-  console.log('store saved in local storage', store.getState())
+  console.log('redux store saved in local storage', store.getState())
   saveToLocalStorage(store.getState())
 })
 
