@@ -1,6 +1,6 @@
 import styleOf from './PictureUser.module.scss'
 
-const PictureUser = ({imageUser, layoutOneColumn}) => {
+const PictureUser = ({imageUser}) => {
   return (
     <div
       className={`
@@ -14,7 +14,7 @@ const PictureUser = ({imageUser, layoutOneColumn}) => {
       <img
         src={imageUser}
         alt="image de l'utilisateur"
-        className={`${layoutOneColumn ? 'max-w-none h-full rounded-full' : 'rounded-full'}`}
+        className='rounded-full'
       />
     </div>
   )

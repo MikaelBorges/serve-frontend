@@ -2,7 +2,7 @@ function FilterRadio({radioName, groupName, checked, handleChangeRadio}) {
 
   return (
     <label
-      className='ml-3 cursor-pointer'
+      className='[&:not(:last-child)]:mr-3 cursor-pointer'
       onClick={(e) => e.stopPropagation()}
       htmlFor={`${groupName}-${radioName}`}
     >

@@ -2,7 +2,6 @@ import Card from '../components/Card'
 import { loadUserAds } from '../api/ads'
 import { useState, useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
-import { userIsLogged } from '../functions/user'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
 import { lightIcon, goodEveningIcon, binIcon, validIcon } from '../constants/icons'
 
@@ -11,13 +10,13 @@ import Masonry from 'react-masonry-css'
 
 import { connect } from 'react-redux'
 
-function ProfilPage(props) {
+function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
 
-  const { userIdPage } = useParams()
+  const { urlId } = useParams()
   const hour = new Date().getHours()
   const [ads, setAds] = useState([])
   const [imgUrl, setImgUrl] = useState('')
-  const [noAds, setNoAds] = useState(false)
+  const [noAds, setNoAds] = useState(null)
   const [isVisitor, setIsVisitor] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [liteInfosOfUser, setLiteInfosOfUser]= useState({})
@@ -28,9 +27,9 @@ function ProfilPage(props) {
 
   const wayToGreet = () => {
     return hour > 6 && hour < 20 ?
-      `Bonjour ${props.dataUser.firstname} ${lightIcon}`
+      `Bonjour ${user.firstname} ${lightIcon}`
       :
-      `Bonsoir ${props.dataUser.firstname} ${goodEveningIcon}`
+      `Bonsoir ${user.firstname} ${goodEveningIcon}`
   }
 
   const handleDeleteAd = e => {
@@ -79,8 +78,8 @@ function ProfilPage(props) {
     setBreakpointsColumnsMasonry(breakpointsObject)
   }
 
-  useEffect(() => {
-    if(userIsLogged(props.dataUser) && (props.dataUser._id === userIdPage)) {
+  /* useEffect(() => {
+    if(props.user.isLogged && (props.user.info._id === userIdPage)) {
       setIsVisitor(false)
       loadUserAds(userIdPage, false)
       .then(res => {
@@ -88,7 +87,8 @@ function ProfilPage(props) {
         setNoAds(res.noAds)
       })
       .catch(err => console.warn('err', err))
-    } else {
+    }
+    else {
       setIsVisitor(true)
       loadUserAds(userIdPage, true)
       .then(res => {
@@ -98,10 +98,11 @@ function ProfilPage(props) {
       })
       .catch(err => console.warn('err', err))
     }
-  }, [props.dataUser, userIdPage]);
+  }, [props.user, userIdPage]); */
 
+  // Mettre à jour les tableaux d'annonces au clic sur une annonce favorite
   useEffect(() => {
-    if(Object.keys(props.clickedAd).length > 0) {
+    if(Object.keys(clickedAd).length > 0) {
 
       // Phase de recherche :
       let item = {}
@@ -110,11 +111,11 @@ function ProfilPage(props) {
       let favoritesToUpdate = 0
 
       ads.forEach((ad, index, arr) => {
-        if(ad._id === props.clickedAd.adId) {
+        if(ad._id === clickedAd.adId) {
           indexSaved = index
           items = [...ads]
           item = {...items[index]}
-          favoritesToUpdate = props.clickedAd.newFavNumber
+          favoritesToUpdate = clickedAd.newFavNumber
           arr.length = index + 1 // Tip > sortir de la boucle
         }
       })
@@ -125,13 +126,24 @@ function ProfilPage(props) {
       items[indexSaved] = item
       // setAreAdsArranged(false)
       setAds(items)
-      props.resetClickedAd()
+      resetClickedAd()
     }
-  }, [props.clickedAd]);
+  }, [clickedAd]);
 
   useEffect(() => {
+    handleSearchBarVisibility(false)
     generateMasonryBreakpointsUntilThisMaxValue(3000)
   }, [])
+
+  // loadUserAds
+  useEffect(() => {
+    loadUserAds(urlId)
+    .then(res => {
+      setAds(res.adsOfUser)
+      setNoAds(res.noAds)
+    })
+    .catch(err => console.error('err', err))
+  }, [urlId])
 
   /* useEffect(() => {
     // console.warn('isVisitor', isVisitor)
@@ -152,20 +164,13 @@ function ProfilPage(props) {
     setImgUrl(user.imageUser)
   } */
 
-  /* <CloudinaryContext className='rounded-full overflow-hidden' cloudName='mika4ever'>
-    <Image publicId={imgUrl}>
-      <Transformation quality='auto' fetchFormat='auto' />
-    </Image>
-  </CloudinaryContext> */
-
   //console.warn('userIdPage', userIdPage)
   //console.warn('props.dataUser._id', props.dataUser._id)
   //if(props.dataUser._id !== userIdPage) return <Navigate to='/' />
 
   return (
-    <section className={`${props.areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}`}>
+    <section className={areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}>
       <div className='py-4'>
-
         {/* {!isVisitor &&
           <>
             <h1 className='pb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
@@ -225,7 +230,7 @@ function ProfilPage(props) {
               {noAds && !isVisitor ?
                 `Vous n'avez pas d'annonce(s) ${props.dataUser.firstname}` : ''
               } */}
-              Annonce(s) :
+              Mes annonce(s) :
             </h2>
           </div>
           {!isVisitor && showCheckboxsDraft &&
@@ -267,20 +272,14 @@ function ProfilPage(props) {
 
       </div>
 
-      {ads.length > 0 && !noAds &&
-        <ul
-        className={`
-          mt-px
-          ${props.areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}
-        `}
-        >
-          {props.areCardsVertical &&
-          <Masonry
-            role='list'
-            className={styleOf.myMasonryGrid}
-            breakpointCols={breakpointsColumnsMasonry}
-            columnClassName={styleOf.myMasonryGridColumn}
-          >
+      {Boolean(ads.length) &&
+      <ul className={areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
+        {areCardsVertical &&
+        <Masonry
+          role='list'
+          className={styleOf.myMasonryGrid}
+          breakpointCols={breakpointsColumnsMasonry}
+          columnClassName={styleOf.myMasonryGridColumn}>
             {ads.map(ad =>
             <Card
               ad={ad}
@@ -288,69 +287,64 @@ function ProfilPage(props) {
               role='listitem'
               isVisitor={isVisitor}
               openPopup={openPopup}
-              darkMode={props.darkMode}
               allCardsChecked={allCardsChecked}
-              horizontalCard={props.horizontalCard}
-              layoutOneColumn={props.layoutOneColumn}
-              showCheckboxsDraft={showCheckboxsDraft}
-              areCardsVertical={props.areCardsVertical}
-              handleAddToFavorites={props.handleAddToFavorites}
-            />
+              updateClickedAd={updateClickedAd}
+              areCardsVertical={areCardsVertical}
+              showCheckboxsDraft={showCheckboxsDraft} />
             )}
-          </Masonry>
+        </Masonry>
         }
 
-        {!props.areCardsVertical && ads.map(ad =>
+        {!areCardsVertical && ads.map(ad =>
         <Card
           ad={ad}
           key={ad._id}
           role='listitem'
           isVisitor={isVisitor}
           openPopup={openPopup}
-          darkMode={props.darkMode}
           allCardsChecked={allCardsChecked}
-          horizontalCard={props.horizontalCard}
-          layoutOneColumn={props.layoutOneColumn}
-          showCheckboxsDraft={showCheckboxsDraft}
-          areCardsVertical={props.areCardsVertical}
-          handleAddToFavorites={props.handleAddToFavorites}
-        />
+          updateClickedAd={updateClickedAd}
+          areCardsVertical={areCardsVertical}
+          showCheckboxsDraft={showCheckboxsDraft} />
         )}
-
-        </ul>
+      </ul>
       }
-      {ads.length === 0 && !noAds &&
-        <img className='w-20' src='https://i.stack.imgur.com/y3Hm3.gif' />
+      {!Boolean(ads.length) && !noAds &&
+      <img
+        className='w-20'
+        alt='chargement'
+        src='https://i.stack.imgur.com/y3Hm3.gif' />
       }
-      {noAds && !isVisitor &&
-        <img
-          alt="l'utilisateur n'a pas d'annonces"
-          src='https://res.cloudinary.com/mika4ever/image/upload/v1672669742/samples/assets/no-ads.svg'
-        />
-      }
+      {/* {noAds && !isVisitor &&
+      <img
+        alt="Vous n'avez pas d'annonces"
+        src='https://res.cloudinary.com/mika4ever/image/upload/v1672669742/samples/assets/no-ads.svg'
+      />
+      } */}
       {isPopupOpen &&
+      <div
+        className={`
+          flex
+          fixed
+          inset-0
+          text-center
+          items-center
+          justify-center
+          z-10
+        `}
+      >
         <div
           className={`
-            flex
-            fixed
-            inset-0
-            text-center
-            items-center
-            justify-center
+            p-4
+            bg-white
+            rounded-3xl
+            text-green-500
           `}
         >
-          <div
-            className={`
-              p-4
-              bg-white
-              rounded-3xl
-              text-green-500
-            `}
-          >
-            <div className='text-7xl'>{validIcon}</div>
-            <div>{responseMessageFromCard}</div>
-          </div>
+          <div className='text-7xl'>{validIcon}</div>
+          <div>{responseMessageFromCard}</div>
         </div>
+      </div>
       }
     </section>
   )
@@ -358,7 +352,8 @@ function ProfilPage(props) {
 
 const mapStateToProps = (store) => {
   return {
-    user: store.user
+    user: store.user,
+    likedAd: store.likedAd
   }
 }
 

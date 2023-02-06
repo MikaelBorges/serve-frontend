@@ -1,5 +1,4 @@
 import styleOf from './FilterButton.module.scss'
-import { useState } from 'react'
 
 function FilterButton({filterButtonName, children}) {
 
@@ -10,6 +9,7 @@ function FilterButton({filterButtonName, children}) {
         flex
         mt-1.5
         border
+        flex-wrap
         rounded-3xl
         items-center
         border-solid
@@ -18,9 +18,11 @@ function FilterButton({filterButtonName, children}) {
         ${styleOf.filterButton}
     `}
     >
-      <span>
+      {filterButtonName &&
+      <span className='mr-3'>
         {filterButtonName}
       </span>
+      }
       <fieldset className='inline-block'>
         {children}
       </fieldset>

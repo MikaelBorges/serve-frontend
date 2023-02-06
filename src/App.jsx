@@ -1,77 +1,53 @@
 import Layout from './Layout'
-import { connect } from 'react-redux'
 import HomePage from './pages/HomePage'
 import './assets/fonts/Gilroy/gilroy.css'
 import LoginPage from './pages/LoginPage'
 import NewAdPage from './pages/NewAdPage'
 import ProfilPage from './pages/ProfilPage'
-import { addToFavorites } from './api/user'
 import { useState, useEffect } from 'react'
 import RegisterPage from './pages/RegisterPage'
 import RequireAuth from './helpers/RequireAuth'
 import UserSettings from './pages/UserSettings'
-import { userIsLogout } from './functions/user'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { lightIcon, darkIcon, systemIcon } from './constants/icons'
+import ModifyAdPage from './pages/ModifyAdPage'
+
+import './swiper-custom.scss'
 
 function App() {
+
+  const navigate = useNavigate()
+
   const [theme, setTheme] = useState('light')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
-  const [dataUser, setDataUser] = useState({})
   const [clickedAd, setClickedAd] = useState({})
   const [darkMode, setDarkMode] = useState(false)
-  const [rightHand, setRightHand] = useState(true)
   const [locationTyped, setLocationTyped] = useState('')
-  const [horizontalCard, setHorizontalCard] = useState(false)
-  const [layoutOneColumn, setLayoutOneColumn] = useState(false)
-  const [authorizedToAdd, setAuthorizedToAdd] = useState(false)
+  const [focusOnSearchBar, setFocusOnSearchBar] = useState(false)
   const [areCardsVertical, setAreCardsVertical] = useState(false)
+  const [isSearchBarVisible, setIsSearchBarVisible] = useState(null)
+
+  const handleFocusOnSearchBar = (focus) => {
+    setFocusOnSearchBar(focus)
+  }
+
+  const handleSearchBarVisibility = (visibility) => {
+    setIsSearchBarVisible(visibility)
+  }
 
   const handleAreCardsVertical = () => {
+    if(!areCardsVertical) window.localStorage.setItem('areCardsVertical', true)
+    else window.localStorage.removeItem('areCardsVertical')
     setAreCardsVertical(!areCardsVertical)
+  }
+
+  const updateClickedAd = (ad) => {
+    setClickedAd(ad)
   }
 
   const resetClickedAd = () => {
     setClickedAd({})
-  }
-
-  const toggleDirectionCard = (horizontalDirection) => {
-    window.localStorage.setItem('horizontalCard', !horizontalCard)
-    switch(horizontalDirection) {
-      case 'toggle':
-        setHorizontalCard(!horizontalCard)
-        break
-      case true:
-        setHorizontalCard(true)
-        break
-      case false:
-        setHorizontalCard(false)
-        break
-      default:
-        console.error('Problème dans la sélection du style des annonces');
-    }
-  }
-
-  const toggleLayout = (layoutSelected) => {
-    switch(layoutSelected) {
-      case 'toggle':
-        setLayoutOneColumn(!layoutOneColumn)
-        window.localStorage.setItem('layoutOneColumn', !layoutOneColumn)
-        break
-      case true:
-        setLayoutOneColumn(true)
-        break
-      case false:
-        setLayoutOneColumn(false)
-        break
-      default:
-        console.error("Problème dans la sélection du layout de l'app");
-    }
-  }
-
-  const toggleHand = () => {
-    setRightHand(!rightHand)
   }
 
   const toggleTheme = (themeSelected) => {
@@ -105,18 +81,10 @@ function App() {
     }
   }
 
-  const updateUser = (data) => {
-    setDataUser(data)
-  }
-
-  const handleAuthorizedToAdd = () => {
-    setAuthorizedToAdd(true)
-  }
-
-  const toggleAddToFavorites = (adId) => {
+  /* const toggleAddToFavorites = (adId) => {
     const ad = {
       adId: adId,
-      userId: dataUser._id,
+      userId: dataUser._id
     }
     addToFavorites(ad)
     .then(res => {
@@ -124,57 +92,65 @@ function App() {
         setClickedAd({adId: adId, newFavNumber: res.data.newFavNumber})
 
         const dataUserCalc = {...dataUser}
-        console.log('adId', adId)
+        //console.log('adId', adId)
         const index = dataUserCalc.favorites.indexOf(adId)
-        console.log('index', index)
+        //console.log('index', index)
 
         if (index > -1) {
-          console.log('trouvé on le supprime')
+          //console.log('trouvé on le supprime')
           dataUserCalc.favorites.splice(index, 1)
         }
         else {
-          console.log("pas trouvé on l'ajoute")
+          //console.log("pas trouvé on l'ajoute")
           dataUserCalc.favorites.push(adId)
         }
 
         // console.log('dataUserCalc', dataUserCalc)
         // setDataUser(dataUserCalc)
 
-        window.localStorage.setItem('user', JSON.stringify(dataUserCalc))
+        window.localStorage.setItem('dataUser', JSON.stringify(dataUserCalc))
 
       }
     })
     .catch(err => console.warn(err))
-  }
+  } */
 
-  const handleAddToFavorites = (e, ad) => {
+  /* const handleAddToFavorites = (e, ad) => {
     e.stopPropagation()
 
-    if(!userIsLogout(dataUser) && (dataUser._id !== ad.userId)) {
-      toggleAddToFavorites(ad._id)
+    const token = window.localStorage.getItem('serve-token')
+
+     console.log('pourquoi on arrive ici ?')
+
+    if(token) {
+      console.log('loggué, et autorisé à aller plus loin')
+      if(dataUser._id !== ad.userId) {
+        toggleAddToFavorites(ad._id)
+      }
     }
-  }
-
-  const changeMinPrice = (minPrice) => {
-    setMinPrice(minPrice)
-  }
-
-  const changeMaxPrice = (maxPrice) => {
-    setMaxPrice(maxPrice)
-  }
+    else {
+      console.log('veuillez vous reconnecter pour utiliser cette fonctionnalité')
+      window.localStorage.removeItem('redux')
+      window.localStorage.removeItem('dataUser')
+      props.logoutUserAction()
+      updateUser({})
+      //navigate('/user/login')
+    }
+  } */
 
   const changeLocationTyped = (locationTyped) => {
     setLocationTyped(locationTyped)
   }
 
+
+
+
   useEffect(() => {
-    const horizontalCardInLS = window.localStorage.getItem('horizontalCard')
-    const layoutOneColumnInLS = window.localStorage.getItem('layoutOneColumn')
+    const areCardsVertical = window.localStorage.getItem('areCardsVertical')
+    //console.log('areCardsVertical', areCardsVertical)
+    if(areCardsVertical) setAreCardsVertical(true)
 
-    if(layoutOneColumnInLS === 'true') setLayoutOneColumn(true)
-    if(horizontalCardInLS === 'true') setHorizontalCard(true)
-
-    // Info : On page load or when changing themes, best to add inline in `head` to avoid FOUC
+    // Info > On page load or when changing themes, best to add inline in `head` to avoid FOUC
     if(localStorage.theme) {
       if(localStorage.theme === 'light') {
         setTheme('light')
@@ -214,31 +190,89 @@ function App() {
       }
     }
 
-    const userDataInLS = window.localStorage.getItem('user')
-    if (userDataInLS) {
-      setDataUser(JSON.parse(userDataInLS))
-      console.log('dataUser a été hydraté par le local storage')
+
+
+    /* const parseJwt = (token) => {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
     }
+    const token = window.localStorage.getItem('serve-token')
+    const parsedJwt = parseJwt(token)
+    console.log('parsedJwt', parsedJwt) */
+
+
+
+    /* if(token) {
+      console.warn('connecté')
+      const userDataInLS = window.localStorage.getItem('dataUser')
+      if (userDataInLS) {
+        setDataUser(JSON.parse(userDataInLS))
+        console.log('dataUser a été hydraté par le local storage')
+      }
+      else console.log("dataUser n'a pas pu être hydraté")
+    }
+    else {
+      console.warn('déconnecté')
+      window.localStorage.removeItem('redux')
+      window.localStorage.removeItem('dataUser')
+      props.logoutUserAction()
+      updateUser({})
+    } */
+
+
   }, []);
+
+  useEffect(() => {
+    if(areCardsVertical) {
+
+      console.log('direction verticale')
+
+      const swipers = document.querySelectorAll('.swiper')
+      console.log('swipers', swipers)
+      swipers.forEach((swiper) => {
+        console.log('swiper', swiper)
+        swiper.classList.add("my-swiper-vertical")
+      })
+      const swipersSlide = document.querySelectorAll('.swiper-slide')
+      console.log('swipersSlide', swipersSlide)
+      swipersSlide.forEach((swiperSlide) => {
+        console.log('swiperSlide', swiperSlide)
+        swiperSlide.classList.remove("my-swiper-slide-horizontal")
+      })
+    }
+    else {
+
+      console.log('direction horizontale')
+
+      const swipers = document.querySelectorAll('.swiper')
+      console.log('swipers', swipers)
+      swipers.forEach((swiper) => {
+        console.log('swiper', swiper)
+        swiper.classList.remove("my-swiper-vertical")
+      })
+      const swipersSlide = document.querySelectorAll('.swiper-slide')
+      console.log('swipersSlide', swipersSlide)
+      swipersSlide.forEach((swiperSlide) => {
+        console.log('swiperSlide', swiperSlide)
+        swiperSlide.classList.add("my-swiper-slide-horizontal")
+      })
+    }
+  }, [areCardsVertical]);
 
   return (
     <Layout
       theme={theme}
       darkMode={darkMode}
-      dataUser={dataUser}
-      rightHand={rightHand}
-      toggleHand={toggleHand}
-      updateUser={updateUser}
       toggleTheme={toggleTheme}
-      toggleLayout={toggleLayout}
-      changeMinPrice={changeMinPrice}
-      changeMaxPrice={changeMaxPrice}
-      horizontalCard={horizontalCard}
-      layoutOneColumn={layoutOneColumn}
-      handleAreCardsVertical={handleAreCardsVertical}
+      focusOnSearchBar={focusOnSearchBar}
+      isSearchBarVisible={isSearchBarVisible}
       changeLocationTyped={changeLocationTyped}
-      toggleDirectionCard={toggleDirectionCard}
-      handleAuthorizedToAdd={handleAuthorizedToAdd}
+      handleFocusOnSearchBar={handleFocusOnSearchBar}
+      handleAreCardsVertical={handleAreCardsVertical}
     >
       <Routes>
         <Route
@@ -250,13 +284,12 @@ function App() {
               maxPrice={maxPrice}
               darkMode={darkMode}
               clickedAd={clickedAd}
-              updateUser={updateUser}
               locationTyped={locationTyped}
               resetClickedAd={resetClickedAd}
-              horizontalCard={horizontalCard}
-              layoutOneColumn={layoutOneColumn}
+              updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
-              handleAddToFavorites={handleAddToFavorites}
+              handleFocusOnSearchBar={handleFocusOnSearchBar}
+              handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }
         />
@@ -266,8 +299,6 @@ function App() {
           element={
             <LoginPage
               darkMode={darkMode}
-              dataUser={dataUser}
-              updateUser={updateUser}
             />
           }
         />
@@ -276,55 +307,46 @@ function App() {
           path='/user/register'
           element={
             <RegisterPage
-              dataUser={dataUser}
               darkMode={darkMode}
             />
           }
         />
         <Route
           exact
-          path='/user/:userIdPage'
+          path='/user/:urlId'
           element={
             <ProfilPage
               darkMode={darkMode}
-              dataUser={dataUser}
               clickedAd={clickedAd}
-              toggleLayout={toggleLayout}
               resetClickedAd={resetClickedAd}
-              horizontalCard={horizontalCard}
-              layoutOneColumn={layoutOneColumn}
+              updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
-              toggleDirectionCard={toggleDirectionCard}
-              handleAddToFavorites={handleAddToFavorites}
+              handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }
         />
         <Route
           exact
-          path='/user/:userIdPage/settings'
-          element={<RequireAuth child={UserSettings} auth={true} dataUser={dataUser} />}
+          path='/user/:urlId/settings'
+          element={<RequireAuth child={UserSettings} auth={true} />}
         />
         <Route
           exact
-          path='/user/:id/new'
+          path='/user/:urlId/new'
           element={
             <NewAdPage
               darkMode={darkMode}
-              dataUser={dataUser}
             />
           }
+        />
+        <Route
+          exact
+          path='/ad/:urlId/edit'
+          element={<ModifyAdPage />}
         />
       </Routes>
     </Layout>
   );
 }
 
-/* const mapStateToProps = (store) => {
-  console.warn('(APP) store', store)
-  return {
-    user: store.user
-  }
-} */
-
-// export default connect(mapStateToProps)(App)
 export default App

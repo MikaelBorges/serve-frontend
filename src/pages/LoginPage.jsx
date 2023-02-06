@@ -5,7 +5,7 @@ import { useNavigate, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loginUserAction } from '../actions/user/userActions'
 
-function LoginPage(props) {
+function LoginPage({loginUserAction, user}) {
 
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -25,10 +25,11 @@ function LoginPage(props) {
     .then(res => {
       if(res.status === 200) {
         window.localStorage.setItem('serve-token', res.data.token)
-        window.localStorage.setItem('user', JSON.stringify(res.data.session.user))
 
-        props.loginUserAction(res.data.session.user)
-        props.updateUser(res.data.session.user)
+        /* console.log('res.data.token', res.data.token)
+        console.log('res.data.session.user', res.data.session.user) */
+
+        loginUserAction(res.data.session.user)
         navigate('/')
       }
       else {
@@ -49,12 +50,9 @@ function LoginPage(props) {
     else {
       setDisabled(true)
     }
-  }, [email, password]);
+  }, [email, password])
 
-  //if(props.user.isLogged) {
-  if(props.dataUser._id) {
-    return <Navigate to='/' />
-  }
+  if(user.isLogged) return <Navigate to='/' />
 
   return (
     <section
@@ -68,6 +66,7 @@ function LoginPage(props) {
         dark:bg-slate-900
       `}
     >
+      <h1 className='dark:text-white text-3xl'>Se connecter</h1>
       <form
         method='post'
         action='/user/login'

@@ -7,9 +7,9 @@ function FilterCheckbox({checkboxName, groupName}) {
 
   return (
     <label
-      className='ml-3 cursor-pointer'
       onClick={(e) => e.stopPropagation()}
       htmlFor={`${groupName}-${checkboxName}`}
+      className='[&:not(:last-child)]:mr-3 cursor-pointer'
     >
       <input
         type='checkbox'

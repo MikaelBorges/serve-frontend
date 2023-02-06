@@ -1,18 +1,12 @@
-import { registerUser } from '../api/user'
+import axios from 'axios'
+import { config } from '../config'
+import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
-import styleOf from './Register.module.scss'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import IconCross from '../components/icons/IconCross'
+import { registerUser, registerUserImage } from '../api/user'
 
-import {
-  Image,
-  Transformation,
-  CloudinaryContext
-} from 'cloudinary-react'
-import { changeImg } from '../api/coach'
-
-function RegisterPage(props) {
-
-  const navigate = useNavigate()
+function RegisterPage({user}) {
   const [img, setImg] = useState(null)
   const [msg, setMsg] = useState(null)
   const [email, setEmail] = useState('')
@@ -24,11 +18,12 @@ function RegisterPage(props) {
   const [firstname, setFirstname] = useState('')
   const [disabled, setDisabled] = useState(true)
 
+  const [imageSelected, setImageSelected] = useState(null)
+
   const onSubmitForm = e => {
     e.preventDefault()
     let data = {
       phone: e.target.phone.value,
-      image: e.target.image.value,
       email: e.target.email.value,
       lastname: e.target.lastname.value,
       password: e.target.password.value,
@@ -36,94 +31,59 @@ function RegisterPage(props) {
     }
     registerUser(data)
     .then((res) => {
-        if (res.status === 200) {
-            setInfo(res.data.message)
+      if (res.status === 200) {
+        setInfo(res.data.message)
+        if(imageSelected) {
+          const { userIdCreated } = res.data
+          const formData = new FormData()
+          formData.append("file", imageSelected)
+          formData.append('folder', `users/${userIdCreated}/profile`)
+          formData.append("upload_preset", "unsigned_upload_preset")
+          axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
+          .then((response) => {
+            const urlUserImage = response.data.secure_url
+            const data = {
+              urlUserImage: urlUserImage,
+              userIdCreated: userIdCreated
+            }
+            registerUserImage(data)
+            .then((res) => {
+              if (res.status === 200) console.warn(res.data.message)
+              else console.error(res.response.data.message)
+            })
+            .catch((err) => {
+              setError(err)
+            })
+          })
+          .catch((err) => {
+            console.error(err)
+          })
         }
-        else {
-            setError(res.response.data.message);
-        }
+      }
+      else setError(res.response.data.message)
     })
     .catch((err) => {
-        console.warn('err: rentré dans le catch RegisterPage.jsx')
-        console.warn(err)
+        console.error(err)
         setError(err)
     })
   }
 
-  // fonction callback de cloudinary déclenché lors de l'envoi un fichier
-  const checkUploadResult = resultEvent => {
-    setMsg(null)
-    //si l'envoi est réussit
-    if (resultEvent.event === 'success') {
+  const onClickRemovePreviewImage = (e) => {
+    //const element = Number(e.target.parentElement.dataset.key)
+    //if(element) setImagesSelected(imagesSelected.filter(item => imagesSelected.indexOf(item) !== element))
+    setImageSelected(null)
+  }
 
-      /* let datas = {
-        imageUser : resultEvent.info.public_id,
-        // id: coach.infos.id
-      }
-      changeImg(datas)
-      .then((res)=>{
-        if(res.status === 200) {
-          getOneCoach(coach.infos.id)
-          .then(response => {
-            let myCoach = response.result
-            myCoach.token = localStorage.getItem('coachme-token')
-            dispatch(connectCoach(myCoach))
-            setImg(response.result.imageUrl)
-          })
-
-          setMsg('Votre profil a bien été édité');
-        } else {
-          setMsg("L'image n'a pas été modifiée");
-        }
-      })
-      .catch(err => console.warn('Echec modification image!')) */
-    } else {
-      console.warn('Erreur envoi fichier')
+  useEffect(() => {
+    if (email !== '' && password !== '' && firstname !== '' && lastname !== '' && phone !== '') {
+        setDisabled(false)
     }
-    console.warn('RESULT EVENT', resultEvent)
-  }
+    else {
+        setDisabled(true)
+    }
+  }, [email, password, firstname, lastname, phone])
 
-  // fonction d'affichage de notre interface de chargement d'images/videos de cloudinary
-  const showWidget = e => {
-    e.preventDefault()
-    //paramètrage de l'interface
-    let widget = window.cloudinary.createUploadWidget(
-      {
-        cloudName: 'mika4ever', // nom de mon cloud
-        uploadPreset: 'samples', // dossier ou l'on veut envoyer
-        maxImageWidth: 800, // on peut paramètrer la taille max de l'image
-        cropping: false, // recadrage
-      },
-      (error, result) => {
-        console.warn('error showWidget', error);
-        console.warn('result showWidget', result);
-        checkUploadResult(result); //appel de notre callback
-      }
-    )
-    // ouverture de notre interface
-    widget.open()
-  }
-
-  /* useEffect(() => {
-    console.warn('register useEffect')
-    console.warn('props.dataUser', props.dataUser)
-    if(Object.keys(props.dataUser).length !== 0 || props.dataUser.constructor !== Object) navigate('/')
-  }, [props.dataUser]); */
-
-  useEffect(() => {
-      if (email !== '' && password !== '' && firstname !== '' && lastname !== '' && phone !== '') {
-          setDisabled(false);
-      }
-      else {
-          setDisabled(true);
-      }
-  }, [email, password]);
-
-  useEffect(() => {
-    console.warn('composant register chargé')
-  }, []);
-
-  if(props.dataUser._id) return <Navigate to='/' />
+  if(user.isLogged) return <Navigate to='/' />
 
   return (
     <section
@@ -137,63 +97,64 @@ function RegisterPage(props) {
         dark:bg-slate-900
       `}
     >
+      <h1 className='dark:text-white text-3xl'>Créer un compte</h1>
       <form
         method='post'
         action='/user/register'
         onSubmit={e => onSubmitForm(e)}
       >
-
-        {/* {img !== null && <CloudinaryContext cloudName="mika4ever">
-          <div>
-            <Image publicId={coach.infos.imageUrl} id="profilImg">
-              <Transformation quality="auto" fetchFormat="auto" />
-            </Image>
-          </div>
-        </CloudinaryContext>} */}
-        {/* <button
-          onClick={e => showWidget(e)}
-          className='bg-slate-200 py-1 px-2'
-        >
-          Ajouter ma photo de profil
-        </button> */}
-
         <input
-          type='text'
-          name='image'
-          placeholder='url de votre photo de profil si vous la connaissez (facultatif)'
-          className={`pl-1 ${styleOf.imageUrl} w-full border dark:bg-slate-800 dark:text-white`}
+          type='file'
+          className='dark:text-slate-900 text-white max-w-full'
+          onChange={(e) => setImageSelected(e.target.files[0])}
         />
+        {Boolean(imageSelected) &&
+          <div className='relative p-1 my-3 w-1/3'>
+            <img
+              alt='preview image'
+              src={URL.createObjectURL(imageSelected)}
+              className='aspect-square object-cover rounded-2xl'
+            />
+            <IconCross
+              className={`
+                h-6
+                w-6
+                p-1
+                top-0
+                right-0
+                absolute
+                text-white
+                bg-red-600
+                rounded-full
+                cursor-pointer
+              `}
+              onClick={(e) => onClickRemovePreviewImage(e)}
+            />
+          </div>
+        }
         <input
-          onChange={e => {
-            setFirstname(e.currentTarget.value);
-          }}
+          onChange={e => setFirstname(e.currentTarget.value)}
           type='text'
           name='firstname'
           placeholder='votre prénom'
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          onChange={(e) => {
-            setLastname(e.currentTarget.value);
-          }}
+          onChange={(e) => setLastname(e.currentTarget.value)}
           type='text'
           name='lastname'
           placeholder='votre nom'
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          onChange={(e) => {
-            setEmail(e.currentTarget.value);
-          }}
+          onChange={(e) => setEmail(e.currentTarget.value)}
           type='text'
           name='email'
           placeholder='votre email'
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          onChange={(e) => {
-            setPassword(e.currentTarget.value);
-          }}
+          onChange={(e) => setPassword(e.currentTarget.value)}
           type='password'
           name='password'
           placeholder='votre mot de passe'
@@ -232,4 +193,10 @@ function RegisterPage(props) {
   );
 }
 
-export default RegisterPage;
+const mapStateToProps = (store, ownProps) => {
+  return {
+    user: store.user
+  }
+}
+
+export default connect(mapStateToProps)(RegisterPage)

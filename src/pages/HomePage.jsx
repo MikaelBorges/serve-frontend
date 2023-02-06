@@ -4,15 +4,17 @@ import Card from '../components/Card'
 import Masonry from 'react-masonry-css'
 import { useState, useEffect } from 'react'
 import styleOf from './HomePage.module.scss'
-import { fetchAdsAction } from '../actions/ads/adsActions'
+//import { fetchAdsAction } from '../actions/ads/adsActions'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-function HomePage(props) {
+function HomePage({clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
+  const [noAds, setNoAds] = useState(null)
   const [search, setSearch] = useSearchParams()
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
 
+  const title = search.get('title')
   const location = search.get('location')
   const minPrice = Number(search.get('minPrice') || 0)
   const maxPrice = Number(search.get('maxPrice') || 0)
@@ -24,6 +26,7 @@ function HomePage(props) {
   ?.filter(ad => maxPrice ? ad.price <= maxPrice : true)
   ?.filter(ad => superUser ? ad.superUser === superUser : true)
   ?.filter(ad => onlyWithPhotos ? ad.imagesWork.length > 0 === onlyWithPhotos : true)
+  ?.filter(ad => title ? ad.title.toUpperCase().includes(title.toUpperCase()) : true)
   ?.filter(ad => location ? ad.location.toUpperCase().includes(location.toUpperCase()) : true)
 
   /* console.log('minPrice', minPrice)
@@ -83,7 +86,14 @@ function HomePage(props) {
   }
 
   useEffect(() => {
-    if(Object.keys(props.clickedAd).length > 0) {
+    const timeout = setTimeout(() => {
+      handleFocusOnSearchBar(false)
+    }, 500)
+    return () => clearTimeout(timeout)
+  }, [filteredAds]);
+
+  useEffect(() => {
+    if(Object.keys(clickedAd).length > 0) {
 
       /* const dataUserCalc = {...dataUser}
       const index = dataUserCalc.favorites.indexOf(adId) */
@@ -95,11 +105,11 @@ function HomePage(props) {
       let favoritesToUpdate = 0
 
       ads.forEach((ad, index, arr) => {
-        if(ad._id === props.clickedAd.adId) {
+        if(ad._id === clickedAd.adId) {
           indexSaved = index
           items = [...ads]
           item = {...items[index]}
-          favoritesToUpdate = props.clickedAd.newFavNumber
+          favoritesToUpdate = clickedAd.newFavNumber
           arr.length = index + 1 // Tip > sortir de la boucle
         }
       })
@@ -109,32 +119,34 @@ function HomePage(props) {
       item.favoritesNb = favoritesToUpdate
       items[indexSaved] = item
       setAds(items)
-      props.resetClickedAd()
+      resetClickedAd()
     }
-  }, [props.clickedAd]);
+  }, [clickedAd]);
 
   useEffect(() => {
+
+    handleSearchBarVisibility(true)
+
     generateMasonryBreakpointsUntilThisMaxValue(3000)
-    if(props.refreshUrl) navigate('/')
+    //if(props.refreshUrl) navigate('/')
     // await loadAds()
     loadAds()
     .then(res => {
       setAds(res.ads)
-      props.fetchAdsAction(res.ads)
+      setNoAds(res.noAds)
+      //props.fetchAdsAction(res.ads)
     })
     .catch(err => console.warn(err))
   }, []);
 
   return (
-    <section className={`flex flex-col space-y-12 ${props.areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>
+    <section className={areCardsVertical ? styleOf.sectionHomepage : 'px-3'}>
+      <h1 className='my-7 text-3xl dark:text-white'>
+        {noAds ? 'Aucune annonces' : 'Toutes les annonces'}
+      </h1>
       {Boolean(filteredAds.length) &&
-      <ul
-        className={`
-          mt-px
-          ${props.areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}
-        `}
-        >
-        {props.areCardsVertical &&
+      <ul className={areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
+        {areCardsVertical &&
         <Masonry
           role='list'
           className={styleOf.myMasonryGrid}
@@ -142,77 +154,49 @@ function HomePage(props) {
           columnClassName={styleOf.myMasonryGridColumn}
         >
           {filteredAds.map(ad =>
-            <Card
-              ad={ad}
-              key={ad._id}
-              role='listitem'
-              darkMode={props.darkMode}
-              horizontalCard={props.horizontalCard}
-              layoutOneColumn={props.layoutOneColumn}
-              areCardsVertical={props.areCardsVertical}
-              handleAddToFavorites={props.handleAddToFavorites}
-            />
+          <Card
+            ad={ad}
+            key={ad._id}
+            role='listitem'
+            updateClickedAd={updateClickedAd}
+            areCardsVertical={areCardsVertical} />
           )}
         </Masonry>
         }
-        {!props.areCardsVertical && filteredAds.map(ad =>
+        {!areCardsVertical && filteredAds.map(ad =>
         <Card
           ad={ad}
           key={ad._id}
           role='listitem'
-          darkMode={props.darkMode}
-          horizontalCard={props.horizontalCard}
-          layoutOneColumn={props.layoutOneColumn}
-          areCardsVertical={props.areCardsVertical}
-          handleAddToFavorites={props.handleAddToFavorites}
-        />
+          updateClickedAd={updateClickedAd}
+          areCardsVertical={areCardsVertical} />
         )}
       </ul>
       }
       {!Boolean(filteredAds.length) && Boolean(ads.length) &&
       <h1 className='text-3xl dark:text-white'>Pas de résultats</h1>
       }
-      {!Boolean(ads.length) &&
+      {!Boolean(ads.length) && !noAds &&
       <img
         className='w-20'
         alt='chargement'
-        src='https://i.stack.imgur.com/y3Hm3.gif'
-      />
+        src='https://i.stack.imgur.com/y3Hm3.gif' />
       }
     </section>
   )
 }
 
-/* const mapStateToProps = (state, ownProps) => {
-  return {
-    store: state
-  }
-} */
-
 const mapStateToProps = (store, ownProps) => {
   return {
-    user: store.user,
-    allAds: store.ads.fetchedAds
+    lastAdLiked: store.lastAdLiked
+    //user: store.user,
   }
 }
 
-/* const mapStateToProps = (store, ownProps) => ({
-  allAds: store.ads
-}) */
-
-/* const mapStateToProps = {
-  store: adsSelectors(state)
-} */
-
-/* const mapDispatchToProps = dispatch => {
-  return {
-    fetchAdsAction: ads => dispatch({type: 'FETCH_ADS_ACTION', payload: ads})
-  }
-} */
-
-const mapDispatchToProps = {
+/* const mapDispatchToProps = {
   fetchAdsAction
-}
+} */
 
-// export default connect(mapStateToProps)(HomePage);
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps)(HomePage);
+//export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+//export default HomePage

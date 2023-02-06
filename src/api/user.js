@@ -11,12 +11,24 @@ import { config } from '../config'
   })
 } */
 
-export function addToFavorites(ad) {
-  return axios.post(`${config.api_url}/addToFavorites`, ad)
+export function addToFavorites(adId) {
+  const token = window.localStorage.getItem('serve-token')
+  return axios.post(`${config.api_url}/addToFavorites`, {adId: adId}, {headers: { "x-access-token": token }})
   .then(res => {
     return res
   })
   .catch(err => {
+    return err
+  })
+}
+
+export function registerUserImage(data) {
+  return axios.post(`${config.api_url}/user/registerUserImage`, data)
+  .then(res => {
+    return res
+  })
+  .catch(err => {
+    console.warn('err', err)
     return err
   })
 }

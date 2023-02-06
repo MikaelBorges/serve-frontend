@@ -5,31 +5,42 @@ import rootReducer from './reducers/rootReducer'
 
 const saveToLocalStorage = (state) => {
   try {
-    localStorage.setItem('state', JSON.stringify(state));
-  } catch (e) {
-    console.error(e);
+    localStorage.setItem('redux', JSON.stringify(state))
   }
-};
+  catch (e) {
+    console.error(e)
+  }
+}
 
 const loadFromLocalStorage = () => {
+  const token = window.localStorage.getItem('serve-token')
+  if (!token) window.localStorage.removeItem('redux')
   try {
-    const stateStr = localStorage.getItem('state');
-    return stateStr ? JSON.parse(stateStr) : undefined;
-  } catch (e) {
-    console.error(e);
-    return undefined;
+    const stateStr = localStorage.getItem('redux')
+    return stateStr ? JSON.parse(stateStr) : undefined
   }
-};
+  catch (e) {
+    console.error(e)
+    return undefined
+  }
+}
 
 const persistedStore = loadFromLocalStorage();
-console.log('redux store hydrated from local storage', persistedStore)
-
+if(persistedStore) console.log('redux store hydrated from local storage', persistedStore)
+else console.log("redux store can't be hydrated because it has been removed from local storage")
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
 const store = createStore(rootReducer, persistedStore, composedEnhancer)
 
 store.subscribe(() => {
-  console.log('redux store saved in local storage', store.getState())
-  saveToLocalStorage(store.getState())
+  const token = window.localStorage.getItem('serve-token')
+  if (token) {
+    saveToLocalStorage(store.getState())
+    console.log('redux store saved in local storage', store.getState())
+  }
+  else {
+    console.log("redux store can't be saved because token doesn't exist in local storage")
+    window.localStorage.removeItem('redux')
+  }
 })
 
 export default store

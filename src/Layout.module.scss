@@ -13,3 +13,11 @@
 .reducedWidthFilters {
   width: calc(100% - 3.3rem);
 }
+
+.resetFilterButton {
+  min-height: 2rem;
+}
+
+.blurTransition {
+  -webkit-transition: -webkit-filter 150ms linear;
+}

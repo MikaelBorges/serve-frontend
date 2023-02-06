@@ -1,6 +1,17 @@
 import axios from 'axios'
 import { config } from '../config'
 
+
+export function retrieveUserAd(adId) {
+  return axios.get(`${config.api_url}/retrieveUserAd/${adId}`)
+  .then(res => {
+      return res.data
+  })
+  .catch(err => {
+      return err
+  })
+}
+
 //on charge toutes les annonces
 export function loadAds() {
   return axios.get(config.api_url)
@@ -12,8 +23,8 @@ export function loadAds() {
   })
 }
 
-export function deleteAd(adToDelete) {
-  return axios.post(`${config.api_url}/deleteAd`, adToDelete)
+export function deleteAd(datas) {
+  return axios.post(`${config.api_url}/deleteAd`, datas)
   .then(res => {
     return res
   })
@@ -22,8 +33,52 @@ export function deleteAd(adToDelete) {
   })
 }
 
+export function deleteCloudinaryImages(datas) {
+  return axios.post(`${config.api_url}/deleteCloudinaryImages`, datas)
+  .then(res => {
+    return res
+  })
+  .catch(err => {
+    console.warn('err', err)
+    return err
+  })
+}
+
+export function registerAdImages(datas) {
+  return axios.post(`${config.api_url}/user/registerAdImages`, datas)
+  .then(res => {
+    return res
+  })
+  .catch(err => {
+    console.warn('err', err)
+    return err
+  })
+}
+
 export function newAd(data) {
   return axios.post(`${config.api_url}/user/ad/${data.userId}`, data)
+  .then(res => {
+    return res
+  })
+  .catch(err => {
+    console.warn('err', err)
+    return err
+  })
+}
+
+export function testRoute(testData) {
+  return axios.post(`${config.api_url}/testRoute`, testData)
+  .then(res => {
+    return res
+  })
+  .catch(err => {
+    console.warn('err', err)
+    return err
+  })
+}
+
+export function modifyAd(datas) {
+  return axios.post(`${config.api_url}/modifyAd`, datas)
   .then(res => {
     return res
   })
