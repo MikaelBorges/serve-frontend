@@ -17,12 +17,17 @@ import { connect } from 'react-redux'
 import { logoutUser } from './api/user'
 import { useState, useRef } from 'react'
 import styleOf from './Layout.module.scss'
+import IconKey from './components/icons/IconKey'
+import IconAdd from './components/icons/IconAdd'
 import PictureUser from './components/PictureUser'
+import IconHeart from './components/icons/IconHeart'
 import Notification from './components/Notification'
 import IconCross from './components/icons/IconCross'
+import IconMessage from './components/icons/IconMessage'
 import IconAccount from './components/icons/IconAccount'
 import FilterRadio from './components/filter/FilterRadio'
 import FilterInput from './components/filter/FilterInput'
+import IconUserPlus from './components/icons/IconUserPlus'
 import FilterButton from './components/filter/FilterButton'
 import IconFiltering from './components/icons/IconFiltering'
 import logoRoundLight from './assets/images/logos/square.png'
@@ -553,6 +558,7 @@ function Layout({
                     {userIcon}
                   </Link>
                 </li>
+                {false &&
                 <li
                   className={`
                     mt-1
@@ -568,10 +574,12 @@ function Layout({
                 >
                   <button
                     className='rounded-3xl h-full w-full'
-                    onClick={() => handleAreCardsVertical()}>
+                    onClick={() => handleAreCardsVertical()}
+                  >
                       {cardIcon}
                   </button>
                 </li>
+                }
               </>
               }
             </ul>
@@ -662,7 +670,7 @@ function Layout({
             </FilterButton>
           </li>
           }
-          {Boolean(filterElementsCheckbox.length) &&
+          {Boolean(filterElementsCheckbox.length) && false &&
           <li className='mr-3'>
             <FilterButton>
               {filterElementsCheckbox.map((checkboxName, index) =>
@@ -690,7 +698,7 @@ function Layout({
             </FilterButton>
           </li>
           }
-          <li className='mr-3'>
+          <li className='mr-3 hidden'>
             <button
               className={`
                 px-3
@@ -736,17 +744,17 @@ function Layout({
         </main>
         <footer
           className={`
+            pt-6
+            pb-20
             text-center
             dark:text-white
             dark:bg-slate-900
             ${focusOnSearchBar ? 'blur-2xl' : ''}
-            ${user.isLogged ? 'pt-6 pb-20' : 'py-6'}
           `}
         >
           © 2023 serve.ac
         </footer>
       </div>
-      {user.isLogged &&
       <nav
         className={`
           z-10
@@ -763,13 +771,10 @@ function Layout({
             p-1
             flex
             w-fit
-            bg-white
             rounded-full
-            dark:bg-black
-            ${styleOf.biggerShadow}
           `}
         >
-          {dockElements.map((dockElement, index) =>
+          {/* {dockElements.map((dockElement, index) =>
             <li
               key={index}
               className={`
@@ -811,7 +816,99 @@ function Layout({
                 </button>
                 }
             </li>
-          )}
+          )} */}
+          {user.isLogged && <>
+          <li
+            className={`
+              p-2
+              flex
+              rounded-full
+              items-center
+              bg-slate-300
+              dark:bg-slate-800
+              justify-center
+              [&:not(:first-child)]:ml-2
+            `}
+          >
+            <Link to={`/user/${user.info._id}/new`} className='relative'>
+              <IconAdd className='text-green-500 text-3xl' />
+            </Link>
+          </li>
+          <li
+            className={`
+              p-2
+              flex
+              rounded-full
+              items-center
+              bg-slate-300
+              dark:bg-slate-800
+              justify-center
+              [&:not(:first-child)]:ml-2
+            `}
+          >
+            <button className='relative'
+              onClick={() => console.warn('afficher la pages des favoris')}>
+                <IconHeart className='text-pink-500 text-3xl' />
+                {Boolean(numberOfFavoritesLiked) &&
+                <Notification notificationNumber={numberOfFavoritesLiked} />
+                }
+            </button>
+          </li>
+          <li
+            className={`
+              p-2
+              flex
+              rounded-full
+              items-center
+              bg-slate-300
+              dark:bg-slate-800
+              justify-center
+              [&:not(:first-child)]:ml-2
+            `}
+          >
+            <button className='relative' onClick={() => console.warn('afficher la messagerie')}>
+              <IconMessage className='text-blue-500 text-3xl' />
+              {false &&
+                <Notification notificationNumber={3} />
+              }
+            </button>
+          </li>
+          </>}
+          {!user.isLogged && <>
+          <li
+            className={`
+              p-2
+              flex
+              rounded-full
+              items-center
+              bg-slate-300
+              dark:bg-slate-800
+              justify-center
+              [&:not(:first-child)]:ml-2
+            `}
+          >
+            <Link to='/user/register'>
+              <IconUserPlus className='text-black dark:text-yellow-100 text-3xl' />
+            </Link>
+          </li>
+          <li
+            className={`
+              py-2
+              px-3
+              flex
+              rounded-full
+              items-center
+              bg-slate-300
+              dark:bg-slate-800
+              justify-center
+              [&:not(:first-child)]:ml-2
+            `}
+          >
+            <Link to='/user/login'>
+              <IconKey className='text-yellow-300 text-2xl' />
+            </Link>
+          </li>
+          </>}
           {/* className={`
             h-full
             w-full
@@ -831,7 +928,6 @@ function Layout({
           `} */}
         </ul>
       </nav>
-      }
     </div>
   )
 }

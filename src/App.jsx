@@ -146,9 +146,8 @@ function App() {
 
 
   useEffect(() => {
-    const areCardsVertical = window.localStorage.getItem('areCardsVertical')
-    //console.log('areCardsVertical', areCardsVertical)
-    if(areCardsVertical) setAreCardsVertical(true)
+    /* const areCardsVertical = window.localStorage.getItem('areCardsVertical')
+    if(areCardsVertical) setAreCardsVertical(true) */
 
     // Info > On page load or when changing themes, best to add inline in `head` to avoid FOUC
     if(localStorage.theme) {

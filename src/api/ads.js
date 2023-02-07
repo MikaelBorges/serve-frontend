@@ -66,17 +66,6 @@ export function newAd(data) {
   })
 }
 
-export function testRoute(testData) {
-  return axios.post(`${config.api_url}/testRoute`, testData)
-  .then(res => {
-    return res
-  })
-  .catch(err => {
-    console.warn('err', err)
-    return err
-  })
-}
-
 export function modifyAd(datas) {
   return axios.post(`${config.api_url}/modifyAd`, datas)
   .then(res => {

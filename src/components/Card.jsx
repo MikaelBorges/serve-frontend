@@ -16,13 +16,16 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import { connect } from 'react-redux'
 import { deleteAd } from '../api/ads'
+import IconBin from './icons/IconBin'
+import IconMap from './icons/IconMap'
+import IconEdit from './icons/IconEdit'
 import PictureUser from './PictureUser'
 import styleOf from './Card.module.scss'
 import { useState, useEffect } from 'react'
+import { addToFavorites } from '../api/user'
 import { Pagination, Navigation, Scrollbar } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { addToFavorites } from '../api/user'
 import { updateLikedAdAction } from '../actions/ads/adsActions'
 import {
   logoutUserAction,
@@ -185,7 +188,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
       `}
     >
       {Boolean(ad.imagesWork.length) &&
-      <div className={`bg-black ${areCardsVertical ? 'aspect-square' : 'w-36 swiper-container-horizontal'}`}>
+      <div className={`bg-black relative ${areCardsVertical ? 'aspect-square' : 'w-36 swiper-container-horizontal'}`}>
         <Swiper
           navigation={true}
           scrollbar={{hide: false}}
@@ -201,6 +204,35 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             </SwiperSlide>
           )}
         </Swiper>
+        {user.isLogged && user.info._id === urlId &&
+        <div className='z-10 flex justify-center bottom-1 m-auto w-full absolute' onClick={() => console.warn('wrong')}>
+          <div className='p-1 flex items-center rounded-3xl'>
+            <button
+              onClick={e => handleDeleteAd(e, ad._id)}
+              className={`
+                p-2
+                bg-slate-200
+                dark:bg-slate-700
+                rounded-full
+                [&:not(:first-child)]:ml-2
+              `}>
+              <IconBin className='dark:text-white text-black' />
+            </button>
+            <Link
+              onClick={(e) => e.stopPropagation()}
+              className={`
+                p-2
+                bg-slate-200
+                dark:bg-slate-700
+                rounded-full
+                [&:not(:first-child)]:ml-2
+              `}
+              to={`/ad/${ad._id}/edit`}>
+              <IconEdit className='dark:text-white text-black' />
+            </Link>
+          </div>
+        </div>
+        }
       </div>
       }
       <div
@@ -216,14 +248,15 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
         <div>
           <h3
             className={`
-              font-bold
+              relative
               dark:text-white
               ${styleOf.limitTextTo}
               ${styleOf.twoLinesMax}
             `}>
             <Link
               onClick={(e) => e.stopPropagation()}
-              className='w-6 h-6 ml-1.5 rounded-full float-right'
+              //className='w-6 h-6 ml-1.5 rounded-full float-right'
+              className='w-6 h-6 ml-1.5 rounded-full absolute top-0 right-0'
               to={`/user/${ad.userId}`}>
               <PictureUser
                 imageUser={ad.imageUser ?
@@ -244,7 +277,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
               whitespace-nowrap
             `}
           >
-            <span className='mr-1'>{pinIcon}</span>{ad.location}
+            <span className='mr-1'><IconMap className='text-red-500 relative bottom-0.5 inline' /></span>{ad.location}
           </div>
         </div>
         <p
@@ -252,7 +285,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             dark:text-white
             ${styleOf.limitTextTo}
             ${areCardsVertical ? 'my-3' : ''}
-            ${areCardsVertical ? styleOf.fiveLinesMax : styleOf.oneLineMax}
+            ${areCardsVertical ? styleOf.fiveLinesMax : styleOf.twoLinesMax}
           `}>
           {ad.description}
         </p>
@@ -300,37 +333,6 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
           </div>
 
           <div className='flex'>
-            {user.isLogged && user.info._id === urlId &&
-            <>
-            <button
-              onClick={e => handleDeleteAd(e, ad._id)}
-              className={`
-                px-2
-                py-1
-                flex
-                items-center
-                rounded-full
-                bg-gray-100
-                dark:bg-slate-600
-              `}>
-              {binIcon}
-            </button>
-            <Link
-              onClick={(e) => e.stopPropagation()}
-              className={`
-                px-2
-                py-1
-                flex
-                items-center
-                rounded-full
-                bg-gray-100
-                dark:bg-slate-600
-              `}
-              to={`/ad/${ad._id}/edit`}>
-              {pencilIcon}
-            </Link>
-            </>
-            }
             <button
               className={`
                 px-2

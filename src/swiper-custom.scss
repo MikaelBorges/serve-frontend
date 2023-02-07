@@ -13,19 +13,22 @@
 
 .swiper-scrollbar {
   top: 0;
-  background: rgba(0,0,0,0);
+  padding: 1px;
+  border-radius: 0;
+  background: rgba(0, 0, 0, 1);
 
   &.swiper-scrollbar-horizontal {
-    height: 2px;
+    width: 100%;
+    height: 0.25rem;
   }
 }
 
 .swiper {
   .swiper-button-disabled {
-    &.swiper-button-prev{
+    &.swiper-button-prev {
       opacity: 0;
     }
-    &.swiper-button-next{
+    &.swiper-button-next {
       opacity: 0;
     }
   }
@@ -84,6 +87,7 @@
 .swiper-slide {
   //visibility: hidden;
   background-color: red;
+  height: 9rem;
 }
 .my-swiper-slide-horizontal {
   height: 9rem;

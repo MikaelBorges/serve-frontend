@@ -1,11 +1,14 @@
 import { Navigate, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
+import { changeUserData } from '../api/user'
 
 function UserSettings({user}) {
   const { urlId } = useParams()
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [info, setInfo] = useState(null)
+  const [error, setError] = useState(null)
   const [lastname, setLastname] = useState('')
   const [password, setPassword] = useState('')
   const [firstname, setFirstname] = useState('')
@@ -13,59 +16,28 @@ function UserSettings({user}) {
 
   const onSubmitForm = e => {
     e.preventDefault()
-    let data = {
+    let datas = {
       phone: e.target.phone.value,
       email: e.target.email.value,
       lastname: e.target.lastname.value,
       password: e.target.password.value,
       firstname: e.target.firstname.value
     }
-    console.log('data', data)
-    /* changeUserData(data)
+    console.log('data', datas)
+    changeUserData(datas, user.info._id)
     .then((res) => {
-      if (res.status === 200) {
-        setInfo(res.data.message)
-        if(imageSelected) {
-          const { userIdCreated } = res.data
-          const formData = new FormData()
-          formData.append("file", imageSelected)
-          formData.append('folder', `users/${userIdCreated}/profile`)
-          formData.append("upload_preset", "unsigned_upload_preset")
-          axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
-          .then((response) => {
-            const urlUserImage = response.data.secure_url
-            const data = {
-              urlUserImage: urlUserImage,
-              userIdCreated: userIdCreated
-            }
-            registerUserImage(data)
-            .then((res) => {
-              if (res.status === 200) console.warn(res.data.message)
-              else console.error(res.response.data.message)
-            })
-            .catch((err) => {
-              setError(err)
-            })
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-        }
-      }
+      if (res.status === 200) setInfo(res.data.message)
       else setError(res.response.data.message)
     })
-    .catch((err) => {
-        console.error(err)
-        setError(err)
-    }) */
+    .catch((err) => setError(err))
   }
 
   useEffect(() => {
     if (email !== '' && password !== '' && firstname !== '' && lastname !== '' && phone !== '') {
-        setDisabled(false)
+      setDisabled(false)
     }
     else {
-        setDisabled(true)
+      setDisabled(true)
     }
   }, [email, password, firstname, lastname, phone])
 
@@ -130,6 +102,12 @@ function UserSettings({user}) {
           Modifier mes données
         </button>
       </form>
+      {info &&
+        <p className='text-green-500'>{info}</p>
+      }
+      {error &&
+        <p className='text-red-500'>{error}</p>
+      }
     </section>
   )
 }

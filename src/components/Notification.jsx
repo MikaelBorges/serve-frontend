@@ -4,12 +4,13 @@ const Notification = ({notificationNumber}) => {
   return (
     <div
       className={`
-        top-1
-        right-1
+        top-0
+        right-0
         text-xs
         absolute
         text-white
         rounded-full
+        text-center
         bg-red-500
         inline-block
         ${styleOf.bubble}
@@ -20,4 +21,4 @@ const Notification = ({notificationNumber}) => {
   )
 }
 
-export default Notification;
+export default Notification

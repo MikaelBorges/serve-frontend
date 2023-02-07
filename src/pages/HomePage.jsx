@@ -140,7 +140,10 @@ function HomePage({clickedAd, resetClickedAd, areCardsVertical, updateClickedAd,
   }, []);
 
   return (
-    <section className={areCardsVertical ? styleOf.sectionHomepage : 'px-3'}>
+    <section className={`${areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>
+      {Boolean(filteredAds.length) &&
+      <div className='border border-black bg-white'>Filtres</div>
+      }
       <h1 className='my-7 text-3xl dark:text-white'>
         {noAds ? 'Aucune annonces' : 'Toutes les annonces'}
       </h1>

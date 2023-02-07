@@ -3,12 +3,31 @@ import { loadUserAds } from '../api/ads'
 import { useState, useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
-import { lightIcon, goodEveningIcon, binIcon, validIcon } from '../constants/icons'
 
 import styleOf from './ProfilPage.module.scss'
 import Masonry from 'react-masonry-css'
 
 import { connect } from 'react-redux'
+
+//import { lightIcon, goodEveningIcon, binIcon, validIcon } from '../constants/icons'
+
+import {
+  binIcon,
+  starIcon,
+  darkIcon,
+  userIcon,
+  cardIcon,
+  plusIcon,
+  heartIcon,
+  wheelIcon,
+  validIcon,
+  lightIcon,
+  systemIcon,
+  messageIcon,
+  modernKeyIcon,
+  disconnectIcon,
+  goodEveningIcon
+} from '../constants/icons'
 
 function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
 
@@ -170,6 +189,105 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
 
   return (
     <section className={areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}>
+
+      <ul className='flex'>
+        <li
+          className={`
+            
+            flex
+            rounded-full
+            items-center
+            aspect-square
+            bg-slate-200
+            cursor-pointer
+            justify-center
+            dark:bg-slate-400
+          `}
+        >
+          <button
+            className='rounded-3xl h-full w-full text-2xl'
+          >
+            {darkIcon}
+          </button>
+        </li>
+        <li
+          className={`
+            
+            flex
+            rounded-full
+            items-center
+            aspect-square
+            bg-slate-200
+            cursor-pointer
+            justify-center
+            dark:bg-slate-400
+          `}
+        >
+          <button
+            className='rounded-3xl h-full w-full text-2xl'
+          >
+            {lightIcon}
+          </button>
+        </li>
+        <li
+          className={`
+            
+            flex
+            rounded-full
+            items-center
+            aspect-square
+            bg-slate-200
+            cursor-pointer
+            justify-center
+            dark:bg-slate-400
+          `}
+        >
+          <button
+            className='rounded-3xl h-full w-full text-2xl'
+          >
+            {systemIcon}
+          </button>
+        </li>
+        <li
+          className={`
+            
+            flex
+            rounded-full
+            items-center
+            aspect-square
+            bg-slate-200
+            cursor-pointer
+            justify-center
+            dark:bg-slate-400
+          `}
+        >
+          <button
+            className='rounded-3xl h-full w-full text-2xl'
+          >
+            {disconnectIcon}
+          </button>
+        </li>
+        <li
+          className={`
+            
+            flex
+            rounded-full
+            items-center
+            aspect-square
+            bg-slate-200
+            cursor-pointer
+            justify-center
+            dark:bg-slate-400
+          `}
+        >
+          <button
+            className='rounded-3xl h-full w-full text-2xl'
+          >
+            {wheelIcon}
+          </button>
+        </li>
+      </ul>
+
       <div className='py-4'>
         {/* {!isVisitor &&
           <>

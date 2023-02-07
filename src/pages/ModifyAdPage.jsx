@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
-import { modifyAd, retrieveUserAd, deleteCloudinaryImages, testRoute } from '../api/ads'
+import { modifyAd, retrieveUserAd, deleteCloudinaryImages } from '../api/ads'
 
 import { updateAdsWithImages } from '../actions/user/userActions'
 
@@ -21,6 +21,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
   const [imagesSelected, setImagesSelected] = useState([])
   const [imagesWork, setImagesWork] = useState([])
   const [adHadImages, setAdHadImages] = useState(null)
+  const [retrievedAd, setRetrievedAd] = useState({})
 
   const onClickRemovePreviewImage = (e) => {
     const element = Number(e.target.parentElement.dataset.key)
@@ -46,7 +47,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
 
 
     if(Object.keys(imagesSelected).length) {
-      console.warn('prendre le bloc rouge')
+      console.warn('prendre les nouvelles images')
       adHaveImages = true
 
       if(adHaveImages !== adHadImages) {
@@ -95,7 +96,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
             modifyAd(datas)
             .then((res) => {
               if (res.status === 200) {
-                console.warn(res.data.message)
+                setInfo(res.data.message)
               }
               else {
                 console.error(res.response.data.message)
@@ -115,7 +116,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
     }
     else if(imagesWork.length) {
 
-      console.warn('prendre le bloc bleu')
+      console.warn('prendre les anciennes images')
       adHaveImages = true
       console.log('adHaveImages', adHaveImages)
 
@@ -135,13 +136,14 @@ function ModifyAdPage({user, updateAdsWithImages}) {
         price: priceConvertedToNumber,
         location: e.target.location.value,
         description: e.target.description.value,
+
         compareIfSomeImagesMustBeDeleted: true
       }
       console.log('datas', datas)
       modifyAd(datas)
       .then((res) => {
         if (res.status === 200) {
-          console.warn(res.data.message)
+          setInfo(res.data.message)
         }
         else {
           console.error(res.response.data.message)
@@ -152,17 +154,6 @@ function ModifyAdPage({user, updateAdsWithImages}) {
         setError(err)
       })
 
-      /* const testData = { imagesWork: imagesWork }
-      testRoute(testData)
-      .then((res) => {
-        if (res.status === 200) {
-          console.warn(res.data.message)
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-        setError(err)
-      }) */
 
     }
     else {
@@ -201,7 +192,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
             modifyAd(datas)
             .then((res) => {
               if (res.status === 200) {
-                console.warn(res.data.message)
+                setInfo(res.data.message)
               }
               else {
                 console.error(res.response.data.message)
@@ -231,7 +222,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
         modifyAd(datas)
         .then((res) => {
           if (res.status === 200) {
-            console.warn(res.data.message)
+            setInfo(res.data.message)
           }
           else {
             console.error(res.response.data.message)
@@ -243,7 +234,6 @@ function ModifyAdPage({user, updateAdsWithImages}) {
         })
       }
     }
-
 
 
     // Si rien n'a été touché, ne pas intéragir avec cloudinary.
@@ -260,8 +250,6 @@ function ModifyAdPage({user, updateAdsWithImages}) {
 
     // Récupérer les adresses des images
     // Envoyer les textes vers la bdd (avec les adresses des images)
-
-
   }
 
   useEffect(() => {
@@ -276,9 +264,11 @@ function ModifyAdPage({user, updateAdsWithImages}) {
     retrieveUserAd(urlId)
     .then(res => {
       const ad = res.adRetrieved
+      console.log('ad', ad)
       console.log('imagesWork', ad.imagesWork)
       if(ad.imagesWork.length) setAdHadImages(true)
       else setAdHadImages(false)
+      setRetrievedAd(ad)
       setImagesWork(ad.imagesWork)
       setTitle(ad.title)
       setDescription(ad.description)
