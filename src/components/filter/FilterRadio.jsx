@@ -1,4 +1,4 @@
-function FilterRadio({radioName, groupName, checked, handleChangeRadio}) {
+function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
 
   return (
     <label
@@ -14,7 +14,9 @@ function FilterRadio({radioName, groupName, checked, handleChangeRadio}) {
         id={`${groupName}-${radioName}`}
         onClick={(e) => e.stopPropagation()}
         onChange={(e) => handleChangeRadio(e)}
-        defaultChecked={checked === radioName ? 'checked' : ''}
+        defaultChecked={
+          isParamOnUrl && radioName === 'oui' ||
+          !isParamOnUrl && radioName === 'non' ? 'checked' : ''}
       />
       {radioName}
     </label>

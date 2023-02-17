@@ -19,7 +19,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
 
   const [imagesSelected, setImagesSelected] = useState([])
 
-  const onSubmitForm = e => {
+  const onSubmitForm = async e => {
     e.preventDefault()
 
     const priceConvertedToNumber = parseInt(e.target.price.value)
@@ -40,7 +40,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
     }
 
     newAd(data)
-    .then(res => {
+    .then(async res => {
       if(res.status === 200) {
         setInfo(res.data.message)
         addAdsOfUserAction(user, res.data.adIdCreated)
@@ -48,45 +48,42 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
           updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
           const adIdCreated = res.data.adIdCreated
           if(adIdCreated) console.warn('adIdCreated a bien été créé', adIdCreated)
-          let urlsAdImages = []
-          imagesSelected.forEach((imageSelected, index) => {
-            const formData = new FormData()
-            formData.append("file", imageSelected)
-            formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
-            formData.append("upload_preset", "unsigned_upload_preset")
-            axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
-            .then((response) => {
+
+
+
+
+
+
+          // Partie buguée
+
+            const urlsAdImages = []
+            for(let imageSelected of imagesSelected) {
+              const formData = new FormData()
+              formData.append("file", imageSelected)
+              formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
+              formData.append("upload_preset", "unsigned_upload_preset")
+              const response = await axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
+
               //console.log('response.data.secure_url', response.data.secure_url)
               urlsAdImages.push(response.data.secure_url)
-              //console.log('index', index)
-              if (!index) {
-                //console.log('urlsAdImages', urlsAdImages)
-                //console.log('urlsAdImages[0]', urlsAdImages[0])
-                //console.log('urlsAdImages[1]', urlsAdImages[1])
-                //console.log('urlsAdImages[2]', urlsAdImages[2])
-                const datas = {
-                  adIdCreated: adIdCreated,
-                  urlsAdImages: urlsAdImages
-                }
-                registerAdImages(datas)
-                .then((res) => {
-                  if (res.status === 200) {
-                    console.warn(res.data.message)
-                  }
-                  else {
-                    console.error(res.response.data.message)
-                  }
-                })
-                .catch((err) => {
-                  console.error(err)
-                  setError(err)
-                })
-              }
-            })
-            .catch((err) => {
-              console.error(err)
-            })
-          })
+            }
+
+
+            const datas = {
+              adIdCreated,
+              urlsAdImages
+            }
+
+            await registerAdImages(datas)
+
+
+
+
+
+
+
+
+
         }
       }
       else {
@@ -103,9 +100,10 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
     setImagesSelected(filesArray)
   }
 
-  const onClickRemovePreviewImage = (e) => {
-    const element = Number(e.target.parentElement.dataset.key)
-    if(element >= 0) setImagesSelected(imagesSelected.filter(item => imagesSelected.indexOf(item) !== element))
+  console.log('imagesSelected', imagesSelected)
+
+  const onClickRemovePreviewImage = (image) => {
+    setImagesSelected(imagesSelected.filter(item => item.name !== image.name && item.lastModified !== image.lastModified))
   }
 
   useEffect(() => {
@@ -154,7 +152,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
               rounded-full
               cursor-pointer
             `}
-            onClick={(e) => onClickRemovePreviewImage(e)} />
+            onClick={() => onClickRemovePreviewImage(image)} />
         </div>
         )}
         </div>

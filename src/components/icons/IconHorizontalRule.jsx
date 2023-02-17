@@ -1,4 +1,5 @@
 // icon:horizontal-rule-16 | Octicons https://primer.style/octicons/ | Github Primer
+
 function IconHorizontalRule(props) {
   return (
     <svg
@@ -14,7 +15,7 @@ function IconHorizontalRule(props) {
         d="M0 7.75A.75.75 0 01.75 7h14.5a.75.75 0 010 1.5H.75A.75.75 0 010 7.75z"
       />
     </svg>
-  );
+  )
 }
 
-export default IconHorizontalRule;
+export default IconHorizontalRule

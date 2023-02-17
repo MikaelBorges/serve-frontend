@@ -1,4 +1,5 @@
 // icon:cross-2 | Radix Icons https://icons.radix-ui.com/ | WorkOS
+
 function IconCross(props) {
   return (
     <svg className="dark:text-white" fill="none" viewBox="0 0 15 15" height="1rem" width="1rem" {...props}>
@@ -9,7 +10,7 @@ function IconCross(props) {
         clipRule="evenodd"
       />
     </svg>
-  );
+  )
 }
 
-export default IconCross;
+export default IconCross

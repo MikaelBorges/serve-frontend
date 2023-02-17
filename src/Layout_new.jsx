@@ -277,72 +277,92 @@ function Layout({
               src={darkMode ? logoRoundDark : logoRoundLight}
             />
           </Link>
-          <div
-            className={`
-              mx-3
-              flex
-              w-full
-              border
-              bg-white
-              rounded-3xl
-              items-center
-              border-transparent
-              dark:bg-slate-800
-              ${darkMode ? '' : styleOf.biggerShadow}
-              ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
-              ${isSearchBarVisible ? '' : 'hidden'}
-            `}>
-            <button
+          <div className={`mx-3 w-full relative`}>
+            {false &&
+            <div
               className={`
-                p-1
+                z-10
                 flex
-                h-full
-                rounded-full
+                inset-0
+                absolute
+                rounded-3xl
+                text-white
                 items-center
-                aspect-square
                 justify-center
+                bg-green-500
                 dark:text-white
-                dark:bg-slate-700
-                ${isButtonFilterActive ? 'bg-slate-200' : ''}
-                ${!isButtonFilterActive && !darkMode ? styleOf.biggerShadow : ''}
               `}
-              //onClick={handleClickFilterButton}
             >
-              <IconFilter />
-            </button>
-            <input
-              autoFocus
-              type='text'
-              id='searchInput'
-              className={`
-                mx-2
-                w-full
-                bg-white
-                text-black
-                dark:text-white
-                placeholder:italic
-                focus:outline-none
-                dark:bg-slate-800
-                placeholder:text-sm
-              `}
-              ref={searchInputRef}
-              placeholder='recherchez'
-              onChange={(e) => handleChangeOnSearchBar(e)}
-            />
-            <button
-              onClick={handleClickIconCross}
+              Annonce envoyée
+            </div>
+            }
+            <div
               className={`
                 flex
                 h-full
-                rounded-full
-                items-center
-                aspect-square
-                dark:bg-slate-700
-                justify-center
+                w-full
+                border
+                bg-white
+                rounded-3xl
+                border-transparent
+                dark:bg-slate-800
                 ${darkMode ? '' : styleOf.biggerShadow}
-              `}>
-              <IconCross />
-            </button>
+                ${focusOnSearchBar ? 'absolute inset-x-0 top-0 mx-0 z-20' : 'relative'}
+                ${isSearchBarVisible ? '' : 'hidden'}
+              `}
+            >
+              <button
+                className={`
+                  p-1
+                  flex
+                  h-full
+                  rounded-full
+                  items-center
+                  aspect-square
+                  justify-center
+                  dark:text-white
+                  dark:bg-slate-700
+                  ${isButtonFilterActive ? 'bg-slate-200' : ''}
+                  ${!isButtonFilterActive && !darkMode ? styleOf.biggerShadow : ''}
+                `}
+                onClick={handleClickFilterButton}
+              >
+                <IconFilter />
+              </button>
+              <input
+                autoFocus
+                type='text'
+                id='searchInput'
+                className={`
+                  mx-2
+                  w-full
+                  bg-white
+                  text-black
+                  dark:text-white
+                  placeholder:italic
+                  focus:outline-none
+                  dark:bg-slate-800
+                  placeholder:text-sm
+                `}
+                ref={searchInputRef}
+                placeholder='recherchez'
+                onChange={(e) => handleChangeOnSearchBar(e)}
+              />
+              <button
+                onClick={handleClickIconCross}
+                className={`
+                  flex
+                  h-full
+                  rounded-full
+                  items-center
+                  aspect-square
+                  dark:bg-slate-700
+                  justify-center
+                  ${darkMode ? '' : styleOf.biggerShadow}
+                `}>
+                <IconCross />
+              </button>
+            </div>
           </div>
           <nav className={`aspect-square ${focusOnSearchBar ? 'blur-2xl' : ''}`}>
             <ul
@@ -670,7 +690,7 @@ function Layout({
             </FilterButton>
           </li>
           }
-          {Boolean(filterElementsCheckbox.length) && false &&
+          {Boolean(filterElementsCheckbox.length) &&
           <li className='mr-3'>
             <FilterButton>
               {filterElementsCheckbox.map((checkboxName, index) =>
@@ -698,7 +718,7 @@ function Layout({
             </FilterButton>
           </li>
           }
-          <li className='mr-3 hidden'>
+          <li className='mr-3'>
             <button
               className={`
                 px-3
@@ -755,6 +775,7 @@ function Layout({
           © 2023 serve.ac
         </footer>
       </div>
+      
       <nav
         className={`
           z-10
@@ -817,6 +838,7 @@ function Layout({
                 }
             </li>
           )} */}
+
           {user.isLogged && <>
           <li
             className={`
@@ -824,13 +846,13 @@ function Layout({
               flex
               rounded-full
               items-center
-              bg-slate-300
+              bg-slate-200
               dark:bg-slate-800
               justify-center
               [&:not(:first-child)]:ml-2
             `}
           >
-            <Link to={`/user/${user.info._id}/new`} className='relative'>
+            <Link to={`/user/${user.info._id}/new`}>
               <IconAdd className='text-green-500 text-3xl' />
             </Link>
           </li>
@@ -840,18 +862,15 @@ function Layout({
               flex
               rounded-full
               items-center
-              bg-slate-300
+              bg-slate-200
               dark:bg-slate-800
               justify-center
               [&:not(:first-child)]:ml-2
             `}
           >
-            <button className='relative'
+            <button
               onClick={() => console.warn('afficher la pages des favoris')}>
-                <IconHeart className='text-pink-500 text-3xl' />
-                {Boolean(numberOfFavoritesLiked) &&
-                <Notification notificationNumber={numberOfFavoritesLiked} />
-                }
+                <IconHeart className='text-red-500 text-3xl' />
             </button>
           </li>
           <li
@@ -860,17 +879,14 @@ function Layout({
               flex
               rounded-full
               items-center
-              bg-slate-300
+              bg-slate-200
               dark:bg-slate-800
               justify-center
               [&:not(:first-child)]:ml-2
             `}
           >
-            <button className='relative' onClick={() => console.warn('afficher la messagerie')}>
+            <button onClick={() => console.warn('afficher la messagerie')}>
               <IconMessage className='text-blue-500 text-3xl' />
-              {false &&
-                <Notification notificationNumber={3} />
-              }
             </button>
           </li>
           </>}
@@ -928,6 +944,7 @@ function Layout({
           `} */}
         </ul>
       </nav>
+      
     </div>
   )
 }

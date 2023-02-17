@@ -225,42 +225,6 @@ function App() {
 
   }, []);
 
-  useEffect(() => {
-    if(areCardsVertical) {
-
-      console.log('direction verticale')
-
-      const swipers = document.querySelectorAll('.swiper')
-      console.log('swipers', swipers)
-      swipers.forEach((swiper) => {
-        console.log('swiper', swiper)
-        swiper.classList.add("my-swiper-vertical")
-      })
-      const swipersSlide = document.querySelectorAll('.swiper-slide')
-      console.log('swipersSlide', swipersSlide)
-      swipersSlide.forEach((swiperSlide) => {
-        console.log('swiperSlide', swiperSlide)
-        swiperSlide.classList.remove("my-swiper-slide-horizontal")
-      })
-    }
-    else {
-
-      console.log('direction horizontale')
-
-      const swipers = document.querySelectorAll('.swiper')
-      console.log('swipers', swipers)
-      swipers.forEach((swiper) => {
-        console.log('swiper', swiper)
-        swiper.classList.remove("my-swiper-vertical")
-      })
-      const swipersSlide = document.querySelectorAll('.swiper-slide')
-      console.log('swipersSlide', swipersSlide)
-      swipersSlide.forEach((swiperSlide) => {
-        console.log('swiperSlide', swiperSlide)
-        swiperSlide.classList.add("my-swiper-slide-horizontal")
-      })
-    }
-  }, [areCardsVertical]);
 
   return (
     <Layout

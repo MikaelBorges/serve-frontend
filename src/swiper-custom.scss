@@ -71,26 +71,46 @@
   // Vertical
   //aspect-ratio: 1 / 1;
 }
-.swiper {
+/* .swiper {
   //visibility: hidden;
   background-color: green;
 }
 .my-swiper-vertical {
   height: 100%;
-}
+} */
 
 .swiper-wrapper {
   //visibility: hidden;
   background-color: blue;
 }
 
-.swiper-slide {
+/* .swiper-slide {
   //visibility: hidden;
   background-color: red;
   height: 9rem;
 }
 .my-swiper-slide-horizontal {
   height: 9rem;
+} */
+
+
+.verticale {
+  .swiper {
+    height: 100%;
+  }
+  .swiper-slide {
+    height: auto;
+  }
+}
+
+
+.horizon {
+  .swiper {
+    height: auto;
+  }
+  .swiper-slide {
+    height: 9rem;
+  }
 }
 
 .swiper-slide {

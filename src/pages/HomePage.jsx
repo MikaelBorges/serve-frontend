@@ -7,7 +7,18 @@ import styleOf from './HomePage.module.scss'
 //import { fetchAdsAction } from '../actions/ads/adsActions'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-function HomePage({clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
+import FilterRadio from '../components/filter/FilterRadio'
+import FilterInput from '../components/filter/FilterInput'
+import FilterButton from '../components/filter/FilterButton'
+import IconHorizontalRule from '../components/icons/IconHorizontalRule'
+
+
+const superUserFilterRadioChoices = ['oui', 'non']
+const photosAdsFilterRadioChoices = ['oui', 'non']
+const filterLocationPlaceholderElements = ['ville']
+const filterPricePlaceholderElements = ['min', 'max']
+
+function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   const [noAds, setNoAds] = useState(null)
@@ -17,12 +28,21 @@ function HomePage({clickedAd, resetClickedAd, areCardsVertical, updateClickedAd,
   const title = search.get('title')
   const location = search.get('location')
   const minPrice = Number(search.get('minPrice') || 0)
-  const maxPrice = Number(search.get('maxPrice') || 0)
+  const maxPrice = search.get('maxPrice') ? Number(search.get('maxPrice')) : null
+
+  console.log('minPrice', minPrice)
+  console.log('maxPrice', maxPrice)
+
+  console.log("search.get('onlyWithPhotos')", search.get('onlyWithPhotos'))
+
   const superUser = search.get('superUser') ? true : false
   const onlyWithPhotos = search.get('onlyWithPhotos') ? true : false
 
+
+  console.log('ads', ads)
+
   const filteredAds = ads
-  ?.filter(ad => minPrice ? minPrice >= ad.price : true)
+  ?.filter(ad => minPrice ? ad.price >= minPrice : true)
   ?.filter(ad => maxPrice ? ad.price <= maxPrice : true)
   ?.filter(ad => superUser ? ad.superUser === superUser : true)
   ?.filter(ad => onlyWithPhotos ? ad.imagesWork.length > 0 === onlyWithPhotos : true)
@@ -85,6 +105,47 @@ function HomePage({clickedAd, resetClickedAd, areCardsVertical, updateClickedAd,
     setBreakpointsColumnsMasonry(breakpointsObject)
   }
 
+  const handleChangeRadio = (e) => {
+    const name = e.target.name
+    const radioValue = e.target.value
+    console.log('name', name)
+    console.log('radioValue', radioValue)
+
+    if(name === 'superUserRadioGroup') {
+      if(radioValue === 'oui') search.set('superUser', true)
+      else search.delete('superUser')
+    }
+    else {
+      if(radioValue === 'oui') search.set('onlyWithPhotos', true)
+      else search.delete('onlyWithPhotos')
+    }
+
+    setSearch(search)
+  }
+
+  const handleChangePriceInput = (e) => {
+    const name = e.target.name
+    const price = e.target.value
+
+    if (price.length) {
+      if(name === 'min') search.set('minPrice', price)
+      else search.set('maxPrice', price)
+    }
+    else {
+      if(name === 'min') search.delete('minPrice')
+      else search.delete('maxPrice')
+    }
+
+    setSearch(search)
+  }
+
+  const handleChangeLocationInput = (e) => {
+    const text = e.target.value
+    if (text.length) search.set('location', text)
+    else search.delete('location')
+    setSearch(search)
+  }
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       handleFocusOnSearchBar(false)
@@ -139,10 +200,151 @@ function HomePage({clickedAd, resetClickedAd, areCardsVertical, updateClickedAd,
     .catch(err => console.warn(err))
   }, []);
 
+  const determinatePriceInputValue = (placeholder) => {
+    if(placeholder === 'min') {
+      if(search.get('minPrice')) return search.get('minPrice')
+      else return ''
+    }
+    else if (placeholder === 'max') {
+      if(search.get('maxPrice')) return search.get('maxPrice')
+      else return ''
+    }
+  }
+
+  const doTest = () => {
+    setSearch({})
+    console.log("search.get('minPrice')", search.get('minPrice'))
+    console.log("search.get('maxPrice')", search.get('maxPrice'))
+    //determinatePriceInputValue(placeholder)
+  }
+
   return (
     <section className={`${areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>
       {Boolean(filteredAds.length) &&
-      <div className='border border-black bg-white'>Filtres</div>
+
+        <ul
+          className={`
+            pt-1
+            flex
+            px-3
+            pb-2
+            mt-3
+            right-3
+            flex-row
+            flex-wrap
+            items-end
+            bg-white
+            rounded-3xl
+            dark:text-white
+            dark:bg-slate-800
+            ${darkMode ? '' : styleOf.biggerShadow}
+          `}
+        >
+
+          {Boolean(filterPricePlaceholderElements.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Prix'>
+              {filterPricePlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  //value={determinatePriceInputValue(placeholder)}
+                  key={index}
+                  type='number'
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={handleChangePriceInput}
+                  defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(filterLocationPlaceholderElements.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Lieu'>
+              {filterLocationPlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  //value={search.get('location') ? search.get('location') : ''}
+                  key={index}
+                  type='text'
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={handleChangeLocationInput}
+                  defaultValue={search.get('location')}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(superUserFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Super user'>
+              {superUserFilterRadioChoices.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='superUserRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  isParamOnUrl={search.get('superUser') === 'true' ? true : false}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(photosAdsFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Uniquement avec photos'>
+              {photosAdsFilterRadioChoices.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='photoRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          <li className='mr-3'>
+            <button
+              className={`
+                px-3
+                flex
+                mt-1.5
+                rounded-3xl
+                items-center
+                bg-slate-200
+                dark:bg-slate-600
+                ${styleOf.resetFilterButton}
+            `}
+              onClick={() => doTest()}
+            >
+              Reset
+            </button>
+          </li>
+          <div
+            className={`
+              h-4
+              flex
+              w-full
+              items-center
+              justify-center
+              overflow-hidden
+            `}
+          >
+            <IconHorizontalRule />
+          </div>
+
+
+
+
+
+
+
+
+
+        </ul>
+      
       }
       <h1 className='my-7 text-3xl dark:text-white'>
         {noAds ? 'Aucune annonces' : 'Toutes les annonces'}

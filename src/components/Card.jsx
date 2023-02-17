@@ -188,7 +188,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
       `}
     >
       {Boolean(ad.imagesWork.length) &&
-      <div className={`bg-black relative ${areCardsVertical ? 'aspect-square' : 'w-36 swiper-container-horizontal'}`}>
+      <div className={`bg-black relative ${areCardsVertical ? 'aspect-square verticale' : 'horizon w-36 swiper-container-horizontal'}`}>
         <Swiper
           navigation={true}
           scrollbar={{hide: false}}
@@ -246,46 +246,60 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
           ${areCardsVertical ? '' : 'justify-between w-full'}
         `}>
         <div>
-          <h3
-            className={`
-              relative
-              dark:text-white
-              ${styleOf.limitTextTo}
-              ${styleOf.twoLinesMax}
-            `}>
-            <Link
-              onClick={(e) => e.stopPropagation()}
-              //className='w-6 h-6 ml-1.5 rounded-full float-right'
-              className='w-6 h-6 ml-1.5 rounded-full absolute top-0 right-0'
-              to={`/user/${ad.userId}`}>
-              <PictureUser
-                imageUser={ad.imageUser ?
-                  ad.imageUser
-                  :
-                  defaultProfile
-                }
-              />
-            </Link>
-            {ad.title}
-          </h3>
-          <div
-            className={`
-              text-xs
-              text-ellipsis
-              text-rose-500
-              overflow-hidden
-              whitespace-nowrap
-            `}
-          >
-            <span className='mr-1'><IconMap className='text-red-500 relative bottom-0.5 inline' /></span>{ad.location}
+
+          <div className='flex justify-between'>
+            <div>
+              <h3
+                className={`
+                  relative
+                  dark:text-white
+                  ${styleOf.limitTextTo}
+                  ${styleOf.twoLinesMax}
+                `}>
+                {ad.title}
+              </h3>
+              <div
+                className={`
+                  text-xs
+                  text-ellipsis
+                  text-rose-500
+                  overflow-hidden
+                  whitespace-nowrap
+                `}
+              >
+                <span className='mr-1'><IconMap className='text-red-500 relative bottom-0.5 inline' /></span>{ad.location}
+              </div>
+            </div>
+            <div className={`w-6 ${styleOf.crownImageContainer}`}>
+              <Link
+                onClick={(e) => e.stopPropagation()}
+                //className='w-6 h-6 ml-1.5 rounded-full float-right'
+                className='rounded-full'
+                to={`/user/${ad.userId}`}>
+                <PictureUser
+                  imageUser={ad.imageUser ?
+                    ad.imageUser
+                    :
+                    defaultProfile
+                  }
+                />
+              </Link>
+              {Boolean(ad.superUser) &&
+              <div className='text-xs text-center'>{crownIcon}</div>
+              }
+            </div>
           </div>
+
+
+
+          
         </div>
         <p
           className={`
             dark:text-white
             ${styleOf.limitTextTo}
             ${areCardsVertical ? 'my-3' : ''}
-            ${areCardsVertical ? styleOf.fiveLinesMax : styleOf.twoLinesMax}
+            ${areCardsVertical ? styleOf.fiveLinesMax : styleOf.oneLineMax}
           `}>
           {ad.description}
         </p>
@@ -313,22 +327,20 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
 
         <div className='flex justify-between items-center'>
 
-          <div className='text-xs'>
-            <div>
-              {Boolean(ad.superUser) &&
-              <span className='mr-1'>{crownIcon}</span>
-              }
-              {Boolean(ad.starsNb) &&
-              <span>{displayStars(ad.starsNb)}</span>
-              }
+          <div>
+            {Boolean(ad.starsNb) &&
+            <div className={styleOf.stars}>
+              {displayStars(ad.starsNb)}
             </div>
+            }
 
             <div
               className={`
-              text-fuchsia-500
-              dark:text-yellow-100
+                text-xs
+                text-fuchsia-500
+                dark:text-yellow-100
               `}>
-              {moneyIcon} {ad.price} €/h
+              {moneyIcon} {ad.price} €
             </div>
           </div>
 
