@@ -1,0 +1,51 @@
+.limitTextTo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+}
+
+.imagePartHorizontalAd {
+  width: 45%;
+}
+
+.textPartHorizontalAd {
+  width: 55%;
+}
+
+.superUserBadge {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+}
+
+.filters {
+  height: calc(100vw/2 - 2.25rem);
+}
+
+.uiButtons {
+  margin: 0.2rem;
+  padding-left: 0.32rem;
+}
+
+.myMasonryGrid {
+  display: flex;
+  justify-content: center;
+}
+
+.myMasonryGridColumn {
+  padding: 0 0.375rem;
+}
+
+.sectionHomepage {
+  padding: 0 0.375rem;
+}
+
+.resetFilterButton {
+  min-height: 2rem;
+}
+
+.biggerShadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

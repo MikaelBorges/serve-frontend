@@ -1,0 +1,1 @@
+export const FETCH_ADS_ACTION = 'FETCH_ADS_ACTION'

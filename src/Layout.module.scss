@@ -1,15 +1,23 @@
-.logo {
-  height: -webkit-fill-available;
-}
-
-.filters {
-  width: inherit;
-}
-
 .filtersNb {
   font-size: 0.6rem;
 }
 
-.filtersButtons {
-  margin: 0.18rem;
+.filterButton {
+  min-height: 2rem;
+}
+
+.biggerShadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.reducedWidthFilters {
+  width: calc(100% - 3.3rem);
+}
+
+.resetFilterButton {
+  min-height: 2rem;
+}
+
+.blurTransition {
+  -webkit-transition: -webkit-filter 150ms linear;
 }

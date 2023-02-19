@@ -1,0 +1,123 @@
+/* :root {
+  --swiper-theme-color: #64748B;
+} */
+
+/* .swiper-pagination-progressbar-fill {
+  --swiper-pagination-color: darkorange;
+} */
+
+.swiper-scrollbar-drag {
+  background-color: white;
+  border-radius: 0;
+}
+
+.swiper-scrollbar {
+  top: 0;
+  padding: 1px;
+  border-radius: 0;
+  background: rgba(0, 0, 0, 1);
+
+  &.swiper-scrollbar-horizontal {
+    width: 100%;
+    height: 0.25rem;
+  }
+}
+
+.swiper {
+  .swiper-button-disabled {
+    &.swiper-button-prev {
+      opacity: 0;
+    }
+    &.swiper-button-next {
+      opacity: 0;
+    }
+  }
+
+  .swiper-button-next { right: 0; }
+  .swiper-button-prev { left: 0; }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    top: 0;
+    opacity: 0;
+    width: 25%;
+    height: 100%;
+    margin-top: 0;
+    border-radius: 0;
+    border-radius: 9999px;
+    background-color: white;
+    --swiper-navigation-color: black;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    /* &.swiper-button-disabled {
+      pointer-events: auto;
+    } */
+
+    &:after {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+// Note > My personal fix, inspired from (https://github.com/nolimits4web/swiper/issues/3599)
+.swiper-container-horizontal {
+  // CSS Grid/Flexbox bug size workaround
+  // @see https://github.com/kenwheeler/slick/issues/982
+
+  // Horizontal
+  min-width: 9rem;
+  //width: 9rem;
+
+  // Vertical
+  //aspect-ratio: 1 / 1;
+}
+/* .swiper {
+  //visibility: hidden;
+  background-color: green;
+}
+.my-swiper-vertical {
+  height: 100%;
+} */
+
+.swiper-wrapper {
+  //visibility: hidden;
+  background-color: blue;
+}
+
+/* .swiper-slide {
+  //visibility: hidden;
+  background-color: red;
+  height: 9rem;
+}
+.my-swiper-slide-horizontal {
+  height: 9rem;
+} */
+
+
+.verticale {
+  .swiper {
+    height: 100%;
+  }
+  .swiper-slide {
+    height: auto;
+  }
+}
+
+
+.horizon {
+  .swiper {
+    height: auto;
+  }
+  .swiper-slide {
+    height: 9rem;
+  }
+}
+
+.swiper-slide {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    //visibility: hidden;
+  }
+}
