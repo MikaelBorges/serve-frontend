@@ -51,7 +51,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
           const urlsAdImages = []
           for(let newImageSelected of newImagesSelected) {
             const formData = new FormData()
-            formData.append("file", imageSelected)
+            formData.append("file", newImageSelected)
             formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
             formData.append("upload_preset", "unsigned_upload_preset")
             const response = await axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
