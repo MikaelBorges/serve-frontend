@@ -296,7 +296,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
         }
         {Boolean(superUserFilterRadioChoices.length) &&
         <li className='mr-3'>
-          <FilterButton filterButtonName='Super user'>
+          <FilterButton filterButtonName='Super utilisateurs'>
             {superUserFilterRadioChoices.map((radioName, index) =>
               <FilterRadio
                 key={index}
@@ -324,7 +324,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           </FilterButton>
         </li>
         }
-        <li className='mr-3'>
+        {/* <li className='mr-3'>
           <button
             className={`
               px-3
@@ -340,7 +340,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           >
             Reset
           </button>
-        </li>
+        </li> */}
         <div
           className={`
             h-4
