@@ -12,7 +12,6 @@ import FilterInput from '../components/filter/FilterInput'
 import FilterButton from '../components/filter/FilterButton'
 import IconHorizontalRule from '../components/icons/IconHorizontalRule'
 
-
 const superUserFilterRadioChoices = ['oui', 'non']
 const photosAdsFilterRadioChoices = ['oui', 'non']
 const filterLocationPlaceholderElements = ['ville']
@@ -37,7 +36,6 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
 
   const superUser = search.get('superUser') ? true : false
   const onlyWithPhotos = search.get('onlyWithPhotos') ? true : false
-
 
   console.log('ads', ads)
 
@@ -200,7 +198,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
     .catch(err => console.warn(err))
   }, []);
 
-  const determinatePriceInputValue = (placeholder) => {
+  /* const determinatePriceInputValue = (placeholder) => {
     if(placeholder === 'min') {
       if(search.get('minPrice')) return search.get('minPrice')
       else return ''
@@ -209,146 +207,154 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
       if(search.get('maxPrice')) return search.get('maxPrice')
       else return ''
     }
-  }
+  } */
 
-  const doTest = () => {
-    setSearch({})
+  const handleResetFilters = () => {
+    console.warn('reset all filters')
+    /* setSearch({})
     console.log("search.get('minPrice')", search.get('minPrice'))
     console.log("search.get('maxPrice')", search.get('maxPrice'))
-    //determinatePriceInputValue(placeholder)
+    //determinatePriceInputValue(placeholder) */
+  }
+
+  const titleAds = () => {
+    if(noAds) return 'Aucune annonces'
+    else {
+      if(!filteredAds.length) return 'Pas de résultats'
+      else return 'Toutes les annonces'
+    }
   }
 
   return (
     <section className={`${areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>
-      {Boolean(filteredAds.length) &&
-
-        <ul
+      <ul
+        className={`
+          pt-1
+          flex
+          px-3
+          pb-2
+          mt-3
+          right-3
+          flex-row
+          flex-wrap
+          items-end
+          bg-white
+          rounded-3xl
+          dark:text-white
+          dark:bg-slate-800
+          ${darkMode ? '' : styleOf.biggerShadow}
+        `}
+      >
+        {/* {filters.map((filter, index) =>
+        <li className='mr-3'>
+          <FilterButton filterButtonName={filter.label}>
+            {filter.inputs.map((placeholder, index) =>
+              <FilterInput
+                key={index}
+                type={filter.type}
+                name={placeholder}
+                placeholder={placeholder}
+                onChange={filter.actionOnChange}
+              />
+            )}
+          </FilterButton>
+        </li>
+        )} */}
+        {Boolean(filterPricePlaceholderElements.length) &&
+        <li className='mr-3'>
+          <FilterButton filterButtonName='Prix'>
+            {filterPricePlaceholderElements.map((placeholder, index) =>
+              <FilterInput
+                //value={determinatePriceInputValue(placeholder)}
+                key={index}
+                type='number'
+                name={placeholder}
+                placeholder={placeholder}
+                onChange={handleChangePriceInput}
+                defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
+              />
+            )}
+          </FilterButton>
+        </li>
+        }
+        {Boolean(filterLocationPlaceholderElements.length) &&
+        <li className='mr-3'>
+          <FilterButton filterButtonName='Lieu'>
+            {filterLocationPlaceholderElements.map((placeholder, index) =>
+              <FilterInput
+                //value={search.get('location') ? search.get('location') : ''}
+                key={index}
+                type='text'
+                name={placeholder}
+                placeholder={placeholder}
+                onChange={handleChangeLocationInput}
+                defaultValue={search.get('location')}
+              />
+            )}
+          </FilterButton>
+        </li>
+        }
+        {Boolean(superUserFilterRadioChoices.length) &&
+        <li className='mr-3'>
+          <FilterButton filterButtonName='Super user'>
+            {superUserFilterRadioChoices.map((radioName, index) =>
+              <FilterRadio
+                key={index}
+                radioName={radioName}
+                groupName='superUserRadioGroup'
+                handleChangeRadio={handleChangeRadio}
+                isParamOnUrl={search.get('superUser') === 'true' ? true : false}
+              />
+            )}
+          </FilterButton>
+        </li>
+        }
+        {Boolean(photosAdsFilterRadioChoices.length) &&
+        <li className='mr-3'>
+          <FilterButton filterButtonName='Uniquement avec photos'>
+            {photosAdsFilterRadioChoices.map((radioName, index) =>
+              <FilterRadio
+                key={index}
+                radioName={radioName}
+                groupName='photoRadioGroup'
+                handleChangeRadio={handleChangeRadio}
+                isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
+              />
+            )}
+          </FilterButton>
+        </li>
+        }
+        <li className='mr-3'>
+          <button
+            className={`
+              px-3
+              flex
+              mt-1.5
+              rounded-3xl
+              items-center
+              bg-slate-200
+              dark:bg-slate-600
+              ${styleOf.resetFilterButton}
+          `}
+            onClick={() => handleResetFilters()}
+          >
+            Reset
+          </button>
+        </li>
+        <div
           className={`
-            pt-1
+            h-4
             flex
-            px-3
-            pb-2
-            mt-3
-            right-3
-            flex-row
-            flex-wrap
-            items-end
-            bg-white
-            rounded-3xl
-            dark:text-white
-            dark:bg-slate-800
-            ${darkMode ? '' : styleOf.biggerShadow}
+            w-full
+            items-center
+            justify-center
+            overflow-hidden
           `}
         >
-
-          {Boolean(filterPricePlaceholderElements.length) &&
-          <li className='mr-3'>
-            <FilterButton filterButtonName='Prix'>
-              {filterPricePlaceholderElements.map((placeholder, index) =>
-                <FilterInput
-                  //value={determinatePriceInputValue(placeholder)}
-                  key={index}
-                  type='number'
-                  name={placeholder}
-                  placeholder={placeholder}
-                  onChange={handleChangePriceInput}
-                  defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
-                />
-              )}
-            </FilterButton>
-          </li>
-          }
-          {Boolean(filterLocationPlaceholderElements.length) &&
-          <li className='mr-3'>
-            <FilterButton filterButtonName='Lieu'>
-              {filterLocationPlaceholderElements.map((placeholder, index) =>
-                <FilterInput
-                  //value={search.get('location') ? search.get('location') : ''}
-                  key={index}
-                  type='text'
-                  name={placeholder}
-                  placeholder={placeholder}
-                  onChange={handleChangeLocationInput}
-                  defaultValue={search.get('location')}
-                />
-              )}
-            </FilterButton>
-          </li>
-          }
-          {Boolean(superUserFilterRadioChoices.length) &&
-          <li className='mr-3'>
-            <FilterButton filterButtonName='Super user'>
-              {superUserFilterRadioChoices.map((radioName, index) =>
-                <FilterRadio
-                  key={index}
-                  radioName={radioName}
-                  groupName='superUserRadioGroup'
-                  handleChangeRadio={handleChangeRadio}
-                  isParamOnUrl={search.get('superUser') === 'true' ? true : false}
-                />
-              )}
-            </FilterButton>
-          </li>
-          }
-          {Boolean(photosAdsFilterRadioChoices.length) &&
-          <li className='mr-3'>
-            <FilterButton filterButtonName='Uniquement avec photos'>
-              {photosAdsFilterRadioChoices.map((radioName, index) =>
-                <FilterRadio
-                  key={index}
-                  radioName={radioName}
-                  groupName='photoRadioGroup'
-                  handleChangeRadio={handleChangeRadio}
-                  isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
-                />
-              )}
-            </FilterButton>
-          </li>
-          }
-          <li className='mr-3'>
-            <button
-              className={`
-                px-3
-                flex
-                mt-1.5
-                rounded-3xl
-                items-center
-                bg-slate-200
-                dark:bg-slate-600
-                ${styleOf.resetFilterButton}
-            `}
-              onClick={() => doTest()}
-            >
-              Reset
-            </button>
-          </li>
-          <div
-            className={`
-              h-4
-              flex
-              w-full
-              items-center
-              justify-center
-              overflow-hidden
-            `}
-          >
-            <IconHorizontalRule />
-          </div>
-
-
-
-
-
-
-
-
-
-        </ul>
-      
-      }
-      <h1 className='my-7 text-3xl dark:text-white'>
-        {noAds ? 'Aucune annonces' : 'Toutes les annonces'}
-      </h1>
+          <IconHorizontalRule />
+        </div>
+      </ul>
+      <h1 className='my-7 text-3xl dark:text-white'>{titleAds()}</h1>
       {Boolean(filteredAds.length) &&
       <ul className={areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
         {areCardsVertical &&
@@ -377,9 +383,6 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           areCardsVertical={areCardsVertical} />
         )}
       </ul>
-      }
-      {!Boolean(filteredAds.length) && Boolean(ads.length) &&
-      <h1 className='text-3xl dark:text-white'>Pas de résultats</h1>
       }
       {!Boolean(ads.length) && !noAds &&
       <img
