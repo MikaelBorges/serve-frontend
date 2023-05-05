@@ -16,7 +16,7 @@ function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
         onChange={(e) => handleChangeRadio(e)}
         defaultChecked={
           isParamOnUrl && radioName === 'oui' ||
-          !isParamOnUrl && radioName === 'non' ? 'checked' : ''}
+          !isParamOnUrl && radioName === 'non'}
       />
       {radioName}
     </label>

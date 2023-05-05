@@ -18,14 +18,14 @@ function ModifyAdPage({user, updateAdsWithImages}) {
   const [disabled, setDisabled] = useState(false)
   const [description, setDescription] = useState('')
 
-  const [imagesSelected, setImagesSelected] = useState([])
+  const [newImagesSelected, setNewImagesSelected] = useState([])
   const [imagesWork, setImagesWork] = useState([])
   const [adHadImages, setAdHadImages] = useState(null)
   const [retrievedAd, setRetrievedAd] = useState({})
 
   const onClickRemovePreviewImage = (e) => {
     const element = Number(e.target.parentElement.dataset.key)
-    if(element >= 0) setImagesSelected(imagesSelected.filter(item => imagesSelected.indexOf(item) !== element))
+    if(element >= 0) setNewImagesSelected(newImagesSelected.filter(item => newImagesSelected.indexOf(item) !== element))
   }
 
   const onClickRemovePreviewImageRetrieved = (e) => {
@@ -35,7 +35,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
 
   const onChangeInputImages = (e) => {
     const filesArray = Object.values(e.target.files)
-    setImagesSelected(filesArray)
+    setNewImagesSelected(filesArray)
   }
 
   const onSubmitForm = async (e) => {
@@ -44,9 +44,10 @@ function ModifyAdPage({user, updateAdsWithImages}) {
     let adHaveImages = null
     let urlsAdImages = []
     console.log('adHadImages', adHadImages)
+    console.log('newImagesSelected', newImagesSelected)
+    console.log('imagesWork', imagesWork)
 
-
-    if(Object.keys(imagesSelected).length) {
+    if(Object.keys(newImagesSelected).length) {
       console.warn('prendre les nouvelles images')
       adHaveImages = true
 
@@ -72,7 +73,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
         .catch(err => console.error(err))
       }
 
-      imagesSelected.forEach((imageSelected, index) => {
+      newImagesSelected.forEach((imageSelected, index) => {
         const formData = new FormData()
         formData.append("file", imageSelected)
         formData.append('folder', `users/${user.info._id}/ads/${urlId}`)
@@ -80,6 +81,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
         axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
         .then((response) => {
           urlsAdImages.push(response.data.secure_url)
+          console.log('urlsAdImages', urlsAdImages)
           if (!index) {
             const priceConvertedToNumber = parseInt(e.target.price.value)
             const datas = {
@@ -253,16 +255,16 @@ function ModifyAdPage({user, updateAdsWithImages}) {
   }
 
   useEffect(() => {
-    console.log('imagesSelected', imagesSelected)
-    if(imagesSelected.length) {
+    console.log('newImagesSelected', newImagesSelected)
+    if(newImagesSelected.length) {
       setImagesWork([])
     }
-  }, [imagesSelected])
+  }, [newImagesSelected])
 
   useEffect(() => {
-    console.log('refait un retrieve')
+    console.log("récupération des images et des textes de l'annonce")
     retrieveUserAd(urlId)
-    .then(res => {
+    .then((res) => {
       const ad = res.adRetrieved
       console.log('ad', ad)
       console.log('imagesWork', ad.imagesWork)
@@ -302,9 +304,9 @@ function ModifyAdPage({user, updateAdsWithImages}) {
           onChange={(e) => onChangeInputImages(e)}
           className='text-white dark:text-slate-900 max-w-full'
         />
-        {Boolean(imagesSelected.length) &&
+        {Boolean(newImagesSelected.length) &&
         <div className='grid gap-3 grid-cols-3 my-3'>
-        {imagesSelected.map((image, index) =>
+        {newImagesSelected.map((image, index) =>
         <div key={index} data-key={index} className='relative p-1'>
           <img
             alt='preview image'

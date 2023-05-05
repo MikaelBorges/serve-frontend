@@ -177,295 +177,296 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
   }, []);
 
   return (
-    <li
-      className={`
-        z-0
-        rounded-3xl
-        bg-slate-200
-        overflow-hidden
-        dark:bg-slate-700
-        ${areCardsVertical ? '[&:not(:last-child)]:mb-3 relative' : 'flex h-36'}
-      `}
-    >
-      {Boolean(ad.imagesWork.length) &&
-      <div className={`bg-black relative ${areCardsVertical ? 'aspect-square verticale' : 'horizon w-36 swiper-container-horizontal'}`}>
-        <Swiper
-          navigation={true}
-          scrollbar={{hide: false}}
-          modules={[Navigation, Scrollbar]}
-        >
-          {ad.imagesWork.map((imageWork, index) =>
-            <SwiperSlide
-              key={`${ad._id}-${index}`}
-            >
-              <img
-                src={imageWork}
-                alt='image du service' />
-            </SwiperSlide>
-          )}
-        </Swiper>
-        {user.isLogged && user.info._id === urlId &&
-        <div className='z-10 flex justify-center bottom-1 m-auto w-full absolute' onClick={() => console.warn('wrong')}>
-          <div className='p-1 flex items-center rounded-3xl'>
-            <button
-              onClick={e => handleDeleteAd(e, ad._id)}
-              className={`
-                p-2
-                bg-slate-200
-                dark:bg-slate-700
-                rounded-full
-                [&:not(:first-child)]:ml-2
-              `}>
-              <IconBin className='dark:text-white text-black' />
-            </button>
-            <Link
-              onClick={(e) => e.stopPropagation()}
-              className={`
-                p-2
-                bg-slate-200
-                dark:bg-slate-700
-                rounded-full
-                [&:not(:first-child)]:ml-2
-              `}
-              to={`/ad/${ad._id}/edit`}>
-              <IconEdit className='dark:text-white text-black' />
-            </Link>
-          </div>
-        </div>
-        }
+    <li>
+      {user.isLogged && user.info._id === urlId &&
+      <div className='p-1 flex'>
+        <button
+          onClick={e => handleDeleteAd(e, ad._id)}
+          className={`
+            p-2
+            bg-slate-200
+            dark:bg-slate-700
+            rounded-full
+            [&:not(:first-child)]:ml-2
+          `}>
+          <IconBin className='dark:text-white text-black' />
+        </button>
+        <Link
+          onClick={(e) => e.stopPropagation()}
+          className={`
+            p-2
+            bg-slate-200
+            dark:bg-slate-700
+            rounded-full
+            [&:not(:first-child)]:ml-2
+          `}
+          to={`/ad/${ad._id}/edit`}>
+          <IconEdit className='dark:text-white text-black' />
+        </Link>
       </div>
       }
+    
       <div
-        onClick={() => handleShowAd()}
         className={`
-          p-2
-          flex
-          flex-col
-          cursor-pointer
+          z-0
+          rounded-3xl
+          bg-slate-200
           overflow-hidden
-          ${areCardsVertical ? '' : 'justify-between w-full'}
-        `}>
-        <div>
+          dark:bg-slate-700
+          ${areCardsVertical ? '[&:not(:last-child)]:mb-3 relative' : 'flex h-36'}
+        `}
+      >
+        {Boolean(ad.imagesWork.length) &&
+        <div className={`bg-black relative ${areCardsVertical ? 'aspect-square swiper-custom-vertical' : 'swiper-custom-horizontal w-36 swiper-container-horizontal'}`}>
+          <Swiper
+            navigation={true}
+            scrollbar={{hide: false}}
+            modules={[Navigation, Scrollbar]}
+          >
+            {ad.imagesWork.map((imageWork, index) =>
+              <SwiperSlide
+                key={`${ad._id}-${index}`}
+              >
+                <img
+                  src={imageWork}
+                  alt='image du service' />
+              </SwiperSlide>
+            )}
+          </Swiper>
+        </div>
+        }
+        <div
+          onClick={() => handleShowAd()}
+          className={`
+            p-2
+            flex
+            flex-col
+            cursor-pointer
+            overflow-hidden
+            ${areCardsVertical ? '' : 'justify-between w-full'}
+          `}>
+          <div>
 
-          <div className='flex justify-between'>
+            <div className='flex justify-between'>
+              <div>
+                <h3
+                  className={`
+                    relative
+                    dark:text-white
+                    ${styleOf.limitTextTo}
+                    ${styleOf.twoLinesMax}
+                  `}>
+                  {ad.title}
+                </h3>
+                <div
+                  className={`
+                    text-xs
+                    text-ellipsis
+                    text-rose-500
+                    overflow-hidden
+                    whitespace-nowrap
+                  `}
+                >
+                  <span className='mr-1'><IconMap className='text-red-500 relative bottom-0.5 inline' /></span>{ad.location}
+                </div>
+              </div>
+              <div className={`w-6 ${styleOf.crownImageContainer}`}>
+                <Link
+                  onClick={(e) => e.stopPropagation()}
+                  //className='w-6 h-6 ml-1.5 rounded-full float-right'
+                  className='rounded-full'
+                  to={`/user/${ad.userId}`}>
+                  <PictureUser
+                    imageUser={ad.imageUser ?
+                      ad.imageUser
+                      :
+                      defaultProfile
+                    }
+                  />
+                </Link>
+                {Boolean(ad.superUser) &&
+                <div className='text-xs text-center'>{crownIcon}</div>
+                }
+              </div>
+            </div>
+
+
+
+            
+          </div>
+          <p
+            className={`
+              dark:text-white
+              ${styleOf.limitTextTo}
+              ${areCardsVertical ? 'my-3' : ''}
+              ${areCardsVertical ? styleOf.fiveLinesMax : styleOf.oneLineMax}
+            `}>
+            {ad.description}
+          </p>
+
+          {/* <div>
+            <p
+              className={`
+                text-gray-400
+              `}
+            >
+              le {props.ad.dateOfPublication}
+            </p>
+            <div
+              className={`
+                pb-3
+                flex
+                justify-between
+              `}
+            >
+              <div className='text-right text-gray-400'>
+                à {props.ad.timeOfPublication}
+              </div>
+            </div>
+          </div> */}
+
+          <div className='flex justify-between items-center'>
+
             <div>
-              <h3
-                className={`
-                  relative
-                  dark:text-white
-                  ${styleOf.limitTextTo}
-                  ${styleOf.twoLinesMax}
-                `}>
-                {ad.title}
-              </h3>
+              {Boolean(ad.starsNb) &&
+              <div className={styleOf.stars}>
+                {displayStars(ad.starsNb)}
+              </div>
+              }
+
               <div
                 className={`
                   text-xs
-                  text-ellipsis
-                  text-rose-500
-                  overflow-hidden
-                  whitespace-nowrap
-                `}
-              >
-                <span className='mr-1'><IconMap className='text-red-500 relative bottom-0.5 inline' /></span>{ad.location}
+                  text-fuchsia-500
+                  dark:text-yellow-100
+                `}>
+                {moneyIcon} {ad.price} €/h
               </div>
             </div>
-            <div className={`w-6 ${styleOf.crownImageContainer}`}>
-              <Link
-                onClick={(e) => e.stopPropagation()}
-                //className='w-6 h-6 ml-1.5 rounded-full float-right'
-                className='rounded-full'
-                to={`/user/${ad.userId}`}>
-                <PictureUser
-                  imageUser={ad.imageUser ?
-                    ad.imageUser
-                    :
-                    defaultProfile
-                  }
-                />
-              </Link>
-              {Boolean(ad.superUser) &&
-              <div className='text-xs text-center'>{crownIcon}</div>
-              }
+
+            <div className='flex'>
+              <button
+                className={`
+                  px-2
+                  py-1
+                  flex
+                  items-center
+                  rounded-full
+                  bg-gray-100
+                  dark:bg-slate-600
+                `}
+                onClick={e => manageAddToFavorites(e)}
+              >
+                <div>{heartIcon}</div>
+                <div className='ml-1 text-red-600'>
+                  {ad.favoritesNb}
+                </div>
+              </button>
             </div>
+
           </div>
 
 
 
-          
-        </div>
-        <p
-          className={`
-            dark:text-white
-            ${styleOf.limitTextTo}
-            ${areCardsVertical ? 'my-3' : ''}
-            ${areCardsVertical ? styleOf.fiveLinesMax : styleOf.oneLineMax}
-          `}>
-          {ad.description}
-        </p>
-
-        {/* <div>
-          <p
+          {/* <button
             className={`
-              text-gray-400
-            `}
-          >
-            le {props.ad.dateOfPublication}
-          </p>
-          <div
-            className={`
-              pb-3
+              px-3
+              py-2
               flex
-              justify-between
+              text-xl
+              items-center
+              rounded-full
+              bg-gray-100
+              dark:bg-slate-600
             `}
+            onClick={e => handleViewReviews(e)}
           >
-            <div className='text-right text-gray-400'>
-              à {props.ad.timeOfPublication}
-            </div>
-          </div>
-        </div> */}
-
-        <div className='flex justify-between items-center'>
-
-          <div>
-            {Boolean(ad.starsNb) &&
-            <div className={styleOf.stars}>
-              {displayStars(ad.starsNb)}
-            </div>
-            }
-
+            <div className='text-xs'>{paperPencilIcon}</div>
             <div
               className={`
-                text-xs
-                text-fuchsia-500
-                dark:text-yellow-100
-              `}>
-              {moneyIcon} {ad.price} €
+                ml-2
+                text-gray-400
+              `}
+            >
+              {props.ad.reviewsNb}
             </div>
-          </div>
+          </button> */}
 
-          <div className='flex'>
-            <button
-              className={`
-                px-2
-                py-1
-                flex
-                items-center
-                rounded-full
-                bg-gray-100
-                dark:bg-slate-600
-              `}
-              onClick={e => manageAddToFavorites(e)}
-            >
-              <div>{heartIcon}</div>
-              <div className='ml-1 text-red-600'>
-                {ad.favoritesNb}
-              </div>
-            </button>
-          </div>
-
-        </div>
-
-
-
-        {/* <button
-          className={`
-            px-3
-            py-2
-            flex
-            text-xl
-            items-center
-            rounded-full
-            bg-gray-100
-            dark:bg-slate-600
-          `}
-          onClick={e => handleViewReviews(e)}
-        >
-          <div className='text-xs'>{paperPencilIcon}</div>
-          <div
-            className={`
-              ml-2
-              text-gray-400
-            `}
-          >
-            {props.ad.reviewsNb}
-          </div>
-        </button> */}
-
-        {/* </div> */}
-          {/* {weAreOnUserPage && !props.isVisitor &&
-          <div className='flex pt-3'>
-            <button
-              className={`
-                px-2
-                py-2
-                flex
-                text-xl
-                items-center
-                rounded-full
-                bg-gray-100
-                dark:bg-slate-600
-              `}
-              onClick={e => handleDeleteAd(e, props.ad._id)}
-            >
-              {binIcon}
-            </button>
-            <button
-              className={`
-                mx-1
-                px-2
-                py-2
-                flex
-                text-xl
-                items-center
-                rounded-full
-                bg-gray-100
-                dark:bg-slate-600
-              `}
-              onClick={e => showStatistics(e)}
-            >
-              <div>{eyeIcon}</div>
-              <div
+          {/* </div> */}
+            {/* {weAreOnUserPage && !props.isVisitor &&
+            <div className='flex pt-3'>
+              <button
                 className={`
-                  ml-1
-                  text-green-500
+                  px-2
+                  py-2
+                  flex
+                  text-xl
+                  items-center
+                  rounded-full
+                  bg-gray-100
+                  dark:bg-slate-600
                 `}
+                onClick={e => handleDeleteAd(e, props.ad._id)}
               >
-                {props.ad.views}
-              </div>
-            </button>
-            <button
-              className={`
-                px-2
-                py-2
-                flex
-                text-xl
-                items-center
-                rounded-full
-                bg-gray-100
-                dark:bg-slate-600
-              `}
-              onClick={e => handleModifyAd(e)}
-            >
-              {pencilIcon}
-            </button>
-            {props.showCheckboxsDraft &&
-              <input
-                value='yes'
-                name='check'
-                type='checkbox'
-                id={props.ad._id}
-                //className='w-8 h-8 rounded-full'
-                //checked={props.allCardsChecked ? true : false}
-                //defaultChecked
-                //onChange={}
-                onClick={e => handleChangeCheckbox(e)}
-                onChange={e => handleChangeCheckbox(e)}
-                //checked={isSubscribed || props.allCardsChecked}
-              />
-            }
-          </div>
-        } */}
+                {binIcon}
+              </button>
+              <button
+                className={`
+                  mx-1
+                  px-2
+                  py-2
+                  flex
+                  text-xl
+                  items-center
+                  rounded-full
+                  bg-gray-100
+                  dark:bg-slate-600
+                `}
+                onClick={e => showStatistics(e)}
+              >
+                <div>{eyeIcon}</div>
+                <div
+                  className={`
+                    ml-1
+                    text-green-500
+                  `}
+                >
+                  {props.ad.views}
+                </div>
+              </button>
+              <button
+                className={`
+                  px-2
+                  py-2
+                  flex
+                  text-xl
+                  items-center
+                  rounded-full
+                  bg-gray-100
+                  dark:bg-slate-600
+                `}
+                onClick={e => handleModifyAd(e)}
+              >
+                {pencilIcon}
+              </button>
+              {props.showCheckboxsDraft &&
+                <input
+                  value='yes'
+                  name='check'
+                  type='checkbox'
+                  id={props.ad._id}
+                  //className='w-8 h-8 rounded-full'
+                  //checked={props.allCardsChecked ? true : false}
+                  //defaultChecked
+                  //onChange={}
+                  onClick={e => handleChangeCheckbox(e)}
+                  onChange={e => handleChangeCheckbox(e)}
+                  //checked={isSubscribed || props.allCardsChecked}
+                />
+              }
+            </div>
+          } */}
+        </div>
       </div>
     </li>
   )

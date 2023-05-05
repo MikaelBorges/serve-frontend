@@ -25,18 +25,19 @@ import Notification from './components/Notification'
 import IconCross from './components/icons/IconCross'
 import IconMessage from './components/icons/IconMessage'
 import IconAccount from './components/icons/IconAccount'
-import FilterRadio from './components/filter/FilterRadio'
-import FilterInput from './components/filter/FilterInput'
 import IconUserPlus from './components/icons/IconUserPlus'
-import FilterButton from './components/filter/FilterButton'
 import IconFilter from './components/icons/IconFilter'
 import logoRoundLight from './assets/images/logos/square.png'
 import { logoutUserAction } from './actions/user/userActions'
-import FilterCheckbox from './components/filter/FilterCheckbox'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import IconHorizontalRule from './components/icons/IconHorizontalRule'
 import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
 import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
+
+/* import FilterRadio from './components/filter/FilterRadio'
+import FilterInput from './components/filter/FilterInput'
+import FilterButton from './components/filter/FilterButton'
+import FilterCheckbox from './components/filter/FilterCheckbox'
+import IconHorizontalRule from './components/icons/IconHorizontalRule'
 
 const superUserFilter = {
   defaultSuperUserFilterRadioChecked: 'non',
@@ -53,7 +54,7 @@ const defaultPhotosAdsFilterRadioChecked = photoAdsFilter.defaultPhotosAdsFilter
 
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
-const filterElementsCheckbox = [`1${starIcon}`, `2${starIcon}`, `3${starIcon}`, `4${starIcon}`, `5${starIcon}`]
+const filterElementsCheckbox = [`1${starIcon}`, `2${starIcon}`, `3${starIcon}`, `4${starIcon}`, `5${starIcon}`] */
 
 function Layout({
   user,
@@ -68,14 +69,14 @@ function Layout({
 }) {
   const navigate = useNavigate()
   const searchInputRef = useRef(null)
-  const locationInputRef = useRef(null)
+  //const locationInputRef = useRef(null)
   const [error, setError] = useState(null)
   const [search, setSearch] = useSearchParams()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [resetAllFilters, setResetAllFilters] = useState(false)
+  //const [resetAllFilters, setResetAllFilters] = useState(false)
   const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
 
-  const numberOfMessagesUnread = user.isLogged ? 2 : ''
+  //const numberOfMessagesUnread = user.isLogged ? 2 : ''
   const numberOfFavoritesLiked = user.isLogged ? user.info.favorites.length : null
   //const numberOfFavoritesLiked = null
 
@@ -95,9 +96,9 @@ function Layout({
     }
   ]
 
-  const inputsReseted = () => {
+  /* const inputsReseted = () => {
     setResetAllFilters(false)
-  }
+  } */
 
   const handleLogout = () => {
     let data = { _id : user.info._id }
@@ -120,7 +121,7 @@ function Layout({
     })
   }
 
-  const handleChangePriceInput = (e) => {
+  /* const handleChangePriceInput = (e) => {
     const name = e.target.name
     const price = e.target.value
 
@@ -134,14 +135,14 @@ function Layout({
     }
 
     setSearch(search)
-  }
+  } */
 
-  const handleChangeLocationInput = (e) => {
+  /* const handleChangeLocationInput = (e) => {
     const text = e.target.value
     if (text.length) search.set('location', text)
     else search.delete('location')
     setSearch(search)
-  }
+  } */
 
   const handleChangeOnSearchBar = (e) => {
     handleFocusOnSearchBar(true)
@@ -151,9 +152,9 @@ function Layout({
     setSearch(search)
   }
 
-  const handleClickFilterButton = () => {
+  /* const handleClickFilterButton = () => {
     setIsButtonFilterActive(!isButtonFilterActive)
-  }
+  } */
 
   const handleClickIconCross = () => {
     searchInputRef.current.value = ''
@@ -163,7 +164,7 @@ function Layout({
     console.warn('texte effacé')
   }
 
-  const handleChangeRadio = (e) => {
+  /* const handleChangeRadio = (e) => {
     const name = e.target.name
     const radioValue = e.target.value
     console.log('name', name)
@@ -179,7 +180,7 @@ function Layout({
     }
 
     setSearch(search)
-  }
+  } */
 
   /* const handleChangeCheckbox = (e) => {
     const checkboxName = e.target.name
@@ -206,21 +207,21 @@ function Layout({
     setSearch(search)
   } */
 
-  const handleResetFilters = () => {
+  /* const handleResetFilters = () => {
     console.warn('reset filters')
     //setResetAllFilters(true)
     //console.log('locationInputRef', locationInputRef)
 
     //locationInputRef.current.value = ''
-    /* search.delete('location')
-    search.delete('minPrice')
-    search.delete('maxPrice')
-    search.delete('superUser')
-    search.delete('onlyWithPhotos')
-    setSearch(search) */
+    //search.delete('location')
+    //search.delete('minPrice')
+    //search.delete('maxPrice')
+    //search.delete('superUser')
+    //search.delete('onlyWithPhotos')
+    //setSearch(search)
   }
-
-  const filters = [
+ */
+  /* const filters = [
     {
       label: 'Prix',
       type: 'number',
@@ -249,7 +250,7 @@ function Layout({
       inputs: ['oui', 'non'],
       actionOnChange: (e) => handleChangeRadio(e)
     }
-  ]
+  ] */
 
   return (
     <div className='min-h-screen dark:bg-slate-900'>
@@ -585,7 +586,8 @@ function Layout({
             </ul>
           </nav>
         </div>
-        {Boolean(filters.length) &&
+
+        {/* {Boolean(filters.length) &&
         <ul
           className={`
             pt-1
@@ -606,22 +608,6 @@ function Layout({
             ${!isSearchBarVisible || !isButtonFilterActive ? 'hidden' : ''}
           `}
         >
-
-          {/* {filters.map((filter, index) =>
-          <li className='mr-3'>
-            <FilterButton filterButtonName={filter.label}>
-              {filter.inputs.map((placeholder, index) =>
-                <FilterInput
-                  key={index}
-                  type={filter.type}
-                  name={placeholder}
-                  placeholder={placeholder}
-                  onChange={filter.actionOnChange}
-                />
-              )}
-            </FilterButton>
-          </li>
-          )} */}
 
           {Boolean(filterPricePlaceholderElements.length) &&
           <li className='mr-3'>
@@ -728,7 +714,8 @@ function Layout({
             <IconHorizontalRule />
           </div>
         </ul>
-        }
+        } */}
+
       </header>
       <div
         onClick={() => handleFocusOnSearchBar(false)}

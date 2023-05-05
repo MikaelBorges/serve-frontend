@@ -17,9 +17,9 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
   const [disabled, setDisabled] = useState(true)
   const [description, setDescription] = useState('')
 
-  const [imagesSelected, setImagesSelected] = useState([])
+  const [newImagesSelected, setNewImagesSelected] = useState([])
 
-  const onSubmitForm = async e => {
+  const onSubmitForm = async (e) => {
     e.preventDefault()
 
     const priceConvertedToNumber = parseInt(e.target.price.value)
@@ -40,50 +40,28 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
     }
 
     newAd(data)
-    .then(async res => {
+    .then(async (res) => {
       if(res.status === 200) {
         setInfo(res.data.message)
         addAdsOfUserAction(user, res.data.adIdCreated)
-        if(imagesSelected.length) {
+        if(newImagesSelected.length) {
           updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
           const adIdCreated = res.data.adIdCreated
           if(adIdCreated) console.warn('adIdCreated a bien été créé', adIdCreated)
-
-
-
-
-
-
-          // Partie buguée
-
-            const urlsAdImages = []
-            for(let imageSelected of imagesSelected) {
-              const formData = new FormData()
-              formData.append("file", imageSelected)
-              formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
-              formData.append("upload_preset", "unsigned_upload_preset")
-              const response = await axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
-
-              //console.log('response.data.secure_url', response.data.secure_url)
-              urlsAdImages.push(response.data.secure_url)
-            }
-
-
-            const datas = {
-              adIdCreated,
-              urlsAdImages
-            }
-
-            await registerAdImages(datas)
-
-
-
-
-
-
-
-
-
+          const urlsAdImages = []
+          for(let newImageSelected of newImagesSelected) {
+            const formData = new FormData()
+            formData.append("file", imageSelected)
+            formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
+            formData.append("upload_preset", "unsigned_upload_preset")
+            const response = await axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
+            urlsAdImages.push(response.data.secure_url)
+          }
+          const datas = {
+            adIdCreated,
+            urlsAdImages
+          }
+          await registerAdImages(datas)
         }
       }
       else {
@@ -97,13 +75,13 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
 
   const onChangeInputImages = (e) => {
     const filesArray = Object.values(e.target.files)
-    setImagesSelected(filesArray)
+    setNewImagesSelected(filesArray)
   }
 
-  console.log('imagesSelected', imagesSelected)
+  console.log('newImagesSelected', newImagesSelected)
 
   const onClickRemovePreviewImage = (image) => {
-    setImagesSelected(imagesSelected.filter(item => item.name !== image.name && item.lastModified !== image.lastModified))
+    setNewImagesSelected(newImagesSelected.filter(item => item.name !== image.name && item.lastModified !== image.lastModified))
   }
 
   useEffect(() => {
@@ -131,9 +109,9 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
           onChange={(e) => onChangeInputImages(e)}
           className='text-white dark:text-slate-900 max-w-full'
         />
-        {Boolean(imagesSelected.length) &&
+        {Boolean(newImagesSelected.length) &&
         <div className='grid gap-3 grid-cols-3 my-3'>
-        {imagesSelected.map((image, index) =>
+        {newImagesSelected.map((image, index) =>
         <div key={index} data-key={index} className='relative p-1'>
           <img
             alt='preview image'
