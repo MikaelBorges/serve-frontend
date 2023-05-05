@@ -10,11 +10,11 @@ function FilterInput(props) {
 
   //console.log('inputRef.current', inputRef.current)
 
-  if(props.resetfilter === 'true') {
+  /* if(props.resetfilter === 'true') {
     console.log("props.resetfilter === 'true'")
     inputRef.current.value = ''
     props.inputsReseted
-  }
+  } */
 
   return (
     <input
