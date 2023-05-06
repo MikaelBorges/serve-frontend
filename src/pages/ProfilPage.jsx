@@ -36,6 +36,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   const [ads, setAds] = useState([])
   const [imgUrl, setImgUrl] = useState('')
   const [noAds, setNoAds] = useState(null)
+  const [loaded, setLoaded] = useState(false)
   const [isVisitor, setIsVisitor] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [liteInfosOfUser, setLiteInfosOfUser]= useState({})
@@ -46,9 +47,9 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
 
   const wayToGreet = () => {
     return hour > 6 && hour < 20 ?
-      `Bonjour ${user.firstname} ${lightIcon}`
+      `Bonjour ${user.info.firstname} ${lightIcon}`
       :
-      `Bonsoir ${user.firstname} ${goodEveningIcon}`
+      `Bonsoir ${user.info.firstname} ${goodEveningIcon}`
   }
 
   const handleDeleteAd = e => {
@@ -119,6 +120,20 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
     }
   }, [props.user, userIdPage]); */
 
+  const titlePage = () => {
+    if(loaded) {
+      if(ads.length) {
+        if(user.info._id === urlId) return `Voici vos annonces`
+        else return `Voici les annonces de ${liteInfosOfUser.firstname}`
+      }
+      else {
+        if(user.info._id === urlId) return `Vous n'avez pas d'annonces`
+        else return `${liteInfosOfUser.firstname} n'a aucune annonce`
+      }
+    }
+    else return 'En chargement...'
+  }
+
   // Mettre à jour les tableaux d'annonces au clic sur une annonce favorite
   useEffect(() => {
     if(Object.keys(clickedAd).length > 0) {
@@ -158,8 +173,10 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   useEffect(() => {
     loadUserAds(urlId)
     .then(res => {
+      setLiteInfosOfUser(res.liteInfos)
       setAds(res.adsOfUser)
-      setNoAds(res.noAds)
+      //setNoAds(res.noAds)
+      setLoaded(true)
     })
     .catch(err => console.error('err', err))
   }, [urlId])
@@ -190,7 +207,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   return (
     <section className={areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}>
 
-      <ul className='flex'>
+      {/* <ul className='flex'>
         <li
           className={`
             
@@ -286,7 +303,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
             {wheelIcon}
           </button>
         </li>
-      </ul>
+      </ul> */}
 
       <div className='py-4'>
         {/* {!isVisitor &&
@@ -333,22 +350,10 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
             </div>
           </>
         } */}
-        <div className='flex justify-between'>
+        {/* <div className='flex justify-between'>
           <div className='flex flex-col justify-center'>
             <h2 className='text-3xl dark:text-white'>
-              {/* {isVisitor && !noAds && Object.keys(liteInfosOfUser).length > 0 ?
-                `Annonce(s) de ${liteInfosOfUser.firstname}` : ''
-              }
-              {!isVisitor && !noAds && Object.keys(props.dataUser).length > 0 ?
-                `Voici vos annonce(s) ${props.dataUser.firstname}` : ''
-              }
-              {noAds && isVisitor ?
-                `${liteInfosOfUser.firstname} n'a pas d'annonce(s)` : ''
-              }
-              {noAds && !isVisitor ?
-                `Vous n'avez pas d'annonce(s) ${props.dataUser.firstname}` : ''
-              } */}
-              Mes annonce(s) :
+              {titlePage()}
             </h2>
           </div>
           {!isVisitor && showCheckboxsDraft &&
@@ -386,8 +391,12 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
               </div>
             </div>
           }
-        </div>
+        </div> */}
 
+        {user.info._id === urlId &&
+        <h1 className='pb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
+        }
+        <h2 className='text-2xl dark:text-white'>{titlePage()}</h2>
       </div>
 
       {Boolean(ads.length) &&
@@ -427,7 +436,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
         )}
       </ul>
       }
-      {!Boolean(ads.length) && !noAds &&
+      {!loaded &&
       <img
         className='w-20'
         alt='chargement'

@@ -293,7 +293,7 @@ function Layout({
               ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
               ${isSearchBarVisible ? '' : 'hidden'}
             `}>
-            <button
+            {/* <button
               className={`
                 p-1
                 flex
@@ -310,7 +310,7 @@ function Layout({
               //onClick={handleClickFilterButton}
             >
               <IconFilter />
-            </button>
+            </button> */}
             <input
               autoFocus
               type='text'
@@ -327,7 +327,7 @@ function Layout({
                 placeholder:text-sm
               `}
               ref={searchInputRef}
-              placeholder='recherchez'
+              placeholder='recherche'
               onChange={(e) => handleChangeOnSearchBar(e)}
             />
             <button
@@ -821,7 +821,7 @@ function Layout({
               <IconAdd className='text-green-500 text-3xl' />
             </Link>
           </li>
-          <li
+          {/* <li
             className={`
               p-2
               flex
@@ -859,7 +859,7 @@ function Layout({
                 <Notification notificationNumber={3} />
               }
             </button>
-          </li>
+          </li> */}
           </>}
           {!user.isLogged && <>
           <li

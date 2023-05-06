@@ -20,7 +20,8 @@ const filterPricePlaceholderElements = ['min', 'max']
 function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
-  const [noAds, setNoAds] = useState(null)
+  //const [noAds, setNoAds] = useState(null)
+  const [loaded, setLoaded] = useState(false)
   const [search, setSearch] = useSearchParams()
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
 
@@ -183,16 +184,15 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
   }, [clickedAd]);
 
   useEffect(() => {
-
     handleSearchBarVisibility(true)
-
     generateMasonryBreakpointsUntilThisMaxValue(3000)
     //if(props.refreshUrl) navigate('/')
     // await loadAds()
     loadAds()
     .then(res => {
       setAds(res.ads)
-      setNoAds(res.noAds)
+      //setNoAds(res.noAds)
+      setLoaded(true)
       //props.fetchAdsAction(res.ads)
     })
     .catch(err => console.warn(err))
@@ -209,20 +209,24 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
     }
   } */
 
-  const handleResetFilters = () => {
+  /* const handleResetFilters = () => {
     console.warn('reset all filters')
-    /* setSearch({})
-    console.log("search.get('minPrice')", search.get('minPrice'))
-    console.log("search.get('maxPrice')", search.get('maxPrice'))
-    //determinatePriceInputValue(placeholder) */
-  }
+    //setSearch({})
+    //console.log("search.get('minPrice')", search.get('minPrice'))
+    //console.log("search.get('maxPrice')", search.get('maxPrice'))
+    //determinatePriceInputValue(placeholder)
+  } */
 
-  const titleAds = () => {
-    if(noAds) return 'Aucune annonces'
-    else {
-      if(!filteredAds.length) return 'Pas de résultats'
-      else return 'Toutes les annonces'
+  const titlePage = () => {
+    if(loaded) {
+      if(!ads.length) return 'Aucune annonces'
+      else {
+        if(!filteredAds.length) return 'Pas de résultats'
+        else if(filteredAds.length !== ads.length) return 'Résultats'
+        else return 'Toutes les annonces'
+      }
     }
+    else return 'En chargement...'
   }
 
   return (
@@ -354,7 +358,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           <IconHorizontalRule />
         </div>
       </ul>
-      <h1 className='my-7 text-3xl dark:text-white'>{titleAds()}</h1>
+      <h1 className='my-7 text-3xl dark:text-white'>{titlePage()}</h1>
       {Boolean(filteredAds.length) &&
       <ul className={areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
         {areCardsVertical &&
@@ -384,7 +388,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
         )}
       </ul>
       }
-      {!Boolean(ads.length) && !noAds &&
+      {!loaded &&
       <img
         className='w-20'
         alt='chargement'
