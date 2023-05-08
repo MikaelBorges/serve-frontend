@@ -49,6 +49,13 @@
     --swiper-navigation-color: black;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
+    /* -webkit-touch-callout: none; // iOS Safari
+    -webkit-user-select: none; // Safari
+    -khtml-user-select: none; // Konqueror HTML
+    -moz-user-select: none; // Old versions of Firefox
+    -ms-user-select: none; // Internet Explorer/Edge
+    user-select: none; // Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+
     /* &.swiper-button-disabled {
       pointer-events: auto;
     } */
@@ -60,7 +67,7 @@
 }
 
 // Note > My personal fix, inspired from (https://github.com/nolimits4web/swiper/issues/3599)
-.swiper-container-horizontal {
+/* .swiper-container-horizontal {
   // CSS Grid/Flexbox bug size workaround
   // @see https://github.com/kenwheeler/slick/issues/982
 
@@ -70,7 +77,7 @@
 
   // Vertical
   //aspect-ratio: 1 / 1;
-}
+} */
 /* .swiper {
   //visibility: hidden;
   background-color: green;
@@ -103,6 +110,8 @@
 }
 
 .swiper-custom-horizontal {
+  min-width: 9rem;
+
   .swiper {
     height: auto;
   }
@@ -117,5 +126,11 @@
     height: 100%;
     object-fit: cover;
     //visibility: hidden;
+  }
+}
+
+.swiper-custom-scrollbar {
+  .swiper-scrollbar-horizontal {
+    left: 0;
   }
 }

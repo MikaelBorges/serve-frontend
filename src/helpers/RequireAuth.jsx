@@ -31,7 +31,7 @@ function RequireAuth(props) {
       //on va vérifier le token (ajax)
       axios.get(`${config.api_url}/api/checkToken`, {headers: { "x-access-token": token }})
       .then((res) => {
-        console.log('res.status', res.status)
+        //console.log('res.status', res.status)
         //console.log("RequireAuth useEffect", res)
         //si le status de la réponse n'est pas 200
         if (res.status !== 200) {

@@ -23,7 +23,7 @@ function UserSettings({user}) {
       password: e.target.password.value,
       firstname: e.target.firstname.value
     }
-    console.log('data', datas)
+    //console.log('data', datas)
     changeUserData(datas, user.info._id)
     .then((res) => {
       if (res.status === 200) setInfo(res.data.message)

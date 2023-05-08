@@ -29,7 +29,7 @@ function LoginPage({loginUserAction, user}) {
         /* console.log('res.data.token', res.data.token)
         console.log('res.data.session.user', res.data.session.user) */
 
-        console.log('res', res)
+        //console.log('res', res)
 
         loginUserAction(res.data.session.user)
         navigate('/')

@@ -161,7 +161,6 @@ function Layout({
     searchInputRef.current.focus()
     search.delete('title')
     setSearch(search)
-    console.warn('texte effacé')
   }
 
   /* const handleChangeRadio = (e) => {
@@ -559,7 +558,6 @@ function Layout({
                     {userIcon}
                   </Link>
                 </li>
-                {false &&
                 <li
                   className={`
                     mt-1
@@ -580,7 +578,6 @@ function Layout({
                       {cardIcon}
                   </button>
                 </li>
-                }
               </>
               }
             </ul>
@@ -733,6 +730,7 @@ function Layout({
           className={`
             pt-6
             pb-20
+            text-xs
             text-center
             dark:text-white
             dark:bg-slate-900

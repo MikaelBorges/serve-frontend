@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage'
 import './assets/fonts/Gilroy/gilroy.css'
 import LoginPage from './pages/LoginPage'
 import NewAdPage from './pages/NewAdPage'
+import ViewAdPage from './pages/ViewAdPage'
 import ProfilPage from './pages/ProfilPage'
 import { useState, useEffect } from 'react'
 import RegisterPage from './pages/RegisterPage'
@@ -306,6 +307,11 @@ function App() {
           exact
           path='/ad/:urlId/edit'
           element={<ModifyAdPage />}
+        />
+        <Route
+          exact
+          path='/ad/:urlId'
+          element={<ViewAdPage />}
         />
       </Routes>
     </Layout>

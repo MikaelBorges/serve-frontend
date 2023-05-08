@@ -177,7 +177,9 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
   }, []);
 
   return (
-    <li>
+    <li
+      className={`${areCardsVertical ? '[&:not(:last-child)]:mb-3' : ''}`}
+    >
       {user.isLogged && user.info._id === urlId &&
       <div className='p-1 flex'>
         <button
@@ -205,8 +207,8 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
         </Link>
       </div>
       }
-    
-      <div
+      {/* <Link
+        onClick={(e) => e.stopPropagation()}
         className={`
           z-0
           rounded-3xl
@@ -215,9 +217,19 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
           dark:bg-slate-700
           ${areCardsVertical ? '[&:not(:last-child)]:mb-3 relative' : 'flex h-36'}
         `}
+        to={`/user/viewAd`}
+      > */}
+      <div
+        className={`
+          z-0
+          rounded-3xl
+          bg-slate-200
+          overflow-hidden
+          dark:bg-slate-700
+          ${areCardsVertical ? 'relative' : 'flex h-36'}`}
       >
         {Boolean(ad.imagesWork.length) &&
-        <div className={`bg-black relative ${areCardsVertical ? 'aspect-square swiper-custom-vertical' : 'swiper-custom-horizontal w-36 swiper-container-horizontal'}`}>
+        <div className={`relative ${areCardsVertical ? 'aspect-square swiper-custom-vertical' : 'swiper-custom-horizontal w-36'}`}>
           <Swiper
             navigation={true}
             scrollbar={{hide: false}}
@@ -344,7 +356,6 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
               </div>
             </div>
 
-            <div className='flex'>
               <button
                 className={`
                   px-2
@@ -362,7 +373,6 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
                   {ad.favoritesNb}
                 </div>
               </button>
-            </div>
 
           </div>
 
@@ -468,6 +478,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
           } */}
         </div>
       </div>
+      {/* </Link> */}
     </li>
   )
 }

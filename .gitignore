@@ -150,3 +150,4 @@ dist
 /public/_logo192.png
 /public/_logo512.png
 /public/index.html
+/src/config.js

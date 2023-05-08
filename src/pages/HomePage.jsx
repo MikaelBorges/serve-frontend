@@ -30,15 +30,15 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
   const minPrice = Number(search.get('minPrice') || 0)
   const maxPrice = search.get('maxPrice') ? Number(search.get('maxPrice')) : null
 
-  console.log('minPrice', minPrice)
+  /* console.log('minPrice', minPrice)
   console.log('maxPrice', maxPrice)
 
-  console.log("search.get('onlyWithPhotos')", search.get('onlyWithPhotos'))
+  console.log("search.get('onlyWithPhotos')", search.get('onlyWithPhotos')) */
 
   const superUser = search.get('superUser') ? true : false
   const onlyWithPhotos = search.get('onlyWithPhotos') ? true : false
 
-  console.log('ads', ads)
+  //console.log('ads', ads)
 
   const filteredAds = ads
   ?.filter(ad => minPrice ? ad.price >= minPrice : true)
@@ -107,8 +107,8 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
   const handleChangeRadio = (e) => {
     const name = e.target.name
     const radioValue = e.target.value
-    console.log('name', name)
-    console.log('radioValue', radioValue)
+    /* console.log('name', name)
+    console.log('radioValue', radioValue) */
 
     if(name === 'superUserRadioGroup') {
       if(radioValue === 'oui') search.set('superUser', true)
@@ -230,7 +230,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
   }
 
   return (
-    <section className={`${areCardsVertical ? styleOf.sectionHomepage : 'px-3'}`}>
+    <section>
       <ul
         className={`
           pt-1
@@ -238,6 +238,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           px-3
           pb-2
           mt-3
+          mx-3
           right-3
           flex-row
           flex-wrap
@@ -358,9 +359,9 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           <IconHorizontalRule />
         </div>
       </ul>
-      <h1 className='my-7 text-3xl dark:text-white'>{titlePage()}</h1>
+      <h1 className='mx-3 my-7 text-3xl dark:text-white'>{titlePage()}</h1>
       {Boolean(filteredAds.length) &&
-      <ul className={areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
+      <ul className={areCardsVertical ? 'px-1.5' : 'px-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
         {areCardsVertical &&
         <Masonry
           role='list'
