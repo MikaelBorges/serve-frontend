@@ -7,7 +7,7 @@ import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
 import { addAdsOfUserAction, updateAdsWithImages } from '../actions/user/userActions'
 
-function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
+function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchBarVisibility}) {
   const { urlId } = useParams()
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
@@ -91,6 +91,10 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages}) {
       setDisabled(true)
     }
   }, [title, price, description, location])
+
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+  }, [])
 
   if(user.info._id !== urlId) return <Navigate to='/' />
 

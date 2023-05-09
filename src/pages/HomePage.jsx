@@ -145,6 +145,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
     setSearch(search)
   }
 
+  // Simulation du blur lors d'une recherche
   useEffect(() => {
     const timeout = setTimeout(() => {
       handleFocusOnSearchBar(false)

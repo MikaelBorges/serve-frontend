@@ -71,10 +71,6 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
     console.warn('voir les avis')
   }
 
-  const handleShowAd = () => {
-    console.warn("afficher l'annonce")
-  }
-
   const handleShowPriceDetails = e => {
     e.stopPropagation()
     console.warn('proposer un prix de prestation')
@@ -207,18 +203,6 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
         </Link>
       </div>
       }
-      {/* <Link
-        onClick={(e) => e.stopPropagation()}
-        className={`
-          z-0
-          rounded-3xl
-          bg-slate-200
-          overflow-hidden
-          dark:bg-slate-700
-          ${areCardsVertical ? '[&:not(:last-child)]:mb-3 relative' : 'flex h-36'}
-        `}
-        to={`/user/viewAd`}
-      > */}
       <div
         className={`
           z-0
@@ -247,7 +231,18 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
           </Swiper>
         </div>
         }
-        <div
+        <Link
+          to={`/ad/${ad._id}`}
+          className={`
+            p-2
+            flex
+            flex-col
+            cursor-pointer
+            overflow-hidden
+            ${areCardsVertical ? '' : 'justify-between w-full'}
+          `}
+        >
+        {/* <div
           onClick={() => handleShowAd()}
           className={`
             p-2
@@ -256,7 +251,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             cursor-pointer
             overflow-hidden
             ${areCardsVertical ? '' : 'justify-between w-full'}
-          `}>
+          `}> */}
           <div>
 
             <div className='flex justify-between'>
@@ -476,9 +471,9 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
               }
             </div>
           } */}
-        </div>
+        {/* </div> */}
+        </Link>
       </div>
-      {/* </Link> */}
     </li>
   )
 }

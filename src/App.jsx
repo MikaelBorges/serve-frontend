@@ -292,7 +292,13 @@ function App() {
         <Route
           exact
           path='/user/:urlId/settings'
-          element={<RequireAuth child={UserSettings} auth={true} />}
+          element={
+            <RequireAuth
+              auth={true}
+              child={UserSettings}
+              handleSearchBarVisibility={handleSearchBarVisibility}
+            />
+          }
         />
         <Route
           exact
@@ -300,6 +306,7 @@ function App() {
           element={
             <NewAdPage
               darkMode={darkMode}
+              handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }
         />
@@ -311,7 +318,7 @@ function App() {
         <Route
           exact
           path='/ad/:urlId'
-          element={<ViewAdPage />}
+          element={<ViewAdPage handleSearchBarVisibility={handleSearchBarVisibility} />}
         />
       </Routes>
     </Layout>

@@ -277,6 +277,8 @@ function Layout({
               src={darkMode ? logoRoundDark : logoRoundLight}
             />
           </Link>
+
+          {isSearchBarVisible &&
           <div
             className={`
               mx-3
@@ -290,7 +292,6 @@ function Layout({
               dark:bg-slate-800
               ${darkMode ? '' : styleOf.biggerShadow}
               ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
-              ${isSearchBarVisible ? '' : 'hidden'}
             `}>
             {/* <button
               className={`
@@ -344,6 +345,8 @@ function Layout({
               <IconCross />
             </button>
           </div>
+          }
+
           <nav className={`aspect-square ${focusOnSearchBar ? 'blur-2xl' : ''}`}>
             <ul
               className={`
@@ -715,7 +718,7 @@ function Layout({
 
       </header>
       <div
-        onClick={() => handleFocusOnSearchBar(false)}
+        //onClick={() => handleFocusOnSearchBar(false)}
         className={`
           ${styleOf.blurTransition}
           ${focusOnSearchBar ? 'relative blur-2xl' : ''}
