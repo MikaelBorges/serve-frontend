@@ -20,11 +20,14 @@ function FilterInput(props) {
     <input
       ref={inputRef}
       //ref={props.locationinputref}
+      // Tip : rounded-none and leading-4 to fix ui issues on ios devices
       className={`
         h-5
         ml-3
-        border-b-2
         bg-white
+        leading-4
+        border-b-2
+        rounded-none
         border-slate-400
         dark:bg-slate-800
         ${props.type === 'text' ? 'w-20' : 'w-12'}

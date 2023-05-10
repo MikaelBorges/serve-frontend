@@ -25,6 +25,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchB
     const priceConvertedToNumber = parseInt(e.target.price.value)
 
     const data = {
+      tel: user.info.tel,
       userId: user.info._id,
       starsNb: user.info.starsNb,
       title: e.target.titre.value,

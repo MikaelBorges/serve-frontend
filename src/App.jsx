@@ -29,6 +29,12 @@ function App() {
   const [areCardsVertical, setAreCardsVertical] = useState(false)
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(null)
 
+  const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
+
+  const handleVisibilityFilters = () => {
+    setIsButtonFilterActive(!isButtonFilterActive)
+  }
+
   const handleFocusOnSearchBar = (focus) => {
     setFocusOnSearchBar(focus)
   }
@@ -147,8 +153,8 @@ function App() {
 
 
   useEffect(() => {
-    /* const areCardsVertical = window.localStorage.getItem('areCardsVertical')
-    if(areCardsVertical) setAreCardsVertical(true) */
+    const areCardsVertical = window.localStorage.getItem('areCardsVertical')
+    if(areCardsVertical) setAreCardsVertical(true)
 
     // Info > On page load or when changing themes, best to add inline in `head` to avoid FOUC
     if(localStorage.theme) {
@@ -235,8 +241,10 @@ function App() {
       focusOnSearchBar={focusOnSearchBar}
       isSearchBarVisible={isSearchBarVisible}
       changeLocationTyped={changeLocationTyped}
+      isButtonFilterActive={isButtonFilterActive}
       handleFocusOnSearchBar={handleFocusOnSearchBar}
       handleAreCardsVertical={handleAreCardsVertical}
+      handleVisibilityFilters={handleVisibilityFilters}
     >
       <Routes>
         <Route
@@ -252,6 +260,7 @@ function App() {
               resetClickedAd={resetClickedAd}
               updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
+              isButtonFilterActive={isButtonFilterActive}
               handleFocusOnSearchBar={handleFocusOnSearchBar}
               handleSearchBarVisibility={handleSearchBarVisibility}
             />
@@ -318,7 +327,14 @@ function App() {
         <Route
           exact
           path='/ad/:urlId'
-          element={<ViewAdPage handleSearchBarVisibility={handleSearchBarVisibility} />}
+          element={
+            <ViewAdPage
+              clickedAd={clickedAd}
+              resetClickedAd={resetClickedAd}
+              updateClickedAd={updateClickedAd}
+              handleSearchBarVisibility={handleSearchBarVisibility}
+            />
+          }
         />
       </Routes>
     </Layout>

@@ -172,6 +172,10 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
     }) */
   }, []);
 
+  const handleShowAd = () => {
+    navigate(`/ad/${ad._id}`)
+  }
+
   return (
     <li
       className={`${areCardsVertical ? '[&:not(:last-child)]:mb-3' : ''}`}
@@ -231,18 +235,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
           </Swiper>
         </div>
         }
-        <Link
-          to={`/ad/${ad._id}`}
-          className={`
-            p-2
-            flex
-            flex-col
-            cursor-pointer
-            overflow-hidden
-            ${areCardsVertical ? '' : 'justify-between w-full'}
-          `}
-        >
-        {/* <div
+        <div
           onClick={() => handleShowAd()}
           className={`
             p-2
@@ -251,7 +244,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             cursor-pointer
             overflow-hidden
             ${areCardsVertical ? '' : 'justify-between w-full'}
-          `}> */}
+          `}>
           <div>
 
             <div className='flex justify-between'>
@@ -471,8 +464,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
               }
             </div>
           } */}
-        {/* </div> */}
-        </Link>
+        </div>
       </div>
     </li>
   )

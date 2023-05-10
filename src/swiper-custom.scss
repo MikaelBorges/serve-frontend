@@ -133,4 +133,13 @@
   .swiper-scrollbar-horizontal {
     left: 0;
   }
+  .swiper-wrapper {
+    max-height: calc(100vh - 4rem);
+  }
 }
+
+/* .swiper-custom-height {
+  .swiper-wrapper {
+    max-height: calc(100% - 4rem);
+  }
+} */

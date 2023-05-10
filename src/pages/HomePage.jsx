@@ -17,7 +17,7 @@ const photosAdsFilterRadioChoices = ['oui', 'non']
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
 
-function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
+function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   //const [noAds, setNoAds] = useState(null)
@@ -29,16 +29,14 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
   const location = search.get('location')
   const minPrice = Number(search.get('minPrice') || 0)
   const maxPrice = search.get('maxPrice') ? Number(search.get('maxPrice')) : null
-
-  /* console.log('minPrice', minPrice)
-  console.log('maxPrice', maxPrice)
-
-  console.log("search.get('onlyWithPhotos')", search.get('onlyWithPhotos')) */
-
   const superUser = search.get('superUser') ? true : false
   const onlyWithPhotos = search.get('onlyWithPhotos') ? true : false
 
-  //console.log('ads', ads)
+  /* const [minPrice, setMinPrice] = useState(Number(search.get('minPrice') || 0))
+  const [maxPrice, setMaxPrice] = useState(search.get('maxPrice') ? Number(search.get('maxPrice')) : null)
+  const [location, setLocation] = useState(search.get('location'))
+  const [superUser, setSuperUser] = useState(search.get('superUser') ? true : false)
+  const [onlyWithPhotos, setOnlyWithPhotos] = useState(search.get('onlyWithPhotos') ? true : false) */
 
   const filteredAds = ads
   ?.filter(ad => minPrice ? ad.price >= minPrice : true)
@@ -47,9 +45,6 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
   ?.filter(ad => onlyWithPhotos ? ad.imagesWork.length > 0 === onlyWithPhotos : true)
   ?.filter(ad => title ? ad.title.toUpperCase().includes(title.toUpperCase()) : true)
   ?.filter(ad => location ? ad.location.toUpperCase().includes(location.toUpperCase()) : true)
-
-  /* console.log('minPrice', minPrice)
-  console.log('maxPrice', maxPrice) */
 
   /* const generateMasonryBreakpointsFor = (verticalCards) => {
     let pas
@@ -145,6 +140,23 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
     setSearch(search)
   }
 
+  /* useEffect(() => {
+    if(search.get('minPrice')) setMinPrice(Number(search.get('minPrice')))
+    else setMinPrice(0)
+
+    if(Number(search.get('maxPrice')) > 0) setMaxPrice(Number(search.get('maxPrice')))
+    else setMaxPrice(null)
+
+    if(search.get('location')) setLocation(search.get('location'))
+    else setLocation(null)
+
+    if(search.get('superUser') === 'true') setSuperUser(true)
+    else setSuperUser(false)
+
+    if(search.get('onlyWithPhotos') === 'true') setOnlyWithPhotos(true)
+    else setOnlyWithPhotos(false)
+  }, [search]) */
+
   // Simulation du blur lors d'une recherche
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -210,13 +222,22 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
     }
   } */
 
-  /* const handleResetFilters = () => {
+  const handleResetFilters = () => {
     console.warn('reset all filters')
-    //setSearch({})
-    //console.log("search.get('minPrice')", search.get('minPrice'))
-    //console.log("search.get('maxPrice')", search.get('maxPrice'))
-    //determinatePriceInputValue(placeholder)
-  } */
+
+    /* setMinPrice(0)
+    setMaxPrice(null)
+    setLocation(null)
+    setSuperUser(false)
+    setOnlyWithPhotos(false) */
+
+    search.delete('minPrice')
+    search.delete('maxPrice')
+    search.delete('location')
+    search.delete('superUser')
+    search.delete('onlyWithPhotos')
+    setSearch(search)
+  }
 
   const titlePage = () => {
     if(loaded) {
@@ -249,6 +270,7 @@ function HomePage({darkMode, clickedAd, resetClickedAd, areCardsVertical, update
           dark:text-white
           dark:bg-slate-800
           ${darkMode ? '' : styleOf.biggerShadow}
+          ${isButtonFilterActive && `sticky z-10 ${styleOf.stickyFilters}`}
         `}
       >
         {/* {filters.map((filter, index) =>
