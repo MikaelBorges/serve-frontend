@@ -38,14 +38,14 @@
   padding: 0 0.375rem;
 }
 
-.sectionHomepage {
-  padding: 0 0.375rem;
-}
-
 .resetFilterButton {
   min-height: 2rem;
 }
 
 .biggerShadow {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.stickyFilters {
+  top: 4.75rem;
 }

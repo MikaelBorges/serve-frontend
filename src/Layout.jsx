@@ -64,8 +64,10 @@ function Layout({
   logoutUserAction,
   focusOnSearchBar,
   isSearchBarVisible,
+  isButtonFilterActive,
   handleFocusOnSearchBar,
-  handleAreCardsVertical
+  handleAreCardsVertical,
+  handleVisibilityFilters
 }) {
   const navigate = useNavigate()
   const searchInputRef = useRef(null)
@@ -74,7 +76,6 @@ function Layout({
   const [search, setSearch] = useSearchParams()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   //const [resetAllFilters, setResetAllFilters] = useState(false)
-  const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
 
   //const numberOfMessagesUnread = user.isLogged ? 2 : ''
   const numberOfFavoritesLiked = user.isLogged ? user.info.favorites.length : null
@@ -152,16 +153,15 @@ function Layout({
     setSearch(search)
   }
 
-  /* const handleClickFilterButton = () => {
-    setIsButtonFilterActive(!isButtonFilterActive)
-  } */
+  const handleClickFilterButton = () => {
+    handleVisibilityFilters()
+  }
 
   const handleClickIconCross = () => {
     searchInputRef.current.value = ''
-    searchInputRef.current.focus()
+    //searchInputRef.current.focus()
     search.delete('title')
     setSearch(search)
-    console.warn('texte effacé')
   }
 
   /* const handleChangeRadio = (e) => {
@@ -278,6 +278,8 @@ function Layout({
               src={darkMode ? logoRoundDark : logoRoundLight}
             />
           </Link>
+
+          {isSearchBarVisible &&
           <div
             className={`
               mx-3
@@ -291,9 +293,8 @@ function Layout({
               dark:bg-slate-800
               ${darkMode ? '' : styleOf.biggerShadow}
               ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
-              ${isSearchBarVisible ? '' : 'hidden'}
             `}>
-            {/* <button
+            <button
               className={`
                 p-1
                 flex
@@ -307,10 +308,10 @@ function Layout({
                 ${isButtonFilterActive ? 'bg-slate-200' : ''}
                 ${!isButtonFilterActive && !darkMode ? styleOf.biggerShadow : ''}
               `}
-              //onClick={handleClickFilterButton}
+              onClick={handleClickFilterButton}
             >
               <IconFilter />
-            </button> */}
+            </button>
             <input
               autoFocus
               type='text'
@@ -345,6 +346,8 @@ function Layout({
               <IconCross />
             </button>
           </div>
+          }
+
           <nav className={`aspect-square ${focusOnSearchBar ? 'blur-2xl' : ''}`}>
             <ul
               className={`
@@ -559,7 +562,6 @@ function Layout({
                     {userIcon}
                   </Link>
                 </li>
-                {false &&
                 <li
                   className={`
                     mt-1
@@ -580,7 +582,6 @@ function Layout({
                       {cardIcon}
                   </button>
                 </li>
-                }
               </>
               }
             </ul>
@@ -718,7 +719,7 @@ function Layout({
 
       </header>
       <div
-        onClick={() => handleFocusOnSearchBar(false)}
+        //onClick={() => handleFocusOnSearchBar(false)}
         className={`
           ${styleOf.blurTransition}
           ${focusOnSearchBar ? 'relative blur-2xl' : ''}
@@ -733,6 +734,7 @@ function Layout({
           className={`
             pt-6
             pb-20
+            text-xs
             text-center
             dark:text-white
             dark:bg-slate-900

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { changeUserData } from '../api/user'
 
-function UserSettings({user}) {
+function UserSettings({user, handleSearchBarVisibility}) {
   const { urlId } = useParams()
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -23,7 +23,7 @@ function UserSettings({user}) {
       password: e.target.password.value,
       firstname: e.target.firstname.value
     }
-    console.log('data', datas)
+    //console.log('data', datas)
     changeUserData(datas, user.info._id)
     .then((res) => {
       if (res.status === 200) setInfo(res.data.message)
@@ -40,6 +40,10 @@ function UserSettings({user}) {
       setDisabled(true)
     }
   }, [email, password, firstname, lastname, phone])
+
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+  }, [])
 
   if(user.info._id !== urlId) return <Navigate to='/' />
 

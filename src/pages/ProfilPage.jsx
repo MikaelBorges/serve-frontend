@@ -205,7 +205,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   //if(props.dataUser._id !== userIdPage) return <Navigate to='/' />
 
   return (
-    <section className={areCardsVertical ? styleOf.sectionProfilPage : 'px-3'}>
+    <section>
 
       {/* <ul className='flex'>
         <li
@@ -305,7 +305,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
         </li>
       </ul> */}
 
-      <div className='py-4'>
+      <div className='m-3'>
         {/* {!isVisitor &&
           <>
             <h1 className='pb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
@@ -400,7 +400,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
       </div>
 
       {Boolean(ads.length) &&
-      <ul className={areCardsVertical ? '' : 'grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
+      <ul className={areCardsVertical ? 'px-1.5' : 'px-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
         {areCardsVertical &&
         <Masonry
           role='list'

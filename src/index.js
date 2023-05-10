@@ -11,16 +11,18 @@ import store from './store'
 // import rootReducer from './reducers/rootReducer'
 // const store = createStore(rootReducer)
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-{/* <React.StrictMode> */}
-root.render(
+import ScrollToTop from "./utils/scrollToTop";
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+<React.StrictMode>
   <Provider store={store}>
     <Router basename="/projects/serve">
+      <ScrollToTop />
       <App />
     </Router>
   </Provider>
-
+</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
