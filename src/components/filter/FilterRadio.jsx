@@ -1,4 +1,5 @@
 function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
+//function FilterRadio({radioName, groupName, handleChangeRadio, ...props}) {
 
   return (
     <label
@@ -17,6 +18,7 @@ function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
         defaultChecked={
           isParamOnUrl && radioName === 'oui' ||
           !isParamOnUrl && radioName === 'non'}
+        //{...props}
       />
       {radioName}
     </label>

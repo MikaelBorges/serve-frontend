@@ -107,6 +107,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
 
     if(name === 'superUserRadioGroup') {
       if(radioValue === 'oui') search.set('superUser', true)
+      //if(search.get('superUser') !== 'true') search.set('superUser', true)
       else search.delete('superUser')
     }
     else {
@@ -332,6 +333,8 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
                 groupName='superUserRadioGroup'
                 handleChangeRadio={handleChangeRadio}
                 isParamOnUrl={search.get('superUser') === 'true' ? true : false}
+                //onChange={handleChangeRadio}
+                //checked={search.get('superUser') === 'true' ? true : false}
               />
             )}
           </FilterButton>
@@ -347,6 +350,8 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
                 groupName='photoRadioGroup'
                 handleChangeRadio={handleChangeRadio}
                 isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
+                //onChange={handleChangeRadio}
+                //value={search.get('onlyWithPhotos') === 'true' ? 'true' : 'false'}
               />
             )}
           </FilterButton>
