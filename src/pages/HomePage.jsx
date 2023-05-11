@@ -263,15 +263,16 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
           mt-3
           mx-3
           right-3
+          bg-white
+          max-w-lg
           flex-row
           flex-wrap
           items-end
-          bg-white
           rounded-3xl
           dark:text-white
           dark:bg-slate-800
           ${darkMode ? '' : styleOf.biggerShadow}
-          ${isButtonFilterActive && `sticky z-10 ${styleOf.stickyFilters}`}
+          ${isButtonFilterActive && `sticky z-20 ${styleOf.stickyFilters}`}
         `}
       >
         {/* {filters.map((filter, index) =>

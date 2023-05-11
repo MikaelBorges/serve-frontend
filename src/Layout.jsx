@@ -290,7 +290,7 @@ function Layout({
               rounded-3xl
               items-center
               border-transparent
-              dark:bg-slate-800
+              dark:bg-slate-600
               ${darkMode ? '' : styleOf.biggerShadow}
               ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
             `}>
@@ -301,11 +301,12 @@ function Layout({
                 h-full
                 rounded-full
                 items-center
+                filter-button
                 aspect-square
                 justify-center
                 dark:text-white
                 dark:bg-slate-700
-                ${isButtonFilterActive ? 'bg-slate-200' : ''}
+                ${isButtonFilterActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
                 ${!isButtonFilterActive && !darkMode ? styleOf.biggerShadow : ''}
               `}
               onClick={handleClickFilterButton}
@@ -324,7 +325,7 @@ function Layout({
                 dark:text-white
                 placeholder:italic
                 focus:outline-none
-                dark:bg-slate-800
+                dark:bg-slate-600
                 placeholder:text-sm
               `}
               ref={searchInputRef}
@@ -338,16 +339,46 @@ function Layout({
                 h-full
                 rounded-full
                 items-center
+                cross-button
                 aspect-square
-                dark:bg-slate-700
                 justify-center
+                dark:bg-slate-700
                 ${darkMode ? '' : styleOf.biggerShadow}
               `}>
               <IconCross />
             </button>
           </div>
           }
-
+          {!user.isLogged && <>
+            <Link
+              to='/user/register'
+              className={`
+                mr-3
+                flex
+                px-2.5
+                rounded-full
+                items-center
+                bg-slate-300
+                dark:bg-slate-600
+              `}
+            >
+              <IconUserPlus className='text-black dark:text-yellow-100 text-xl' />
+            </Link>
+            <Link to='/user/login'
+              className={`
+                flex
+                px-2.5
+                rounded-full
+                items-center
+                bg-slate-300
+                dark:bg-slate-600
+              `}
+            >
+              <IconKey className='text-yellow-300 text-xl' />
+            </Link>
+            </>
+          }
+          {user.isLogged &&
           <nav className={`aspect-square ${focusOnSearchBar ? 'blur-2xl' : ''}`}>
             <ul
               className={`
@@ -586,6 +617,7 @@ function Layout({
               }
             </ul>
           </nav>
+          }
         </div>
 
         {/* {Boolean(filters.length) &&
@@ -863,7 +895,7 @@ function Layout({
             </button>
           </li> */}
           </>}
-          {!user.isLogged && <>
+          {/* {!user.isLogged && <>
           <li
             className={`
               p-2
@@ -897,7 +929,7 @@ function Layout({
               <IconKey className='text-yellow-300 text-2xl' />
             </Link>
           </li>
-          </>}
+          </>} */}
           {/* className={`
             h-full
             w-full

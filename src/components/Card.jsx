@@ -191,7 +191,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             rounded-full
             [&:not(:first-child)]:ml-2
           `}>
-          <IconBin className='dark:text-white text-black' />
+          <IconBin className='text-red-600' />
         </button>
         <Link
           onClick={(e) => e.stopPropagation()}

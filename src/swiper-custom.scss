@@ -24,26 +24,37 @@
 }
 
 .swiper {
-  .swiper-button-disabled {
+  /* .swiper-button-disabled {
     &.swiper-button-prev {
       opacity: 0;
     }
     &.swiper-button-next {
       opacity: 0;
     }
-  }
+  } */
 
-  .swiper-button-next { right: 0; }
-  .swiper-button-prev { left: 0; }
+  // Without arrows
+  /* .swiper-button-next { right: 0; }
+  .swiper-button-prev { left: 0; } */
+
+  // With arrows
+  .swiper-button-next { right: 4px; }
+  .swiper-button-prev { left: 4px; }
 
   .swiper-button-prev,
   .swiper-button-next {
-    top: 0;
+    // Without arrows
+    /* top: 0;
     opacity: 0;
     width: 25%;
     height: 100%;
-    margin-top: 0;
-    border-radius: 0;
+    margin-top: 0; */
+
+    // With arrows
+    width: 2rem;
+    height: 2rem;
+    margin-top: -14px;
+
     border-radius: 9999px;
     background-color: white;
     --swiper-navigation-color: black;
