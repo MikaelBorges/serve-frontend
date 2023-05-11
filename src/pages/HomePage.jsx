@@ -21,7 +21,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   //const [noAds, setNoAds] = useState(null)
-  const [loaded, setLoaded] = useState(false)
+  const [appIsLoading, setAppIsLoading] = useState(true)
   const [search, setSearch] = useSearchParams()
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
 
@@ -158,6 +158,21 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
     else setOnlyWithPhotos(false)
   }, [search]) */
 
+  useEffect(() => {
+    handleSearchBarVisibility(true)
+    generateMasonryBreakpointsUntilThisMaxValue(3000)
+    //if(props.refreshUrl) navigate('/')
+    // await loadAds()
+    loadAds()
+    .then(res => {
+      setAds(res.ads)
+      //setNoAds(res.noAds)
+      setAppIsLoading(false)
+      //props.fetchAdsAction(res.ads)
+    })
+    .catch(err => console.warn(err))
+  }, []);
+
   // Simulation du blur lors d'une recherche
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -197,21 +212,6 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
     }
   }, [clickedAd]);
 
-  useEffect(() => {
-    handleSearchBarVisibility(true)
-    generateMasonryBreakpointsUntilThisMaxValue(3000)
-    //if(props.refreshUrl) navigate('/')
-    // await loadAds()
-    loadAds()
-    .then(res => {
-      setAds(res.ads)
-      //setNoAds(res.noAds)
-      setLoaded(true)
-      //props.fetchAdsAction(res.ads)
-    })
-    .catch(err => console.warn(err))
-  }, []);
-
   /* const determinatePriceInputValue = (placeholder) => {
     if(placeholder === 'min') {
       if(search.get('minPrice')) return search.get('minPrice')
@@ -241,7 +241,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
   }
 
   const titlePage = () => {
-    if(loaded) {
+    if(!appIsLoading) {
       if(!ads.length) return 'Aucune annonces'
       else {
         if(!filteredAds.length) return 'Pas de résultats'
@@ -418,7 +418,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
         )}
       </ul>
       }
-      {!loaded &&
+      {appIsLoading &&
       <img
         className='w-20'
         alt='chargement'

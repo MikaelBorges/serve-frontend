@@ -228,6 +228,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
                 key={`${ad._id}-${index}`}
               >
                 <img
+                  onClick={() => console.warn('display image bigger')}
                   src={imageWork}
                   alt='image du service' />
               </SwiperSlide>

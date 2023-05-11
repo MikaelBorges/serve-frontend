@@ -140,17 +140,14 @@
   }
 }
 
-.swiper-custom-scrollbar {
+.swiper-custom-view-ad-page {
   .swiper-scrollbar-horizontal {
     left: 0;
   }
-  .swiper-wrapper {
-    max-height: calc(100vh - 4rem);
-  }
 }
 
-/* .swiper-custom-height {
-  .swiper-wrapper {
-    max-height: calc(100% - 4rem);
+@media all and (min-width: 480px) {
+  .swiper-custom-view-ad-page {
+    aspect-ratio: auto;
   }
-} */
+}

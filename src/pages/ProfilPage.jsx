@@ -9,7 +9,7 @@ import Masonry from 'react-masonry-css'
 
 import { connect } from 'react-redux'
 
-//import { lightIcon, goodEveningIcon, binIcon, validIcon } from '../constants/icons'
+//import { lightIcon, telescopeIcon, binIcon, validIcon } from '../constants/icons'
 
 import {
   binIcon,
@@ -26,7 +26,7 @@ import {
   messageIcon,
   modernKeyIcon,
   disconnectIcon,
-  goodEveningIcon
+  telescopeIcon
 } from '../constants/icons'
 
 function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
@@ -36,7 +36,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   const [ads, setAds] = useState([])
   const [imgUrl, setImgUrl] = useState('')
   const [noAds, setNoAds] = useState(null)
-  const [loaded, setLoaded] = useState(false)
+  const [appIsLoading, setAppIsLoading] = useState(true)
   const [isVisitor, setIsVisitor] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [liteInfosOfUser, setLiteInfosOfUser]= useState({})
@@ -49,7 +49,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
     return hour > 6 && hour < 20 ?
       `Bonjour ${user.info.firstname} ${lightIcon}`
       :
-      `Bonsoir ${user.info.firstname} ${goodEveningIcon}`
+      `Bonsoir ${user.info.firstname} ${telescopeIcon}`
   }
 
   const handleDeleteAd = e => {
@@ -121,7 +121,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   }, [props.user, userIdPage]); */
 
   const titlePage = () => {
-    if(loaded) {
+    if(!appIsLoading) {
       if(ads.length) {
         if(user.info._id === urlId) return `Voici vos annonces`
         else return `Voici les annonces de ${liteInfosOfUser.firstname}`
@@ -133,6 +133,23 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
     }
     else return 'En chargement...'
   }
+
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+    generateMasonryBreakpointsUntilThisMaxValue(3000)
+  }, [])
+
+  // loadUserAds
+  useEffect(() => {
+    loadUserAds(urlId)
+    .then(res => {
+      setLiteInfosOfUser(res.liteInfos)
+      setAds(res.adsOfUser)
+      //setNoAds(res.noAds)
+      setAppIsLoading(false)
+    })
+    .catch(err => console.error('err', err))
+  }, [urlId])
 
   // Mettre à jour les tableaux d'annonces au clic sur une annonce favorite
   useEffect(() => {
@@ -163,23 +180,6 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
       resetClickedAd()
     }
   }, [clickedAd]);
-
-  useEffect(() => {
-    handleSearchBarVisibility(false)
-    generateMasonryBreakpointsUntilThisMaxValue(3000)
-  }, [])
-
-  // loadUserAds
-  useEffect(() => {
-    loadUserAds(urlId)
-    .then(res => {
-      setLiteInfosOfUser(res.liteInfos)
-      setAds(res.adsOfUser)
-      //setNoAds(res.noAds)
-      setLoaded(true)
-    })
-    .catch(err => console.error('err', err))
-  }, [urlId])
 
   /* useEffect(() => {
     // console.warn('isVisitor', isVisitor)
@@ -436,7 +436,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
         )}
       </ul>
       }
-      {!loaded &&
+      {appIsLoading &&
       <img
         className='w-20'
         alt='chargement'

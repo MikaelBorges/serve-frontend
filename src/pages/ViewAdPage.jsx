@@ -63,24 +63,26 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
 
   return(
     <div className='lg:flex'>
-      <Swiper className='lg:w-2/3 aspect-square swiper-custom-scrollbar swiper-custom-height' scrollbar={{hide: false}} navigation={true} modules={[Navigation, Scrollbar]}>
+      <Swiper className='max-h-screen relative lg:w-2/3 aspect-square swiper-custom-view-ad-page swiper-custom-height' scrollbar={{hide: false}} navigation={true} modules={[Navigation, Scrollbar]}>
         {ad.imagesWork?.map((imageWork, index) =>
-          <SwiperSlide
-            key={`${ad._id}-${index}`}
-            onClick={() => console.warn('display image bigger')}
-          >
+          <SwiperSlide key={`${ad._id}-${index}`}>
             <img
               src={imageWork}
-              alt='image du service' />
+              alt='image du service'
+              onClick={() => console.warn('display image bigger')}
+            />
           </SwiperSlide>
         )}
-      </Swiper>
-      <div className='lg:w-1/3 p-2 dark:text-white'>
         <button
           className={`
-            px-2
-            py-1
+            px-3
+            py-1.5
             flex
+            z-10
+            text-xl
+            right-5
+            bottom-5
+            absolute
             items-center
             rounded-full
             bg-gray-100
@@ -93,6 +95,8 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
             {ad.favoritesNb}
           </div>
         </button>
+      </Swiper>
+      <div className='lg:w-1/3 p-2 dark:text-white'>
         <p className='text-xs'>Annonce mise en ligne le {ad.dateOfPublication}</p>
         <h1 className='text-3xl dark:text-white'>{ad.title}</h1>
         <p className='text-xl text-red-500'>
