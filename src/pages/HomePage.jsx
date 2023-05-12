@@ -6,6 +6,25 @@ import { useState, useEffect } from 'react'
 import styleOf from './HomePage.module.scss'
 //import { fetchAdsAction } from '../actions/ads/adsActions'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import IconSettings from '../components/icons/IconSettings'
+
+import {
+  binIcon,
+  starIcon,
+  darkIcon,
+  userIcon,
+  cardIcon,
+  plusIcon,
+  heartIcon,
+  wheelIcon,
+  validIcon,
+  lightIcon,
+  systemIcon,
+  messageIcon,
+  modernKeyIcon,
+  disconnectIcon,
+  telescopeIcon
+} from '../constants/icons'
 
 import FilterRadio from '../components/filter/FilterRadio'
 import FilterInput from '../components/filter/FilterInput'
@@ -17,7 +36,7 @@ const photosAdsFilterRadioChoices = ['oui', 'non']
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
 
-function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
+function HomePage({toggleTheme, handleAreCardsVertical, isButtonSettingsActive, isButtonFilterActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   //const [noAds, setNoAds] = useState(null)
@@ -254,6 +273,30 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
 
   return (
     <section>
+      {isButtonSettingsActive &&
+      <ul>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
+            {darkIcon}
+          </button>
+        </li>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
+            {lightIcon}
+          </button>
+        </li>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
+            {systemIcon}
+          </button>
+        </li>
+        <li className='inline'>
+          <button onClick={() => handleAreCardsVertical()}>
+            {cardIcon}
+          </button>
+        </li>
+      </ul>
+      }
       <ul
         className={`
           pt-1
@@ -272,7 +315,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
           dark:text-white
           dark:bg-slate-800
           ${darkMode ? '' : styleOf.biggerShadow}
-          ${isButtonFilterActive && `sticky z-20 ${styleOf.stickyFilters}`}
+          ${isButtonFilterActive ? `sticky z-20 ${styleOf.stickyFilters}` : ''}
         `}
       >
         {/* {filters.map((filter, index) =>
@@ -326,7 +369,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
         }
         {Boolean(superUserFilterRadioChoices.length) &&
         <li className='mr-3'>
-          <FilterButton filterButtonName='Super utilisateurs'>
+          <FilterButton filterButtonName='Super users'>
             {superUserFilterRadioChoices.map((radioName, index) =>
               <FilterRadio
                 key={index}
@@ -343,7 +386,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
         }
         {Boolean(photosAdsFilterRadioChoices.length) &&
         <li className='mr-3'>
-          <FilterButton filterButtonName='Uniquement avec photos'>
+          <FilterButton filterButtonName='Avec photos'>
             {photosAdsFilterRadioChoices.map((radioName, index) =>
               <FilterRadio
                 key={index}

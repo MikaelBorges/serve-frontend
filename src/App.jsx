@@ -28,7 +28,7 @@ function App() {
   const [focusOnSearchBar, setFocusOnSearchBar] = useState(false)
   const [areCardsVertical, setAreCardsVertical] = useState(false)
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(null)
-
+  const [isButtonSettingsActive, setIsButtonSettingsActive] = useState(false)
   const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
 
   const handleVisibilityFilters = () => {
@@ -232,6 +232,9 @@ function App() {
 
   }, []);
 
+  const handleClickSettingsButton = () => {
+    setIsButtonSettingsActive(!isButtonSettingsActive)
+  }
 
   return (
     <Layout
@@ -242,9 +245,11 @@ function App() {
       isSearchBarVisible={isSearchBarVisible}
       changeLocationTyped={changeLocationTyped}
       isButtonFilterActive={isButtonFilterActive}
+      isButtonSettingsActive={isButtonSettingsActive}
       handleFocusOnSearchBar={handleFocusOnSearchBar}
       handleAreCardsVertical={handleAreCardsVertical}
       handleVisibilityFilters={handleVisibilityFilters}
+      handleClickSettingsButton={handleClickSettingsButton}
     >
       <Routes>
         <Route
@@ -256,13 +261,17 @@ function App() {
               maxPrice={maxPrice}
               darkMode={darkMode}
               clickedAd={clickedAd}
+              toggleTheme={toggleTheme}
               locationTyped={locationTyped}
               resetClickedAd={resetClickedAd}
               updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
               isButtonFilterActive={isButtonFilterActive}
+              isButtonSettingsActive={isButtonSettingsActive}
               handleFocusOnSearchBar={handleFocusOnSearchBar}
+              handleAreCardsVertical={handleAreCardsVertical}
               handleSearchBarVisibility={handleSearchBarVisibility}
+              handleClickSettingsButton={handleClickSettingsButton}
             />
           }
         />
@@ -291,9 +300,12 @@ function App() {
             <ProfilPage
               darkMode={darkMode}
               clickedAd={clickedAd}
+              toggleTheme={toggleTheme}
               resetClickedAd={resetClickedAd}
               updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
+              isButtonSettingsActive={isButtonSettingsActive}
+              handleAreCardsVertical={handleAreCardsVertical}
               handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }

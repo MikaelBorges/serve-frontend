@@ -1,15 +1,17 @@
 import Card from '../components/Card'
 import { loadUserAds } from '../api/ads'
 import { useState, useEffect } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate, Link, useNavigate } from 'react-router-dom'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
-
+import { logoutUserAction } from '../actions/user/userActions'
 import styleOf from './ProfilPage.module.scss'
 import Masonry from 'react-masonry-css'
 
 import { connect } from 'react-redux'
 
 //import { lightIcon, telescopeIcon, binIcon, validIcon } from '../constants/icons'
+
+import { logoutUser } from '../api/user'
 
 import {
   binIcon,
@@ -29,8 +31,8 @@ import {
   telescopeIcon
 } from '../constants/icons'
 
-function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
-
+function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggleTheme, logoutUserAction, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
+  const navigate = useNavigate()
   const { urlId } = useParams()
   const hour = new Date().getHours()
   const [ads, setAds] = useState([])
@@ -44,6 +46,28 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   const [showCheckboxsDraft, setshowCheckboxsDraft] = useState(false)
   const [responseMessageFromCard, setResponseMessageFromCard] = useState('')
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
+  const [error, setError] = useState(null)
+
+  const handleLogout = () => {
+    let data = { _id : user.info._id }
+    logoutUser(data)
+    .then(res => {
+      if (res.status === 200) {
+        window.localStorage.removeItem('redux')
+        window.localStorage.removeItem('serve-token')
+        logoutUserAction()
+        //if(window.location.pathname !== '/') navigate('/')
+      }
+      else {
+        setError(res.msg)
+      }
+    })
+    .catch(err => {
+      console.warn('erreur: rentre dans le catch du Layout')
+      console.warn(err)
+      // setError(err)
+    })
+  }
 
   const wayToGreet = () => {
     return hour > 6 && hour < 20 ?
@@ -206,105 +230,44 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
 
   return (
     <section>
-
-      {/* <ul className='flex'>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
+      {isButtonSettingsActive &&
+      <ul>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
             {darkIcon}
           </button>
         </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
             {lightIcon}
           </button>
         </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
             {systemIcon}
           </button>
         </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {disconnectIcon}
+        {user.isLogged &&
+          <li className='inline'>
+            <button className='cursor-pointer' onClick={() => handleLogout()}>
+              {disconnectIcon}
+            </button>
+          </li>
+        }
+        {user.isLogged &&
+          <li className='inline'>
+            <Link className='cursor-pointer' to={`/user/${user.info._id}/settings`}>
+              {wheelIcon}
+            </Link>
+          </li>
+        }
+        <li className='inline'>
+          <button onClick={() => handleAreCardsVertical()}>
+            {cardIcon}
           </button>
         </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {wheelIcon}
-          </button>
-        </li>
-      </ul> */}
-
+      </ul>
+      }
       <div className='m-3'>
         {/* {!isVisitor &&
           <>
@@ -449,30 +412,46 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
       />
       } */}
       {isPopupOpen &&
-      <div
-        className={`
-          flex
-          fixed
-          inset-0
-          text-center
-          items-center
-          justify-center
-          z-10
-        `}
-      >
         <div
           className={`
-            p-4
-            bg-white
-            rounded-3xl
-            text-green-500
-          `}
-        >
-          <div className='text-7xl'>{validIcon}</div>
-          <div>{responseMessageFromCard}</div>
+            flex
+            fixed
+            inset-0
+            text-center
+            items-center
+            justify-center
+            z-10
+          `}>
+          <div
+            className={`
+              p-4
+              bg-white
+              rounded-3xl
+              text-green-500
+            `}>
+            <div className='text-7xl'>{validIcon}</div>
+            <div>{responseMessageFromCard}</div>
+          </div>
         </div>
-      </div>
       }
+      <div className='flex justify-end'>
+        <button
+          className={`
+            mt-6
+            mx-3
+            px-2
+            py-1
+            text-sm
+            bg-gray-100
+            rounded-full
+            text-red-600
+            cursor-pointer
+            dark:bg-slate-600
+          `}
+          onClick={() => handleLogout()}>
+            Se déconnecter
+        </button>
+      </div>
     </section>
   )
 }
@@ -484,4 +463,8 @@ const mapStateToProps = (store) => {
   }
 }
 
-export default connect(mapStateToProps)(ProfilPage)
+const mapDispatchToProps = {
+  logoutUserAction
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilPage)

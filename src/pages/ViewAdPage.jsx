@@ -8,7 +8,7 @@ import { Navigation, Scrollbar } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useState, useEffect } from 'react'
 import { retrieveUserAd } from '../api/ads'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import IconMap from '../components/icons/IconMap'
 import { moneyIcon, smartphoneIcon, heartIcon } from '../constants/icons'
 import { addToFavorites } from '../api/user'
@@ -44,6 +44,18 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
     }
   }
 
+  const formattedTel = () => {
+    if(ad.tel) {
+      const arrayTel = ad.tel.split('')
+      let arrayTelSpaced = []
+      arrayTel.forEach((el, index) => {
+        if(index > 0 && index % 2 === 0) arrayTelSpaced.push(' ')
+        arrayTelSpaced.push(el)
+      })
+      return arrayTelSpaced.join('')
+    }
+  }
+
   useEffect(() => {
     handleSearchBarVisibility(false)
     retrieveUserAd(urlId)
@@ -63,6 +75,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
 
   return(
     <div className='lg:flex'>
+      {Boolean(ad?.imagesWork?.length) &&
       <Swiper className='max-h-screen relative lg:w-2/3 aspect-square swiper-custom-view-ad-page swiper-custom-height' scrollbar={{hide: false}} navigation={true} modules={[Navigation, Scrollbar]}>
         {ad.imagesWork?.map((imageWork, index) =>
           <SwiperSlide key={`${ad._id}-${index}`}>
@@ -96,36 +109,67 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
           </div>
         </button>
       </Swiper>
+      }
       <div className='lg:w-1/3 p-2 dark:text-white'>
-        <p className='text-xs'>Annonce mise en ligne le {ad.dateOfPublication}</p>
+        {!ad?.imagesWork?.length &&
+        <button
+          className={`
+            px-3
+            py-1.5
+            flex
+            z-10
+            text-xl
+            items-center
+            rounded-full
+            bg-gray-100
+            dark:bg-slate-600
+          `}
+          onClick={() => manageAddToFavorites()}
+        >
+          <div>{heartIcon}</div>
+          <div className='ml-1 text-red-600'>
+            {ad.favoritesNb}
+          </div>
+        </button>
+        }
+        <div className='flex justify-between items-center'>
+          <p className='text-xs'>Annonce mise en ligne le {ad.dateOfPublication}</p>
+          <Link
+            className='w-8'
+            to={`/user/${ad.userId}`}
+          >
+            <img
+              src={ad.imageUser}
+              alt='image utilisateur'
+              className='rounded-full'
+            />
+          </Link>
+        </div>
         <h1 className='text-3xl dark:text-white'>{ad.title}</h1>
         <p className='text-xl text-red-500'>
           <IconMap className='mr-1 relative bottom-0.5 inline' />{ad.location}
         </p>
         <p className='text-2xl text-fuchsia-500 dark:text-yellow-100'>{moneyIcon} {ad.price} €/h</p>
-        <p>{ad.description}</p>
-        <div className='flex items-center'>
-          <p>Contacter {ad.firstname} au :</p>
-          <a
-            className={`
-              ml-2
-              px-2
-              py-1
-              flex
-              w-fit
-              bg-gray-100
-              items-center
-              rounded-full
-              dark:bg-slate-600
-            `}
-            href={`tel:${ad.tel}`}
-          >
-            <div>{smartphoneIcon}</div>
-            <div className='ml-1'>
-              {ad.tel}
-            </div>
-          </a>
-        </div>
+        <p className='my-5'>{ad.description}</p>
+        <p>Contacter {ad.firstname} au :</p>
+        <a
+          className={`
+            px-2
+            py-1
+            flex
+            w-fit
+            bg-gray-100
+            items-center
+            rounded-full
+            dark:bg-slate-600
+          `}
+          href={`tel:${ad.tel}`}
+        >
+          <div>{smartphoneIcon}</div>
+          <div className='ml-1'>
+            {formattedTel()}
+          </div>
+        </a>
       </div>
     </div>
   )

@@ -23,10 +23,11 @@ import PictureUser from './components/PictureUser'
 import IconHeart from './components/icons/IconHeart'
 import Notification from './components/Notification'
 import IconCross from './components/icons/IconCross'
+import IconFilter from './components/icons/IconFilter'
 import IconMessage from './components/icons/IconMessage'
 import IconAccount from './components/icons/IconAccount'
 import IconUserPlus from './components/icons/IconUserPlus'
-import IconFilter from './components/icons/IconFilter'
+import IconSettings from './components/icons/IconSettings'
 import logoRoundLight from './assets/images/logos/square.png'
 import { logoutUserAction } from './actions/user/userActions'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -67,7 +68,9 @@ function Layout({
   isButtonFilterActive,
   handleFocusOnSearchBar,
   handleAreCardsVertical,
-  handleVisibilityFilters
+  handleVisibilityFilters,
+  handleClickSettingsButton,
+  isButtonSettingsActive
 }) {
   const navigate = useNavigate()
   const searchInputRef = useRef(null)
@@ -257,7 +260,7 @@ function Layout({
       <header
         className={`
           p-3
-          z-10
+          z-30
           top-0
           w-full
           sticky
@@ -271,14 +274,34 @@ function Layout({
             justify-between
           `}
         >
-          <Link to='/' className='contents'>
-            <img
-              alt='logo'
-              className='max-w-none h-full'
-              src={darkMode ? logoRoundDark : logoRoundLight}
-            />
-          </Link>
-
+          <div className='flex'>
+            <Link to='/' className='contents'>
+              <img
+                alt='logo'
+                className='max-w-none h-full rounded-full'
+                src={darkMode ? logoRoundDark : logoRoundLight}
+              />
+            </Link>
+            <button
+              className={`
+                ml-3
+                p-1
+                flex
+                h-full
+                rounded-full
+                items-center
+                aspect-square
+                justify-center
+                dark:text-white
+                dark:bg-slate-700
+                ${isButtonSettingsActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                ${!isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+              `}
+              onClick={() => handleClickSettingsButton()}
+            >
+              <IconSettings />
+            </button>
+          </div>
           {isSearchBarVisible &&
           <div
             className={`
@@ -349,7 +372,8 @@ function Layout({
             </button>
           </div>
           }
-          {!user.isLogged && <>
+          {!user.isLogged &&
+          <div className='flex'>
             <Link
               to='/user/register'
               className={`
@@ -376,9 +400,17 @@ function Layout({
             >
               <IconKey className='text-yellow-300 text-xl' />
             </Link>
-            </>
-          }
+          </div>}
           {user.isLogged &&
+            <Link to={`/user/${user.info._id}`} className='contents'>
+              <img
+                alt='image utilisateur'
+                src={user.info.imageUser}
+                className='max-w-none h-full rounded-full'
+              />
+            </Link>
+          }
+          {user.isLogged && false &&
           <nav className={`aspect-square ${focusOnSearchBar ? 'blur-2xl' : ''}`}>
             <ul
               className={`

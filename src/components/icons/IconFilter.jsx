@@ -1,25 +1,20 @@
-// icon:filtering | System UIcons https://systemuicons.com/ | Corey Ginnivan
+// icon:348-filter | Icomoon https://icomoon.io/ | Keyamoon
 
 function IconFilter(props) {
   return (
     <svg
-      viewBox="0 0 21 21"
+      viewBox="0 0 16 16"
       fill="currentColor"
-      height="1.2rem"
-      width="1.2rem"
+      height="1em"
+      width="1em"
       {...props}
     >
-      <g
-        fill="none"
-        fillRule="evenodd"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M6.5 4a1 1 0 011 1v2a1 1 0 11-2 0V5a1 1 0 011-1zM18.5 6h-11M5.5 6h-3M6.5 14a1 1 0 011 1v2a1 1 0 01-2 0v-2a1 1 0 011-1zM18.5 16h-11M5.5 16h-3M14.5 9a1 1 0 011 1v2a1 1 0 01-2 0v-2a1 1 0 011-1zM13.5 11h-11M18.5 11h-3" />
-      </g>
+      <path
+        fill="currentColor"
+        d="M8 0C3.582 0 0 1.119 0 2.5V4l6 6v5c0 .552.895 1 2 1s2-.448 2-1v-5l6-6V2.5C16 1.119 12.418 0 8 0zM1.475 2.169c.374-.213.9-.416 1.52-.586C4.369 1.207 6.147 1 8 1s3.631.207 5.005.583c.62.17 1.146.372 1.52.586.247.141.38.26.442.331-.062.071-.195.19-.442.331-.374.213-.9.416-1.52.586C11.631 3.793 9.853 4 8 4s-3.631-.207-5.005-.583c-.62-.17-1.146-.372-1.52-.586a1.741 1.741 0 01-.442-.331c.062-.071.195-.19.442-.331z"
+      />
     </svg>
-  )
+  );
 }
 
 export default IconFilter
