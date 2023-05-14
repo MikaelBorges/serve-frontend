@@ -290,7 +290,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
   if(!user.isLogged || !user.info.ads.includes(urlId)) return <Navigate to='/' />
 
   return (
-    <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section className='dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
       <form
         method='post'
         onSubmit={e => onSubmitForm(e)}

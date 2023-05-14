@@ -14,6 +14,7 @@ import { moneyIcon, smartphoneIcon, heartIcon } from '../constants/icons'
 import { addToFavorites } from '../api/user'
 import { updateLikedAdAction } from '../actions/ads/adsActions'
 import { logoutUserAction, favoriteAddUserAction } from '../actions/user/userActions'
+import defaultProfile from '../assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
 function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility, updateClickedAd, updateLikedAdAction, favoriteAddUserAction, logoutUserAction}) {
   const { urlId } = useParams()
@@ -61,6 +62,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
     retrieveUserAd(urlId)
     .then((res) => {
       setAd(res.adRetrieved)
+      console.log('ad', res.adRetrieved)
     })
   }, [])
 
@@ -76,7 +78,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
   return(
     <div className='lg:flex'>
       {Boolean(ad?.imagesWork?.length) &&
-      <Swiper className='max-h-screen relative lg:w-2/3 aspect-square swiper-custom-view-ad-page swiper-custom-height' scrollbar={{hide: false}} navigation={true} modules={[Navigation, Scrollbar]}>
+      <Swiper className='max-h-screen lg:w-2/3 aspect-square swiper-custom-view-ad-page swiper-custom-height' scrollbar={{hide: false}} navigation={true} modules={[Navigation, Scrollbar]}>
         {ad.imagesWork?.map((imageWork, index) =>
           <SwiperSlide key={`${ad._id}-${index}`}>
             <img
@@ -86,65 +88,42 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
             />
           </SwiperSlide>
         )}
-        <button
-          className={`
-            px-3
-            py-1.5
-            flex
-            z-10
-            text-xl
-            right-5
-            bottom-5
-            absolute
-            items-center
-            rounded-full
-            bg-gray-100
-            dark:bg-slate-600
-          `}
-          onClick={() => manageAddToFavorites()}
-        >
-          <div>{heartIcon}</div>
-          <div className='ml-1 text-red-600'>
-            {ad.favoritesNb}
-          </div>
-        </button>
       </Swiper>
       }
-      <div className='lg:w-1/3 p-2 dark:text-white'>
-        {!ad?.imagesWork?.length &&
-        <button
-          className={`
-            px-3
-            py-1.5
-            flex
-            z-10
-            text-xl
-            items-center
-            rounded-full
-            bg-gray-100
-            dark:bg-slate-600
-          `}
-          onClick={() => manageAddToFavorites()}
-        >
-          <div>{heartIcon}</div>
-          <div className='ml-1 text-red-600'>
-            {ad.favoritesNb}
-          </div>
-        </button>
-        }
+      <div className='lg:w-1/3 p-3 dark:text-white'>
+
         <div className='flex justify-between items-center'>
-          <p className='text-xs'>Annonce mise en ligne le {ad.dateOfPublication}</p>
           <Link
             className='w-8'
-            to={`/user/${ad.userId}`}
-          >
+            to={`/user/${ad.userId}`}>
             <img
-              src={ad.imageUser}
+              src={ad.imageUser ? ad.imageUser : defaultProfile}
               alt='image utilisateur'
               className='rounded-full'
             />
           </Link>
+          <button
+            className={`
+              px-3
+              py-1.5
+              flex
+              z-10
+              text-xl
+              items-center
+              rounded-full
+              bg-slate-200
+              dark:bg-slate-600
+            `}
+            onClick={() => manageAddToFavorites()}
+          >
+            <div>{heartIcon}</div>
+            <div className='ml-1 text-red-600'>
+              {ad.favoritesNb}
+            </div>
+          </button>
         </div>
+
+        <p className='text-xs mt-2 mb-1'>Annonce mise en ligne le {ad.dateOfPublication}</p>
         <h1 className='text-3xl dark:text-white'>{ad.title}</h1>
         <p className='text-xl text-red-500'>
           <IconMap className='mr-1 relative bottom-0.5 inline' />{ad.location}
@@ -158,7 +137,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
             py-1
             flex
             w-fit
-            bg-gray-100
+            bg-slate-200
             items-center
             rounded-full
             dark:bg-slate-600

@@ -19,7 +19,7 @@ function FilterButton({filterButtonName, children}) {
     `}
     >
       {filterButtonName &&
-      <span className='mr-3'>
+      <span>
         {filterButtonName}
       </span>
       }

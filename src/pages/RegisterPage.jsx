@@ -93,7 +93,6 @@ function RegisterPage({user}) {
         flex-col
         bg-white
         space-y-12
-        min-h-screen
         dark:bg-slate-900
       `}
     >

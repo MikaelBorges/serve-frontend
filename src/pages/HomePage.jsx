@@ -36,7 +36,7 @@ const photosAdsFilterRadioChoices = ['oui', 'non']
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
 
-function HomePage({toggleTheme, handleAreCardsVertical, isButtonSettingsActive, isButtonFilterActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
+function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical, isFilterMagneticButtonActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   //const [noAds, setNoAds] = useState(null)
@@ -268,12 +268,12 @@ function HomePage({toggleTheme, handleAreCardsVertical, isButtonSettingsActive, 
         else return 'Toutes les annonces'
       }
     }
-    else return 'En chargement...'
+    else return 'Toutes les annonces...'
   }
 
   return (
     <section>
-      {isButtonSettingsActive &&
+      {/* {isButtonSettingsActive &&
       <ul>
         <li className='inline'>
           <button onClick={e => toggleTheme(e.target.innerText)}>
@@ -296,141 +296,143 @@ function HomePage({toggleTheme, handleAreCardsVertical, isButtonSettingsActive, 
           </button>
         </li>
       </ul>
-      }
-      <ul
-        className={`
-          pt-1
-          flex
-          px-3
-          pb-2
-          mt-3
-          mx-3
-          right-3
-          bg-white
-          max-w-lg
-          flex-row
-          flex-wrap
-          items-end
-          rounded-3xl
-          dark:text-white
-          dark:bg-slate-800
-          ${darkMode ? '' : styleOf.biggerShadow}
-          ${isButtonFilterActive ? `sticky z-20 ${styleOf.stickyFilters}` : ''}
-        `}
-      >
-        {/* {filters.map((filter, index) =>
-        <li className='mr-3'>
-          <FilterButton filterButtonName={filter.label}>
-            {filter.inputs.map((placeholder, index) =>
-              <FilterInput
-                key={index}
-                type={filter.type}
-                name={placeholder}
-                placeholder={placeholder}
-                onChange={filter.actionOnChange}
-              />
-            )}
-          </FilterButton>
-        </li>
-        )} */}
-        {Boolean(filterPricePlaceholderElements.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Prix'>
-            {filterPricePlaceholderElements.map((placeholder, index) =>
-              <FilterInput
-                //value={determinatePriceInputValue(placeholder)}
-                key={index}
-                type='number'
-                name={placeholder}
-                placeholder={placeholder}
-                onChange={handleChangePriceInput}
-                defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {Boolean(filterLocationPlaceholderElements.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Lieu'>
-            {filterLocationPlaceholderElements.map((placeholder, index) =>
-              <FilterInput
-                //value={search.get('location') ? search.get('location') : ''}
-                key={index}
-                type='text'
-                name={placeholder}
-                placeholder={placeholder}
-                onChange={handleChangeLocationInput}
-                defaultValue={search.get('location')}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {Boolean(superUserFilterRadioChoices.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Super users'>
-            {superUserFilterRadioChoices.map((radioName, index) =>
-              <FilterRadio
-                key={index}
-                radioName={radioName}
-                groupName='superUserRadioGroup'
-                handleChangeRadio={handleChangeRadio}
-                isParamOnUrl={search.get('superUser') === 'true' ? true : false}
-                //onChange={handleChangeRadio}
-                //checked={search.get('superUser') === 'true' ? true : false}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {Boolean(photosAdsFilterRadioChoices.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Avec photos'>
-            {photosAdsFilterRadioChoices.map((radioName, index) =>
-              <FilterRadio
-                key={index}
-                radioName={radioName}
-                groupName='photoRadioGroup'
-                handleChangeRadio={handleChangeRadio}
-                isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
-                //onChange={handleChangeRadio}
-                //value={search.get('onlyWithPhotos') === 'true' ? 'true' : 'false'}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {/* <li className='mr-3'>
-          <button
-            className={`
-              px-3
-              flex
-              mt-1.5
-              rounded-3xl
-              items-center
-              bg-slate-200
-              dark:bg-slate-600
-              ${styleOf.resetFilterButton}
-          `}
-            onClick={() => handleResetFilters()}
-          >
-            Reset
-          </button>
-        </li> */}
-        <div
+      } */}
+      {isFilterOffButtonActive &&
+        <ul
           className={`
-            h-4
+            pt-1
             flex
-            w-full
-            items-center
-            justify-center
-            overflow-hidden
+            px-3
+            pb-2
+            mt-3
+            mx-3
+            right-3
+            bg-white
+            max-w-lg
+            flex-row
+            flex-wrap
+            items-end
+            rounded-3xl
+            dark:text-white
+            dark:bg-slate-800
+            ${darkMode ? '' : styleOf.biggerShadow}
+            ${isFilterMagneticButtonActive ? `sticky z-20 ${styleOf.stickyFilters}` : ''}
           `}
         >
-          <IconHorizontalRule />
-        </div>
-      </ul>
+          {/* {filters.map((filter, index) =>
+          <li className='mr-3'>
+            <FilterButton filterButtonName={filter.label}>
+              {filter.inputs.map((placeholder, index) =>
+                <FilterInput
+                  key={index}
+                  type={filter.type}
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={filter.actionOnChange}
+                />
+              )}
+            </FilterButton>
+          </li>
+          )} */}
+          {Boolean(filterPricePlaceholderElements.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Prix'>
+              {filterPricePlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  //value={determinatePriceInputValue(placeholder)}
+                  key={index}
+                  type='number'
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={handleChangePriceInput}
+                  defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(filterLocationPlaceholderElements.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Lieu'>
+              {filterLocationPlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  //value={search.get('location') ? search.get('location') : ''}
+                  key={index}
+                  type='text'
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={handleChangeLocationInput}
+                  defaultValue={search.get('location')}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(superUserFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Super users'>
+              {superUserFilterRadioChoices.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='superUserRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  isParamOnUrl={search.get('superUser') === 'true' ? true : false}
+                  //onChange={handleChangeRadio}
+                  //checked={search.get('superUser') === 'true' ? true : false}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(photosAdsFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Avec photos'>
+              {photosAdsFilterRadioChoices.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='photoRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
+                  //onChange={handleChangeRadio}
+                  //value={search.get('onlyWithPhotos') === 'true' ? 'true' : 'false'}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {/* <li className='mr-3'>
+            <button
+              className={`
+                px-3
+                flex
+                mt-1.5
+                rounded-3xl
+                items-center
+                bg-slate-200
+                dark:bg-slate-600
+                ${styleOf.resetFilterButton}
+            `}
+              onClick={() => handleResetFilters()}
+            >
+              Reset
+            </button>
+          </li> */}
+          <div
+            className={`
+              h-4
+              flex
+              w-full
+              items-center
+              justify-center
+              overflow-hidden
+            `}
+          >
+            <IconHorizontalRule />
+          </div>
+        </ul>
+      }
       <h1 className='mx-3 my-7 text-3xl dark:text-white'>{titlePage()}</h1>
       {Boolean(filteredAds.length) &&
       <ul className={areCardsVertical ? 'px-1.5' : 'px-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
@@ -460,12 +462,6 @@ function HomePage({toggleTheme, handleAreCardsVertical, isButtonSettingsActive, 
           areCardsVertical={areCardsVertical} />
         )}
       </ul>
-      }
-      {appIsLoading &&
-      <img
-        className='w-20'
-        alt='chargement'
-        src='https://i.stack.imgur.com/y3Hm3.gif' />
       }
     </section>
   )

@@ -3,7 +3,7 @@ function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
 
   return (
     <label
-      className='[&:not(:last-child)]:mr-3 cursor-pointer'
+      className='ml-3 cursor-pointer'
       onClick={(e) => e.stopPropagation()}
       htmlFor={`${groupName}-${radioName}`}
     >

@@ -21,3 +21,14 @@
 .blurTransition {
   -webkit-transition: -webkit-filter 150ms linear;
 }
+
+.filterButton {
+  padding: 0.7rem;
+}
+
+@media all and (max-width: 374px) {
+  .filterButton,
+  .crossButton {
+    display: none;
+  }
+}

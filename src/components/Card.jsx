@@ -19,7 +19,6 @@ import { deleteAd } from '../api/ads'
 import IconBin from './icons/IconBin'
 import IconMap from './icons/IconMap'
 import IconEdit from './icons/IconEdit'
-import PictureUser from './PictureUser'
 import styleOf from './Card.module.scss'
 import { useState, useEffect } from 'react'
 import { addToFavorites } from '../api/user'
@@ -277,12 +276,10 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
                   //className='w-6 h-6 ml-1.5 rounded-full float-right'
                   className='rounded-full'
                   to={`/user/${ad.userId}`}>
-                  <PictureUser
-                    imageUser={ad.imageUser ?
-                      ad.imageUser
-                      :
-                      defaultProfile
-                    }
+                  <img
+                    src={ad.imageUser ? ad.imageUser : defaultProfile}
+                    alt="image de l'utilisateur"
+                    className='rounded-full'
                   />
                 </Link>
                 {Boolean(ad.superUser) &&
@@ -352,7 +349,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
                   flex
                   items-center
                   rounded-full
-                  bg-gray-100
+                  bg-slate-100
                   dark:bg-slate-600
                 `}
                 onClick={e => manageAddToFavorites(e)}

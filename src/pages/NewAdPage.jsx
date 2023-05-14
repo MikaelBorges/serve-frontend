@@ -100,7 +100,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchB
   if(user.info._id !== urlId) return <Navigate to='/' />
 
   return (
-    <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section className='dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
       <h1 className='dark:text-white text-3xl'>Nouvelle annonce</h1>
       <form
         method='post'

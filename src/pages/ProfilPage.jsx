@@ -31,7 +31,7 @@ import {
   telescopeIcon
 } from '../constants/icons'
 
-function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggleTheme, logoutUserAction, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
+function ProfilPage({user, handleAreCardsVertical, toggleTheme, logoutUserAction, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const { urlId } = useParams()
   const hour = new Date().getHours()
@@ -56,7 +56,7 @@ function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggl
         window.localStorage.removeItem('redux')
         window.localStorage.removeItem('serve-token')
         logoutUserAction()
-        //if(window.location.pathname !== '/') navigate('/')
+        if(window.location.pathname !== '/') navigate('/')
       }
       else {
         setError(res.msg)
@@ -155,7 +155,7 @@ function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggl
         else return `${liteInfosOfUser.firstname} n'a aucune annonce`
       }
     }
-    else return 'En chargement...'
+    else return 'Voici vos annonces...'
   }
 
   useEffect(() => {
@@ -230,44 +230,6 @@ function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggl
 
   return (
     <section>
-      {isButtonSettingsActive &&
-      <ul>
-        <li className='inline'>
-          <button onClick={e => toggleTheme(e.target.innerText)}>
-            {darkIcon}
-          </button>
-        </li>
-        <li className='inline'>
-          <button onClick={e => toggleTheme(e.target.innerText)}>
-            {lightIcon}
-          </button>
-        </li>
-        <li className='inline'>
-          <button onClick={e => toggleTheme(e.target.innerText)}>
-            {systemIcon}
-          </button>
-        </li>
-        {user.isLogged &&
-          <li className='inline'>
-            <button className='cursor-pointer' onClick={() => handleLogout()}>
-              {disconnectIcon}
-            </button>
-          </li>
-        }
-        {user.isLogged &&
-          <li className='inline'>
-            <Link className='cursor-pointer' to={`/user/${user.info._id}/settings`}>
-              {wheelIcon}
-            </Link>
-          </li>
-        }
-        <li className='inline'>
-          <button onClick={() => handleAreCardsVertical()}>
-            {cardIcon}
-          </button>
-        </li>
-      </ul>
-      }
       <div className='m-3'>
         {/* {!isVisitor &&
           <>
@@ -357,9 +319,42 @@ function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggl
         </div> */}
 
         {user.info._id === urlId &&
-        <h1 className='pb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
+        <h1 className='mb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
         }
-        <h2 className='text-2xl dark:text-white'>{titlePage()}</h2>
+        {user.info._id === urlId &&
+        <div className='flex justify-between mt-6'>
+          <Link
+            className={`
+              px-2
+              py-1
+              text-xs
+              bg-slate-200
+              rounded-full
+              text-gray-500
+              cursor-pointer
+              dark:bg-slate-600
+              dark:text-yellow-100
+            `}
+            to={`/user/${user.info._id}/settings`}>
+              Modifier mon compte
+          </Link>
+          <button
+            className={`
+              px-2
+              py-1
+              text-xs
+              bg-slate-200
+              rounded-full
+              text-red-600
+              cursor-pointer
+              dark:bg-slate-600
+            `}
+            onClick={() => handleLogout()}>
+              Se déconnecter
+          </button>
+        </div>
+        }
+        <h2 className='mt-4 text-2xl dark:text-white'>{titlePage()}</h2>
       </div>
 
       {Boolean(ads.length) &&
@@ -399,12 +394,6 @@ function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggl
         )}
       </ul>
       }
-      {appIsLoading &&
-      <img
-        className='w-20'
-        alt='chargement'
-        src='https://i.stack.imgur.com/y3Hm3.gif' />
-      }
       {/* {noAds && !isVisitor &&
       <img
         alt="Vous n'avez pas d'annonces"
@@ -434,24 +423,6 @@ function ProfilPage({user, isButtonSettingsActive, handleAreCardsVertical, toggl
           </div>
         </div>
       }
-      <div className='flex justify-end'>
-        <button
-          className={`
-            mt-6
-            mx-3
-            px-2
-            py-1
-            text-sm
-            bg-gray-100
-            rounded-full
-            text-red-600
-            cursor-pointer
-            dark:bg-slate-600
-          `}
-          onClick={() => handleLogout()}>
-            Se déconnecter
-        </button>
-      </div>
     </section>
   )
 }

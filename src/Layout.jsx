@@ -19,7 +19,6 @@ import { useState, useRef } from 'react'
 import styleOf from './Layout.module.scss'
 import IconKey from './components/icons/IconKey'
 import IconAdd from './components/icons/IconAdd'
-import PictureUser from './components/PictureUser'
 import IconHeart from './components/icons/IconHeart'
 import Notification from './components/Notification'
 import IconCross from './components/icons/IconCross'
@@ -28,6 +27,10 @@ import IconMessage from './components/icons/IconMessage'
 import IconAccount from './components/icons/IconAccount'
 import IconUserPlus from './components/icons/IconUserPlus'
 import IconSettings from './components/icons/IconSettings'
+import IconLayoutMasonry from './components/icons/IconLayoutMasonry'
+import IconListLayout from './components/icons/IconListLayout'
+import IconFilterOff from './components/icons/IconFilterOff'
+import IconFilterMagnetic from './components/icons/IconFilterMagnetic'
 import logoRoundLight from './assets/images/logos/square.png'
 import { logoutUserAction } from './actions/user/userActions'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -59,18 +62,20 @@ const filterElementsCheckbox = [`1${starIcon}`, `2${starIcon}`, `3${starIcon}`, 
 
 function Layout({
   user,
+  theme,
   children,
   darkMode,
   toggleTheme,
+  areCardsVertical,
   logoutUserAction,
   focusOnSearchBar,
   isSearchBarVisible,
-  isButtonFilterActive,
+  handleMagnetismFilter,
+  handleVisibilityFilter,
   handleFocusOnSearchBar,
   handleAreCardsVertical,
-  handleVisibilityFilters,
-  handleClickSettingsButton,
-  isButtonSettingsActive
+  isFilterOffButtonActive,
+  isFilterMagneticButtonActive
 }) {
   const navigate = useNavigate()
   const searchInputRef = useRef(null)
@@ -78,6 +83,10 @@ function Layout({
   const [error, setError] = useState(null)
   const [search, setSearch] = useSearchParams()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isButtonSettingsActive, setIsButtonSettingsActive] = useState(false)
+
+  const [isFilterSelectButtonActive, setIsFilterSelectButtonActive] = useState(false)
+  const [isThemeSelectButtonActive, setIsThemeSelectButtonActive] = useState(true)
   //const [resetAllFilters, setResetAllFilters] = useState(false)
 
   //const numberOfMessagesUnread = user.isLogged ? 2 : ''
@@ -103,6 +112,21 @@ function Layout({
   /* const inputsReseted = () => {
     setResetAllFilters(false)
   } */
+
+  const handleClickSettingsButton = () => {
+    if(isThemeSelectButtonActive) setIsThemeSelectButtonActive(false)
+    setIsButtonSettingsActive(!isButtonSettingsActive)
+  }
+
+  const themeSelectButtonIcon = () => {
+    switch(theme) {
+      case 'light': return lightIcon
+      case 'dark': return darkIcon
+      case 'system': return systemIcon
+      default:
+        console.error('Problème dans la sélection du thème');
+    }
+  }
 
   const handleLogout = () => {
     let data = { _id : user.info._id }
@@ -156,8 +180,14 @@ function Layout({
     setSearch(search)
   }
 
-  const handleClickFilterButton = () => {
-    handleVisibilityFilters()
+  const handleClickFilterMagneticButton = () => {
+    setIsFilterSelectButtonActive(!isFilterSelectButtonActive)
+    handleMagnetismFilter()
+  }
+
+  const handleClickFilterOffButton = () => {
+    setIsFilterSelectButtonActive(!isFilterSelectButtonActive)
+    handleVisibilityFilter()
   }
 
   const handleClickIconCross = () => {
@@ -266,151 +296,335 @@ function Layout({
           sticky
         `}
       >
+
         <div
           className={`
             h-10
             flex
             relative
             justify-between
-          `}
-        >
+          `}>
+
           <div className='flex'>
-            <Link to='/' className='contents'>
+            <Link
+            to='/'
+            className='mr-1.5 w-10' // Tip : fix width cause ios safari
+            >
               <img
                 alt='logo'
                 className='max-w-none h-full rounded-full'
                 src={darkMode ? logoRoundDark : logoRoundLight}
               />
             </Link>
-            <button
-              className={`
-                ml-3
-                p-1
-                flex
-                h-full
-                rounded-full
-                items-center
-                aspect-square
-                justify-center
-                dark:text-white
-                dark:bg-slate-700
-                ${isButtonSettingsActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
-                ${!isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
-              `}
-              onClick={() => handleClickSettingsButton()}
-            >
-              <IconSettings />
-            </button>
+
+            <ul className='flex'>
+              <li>
+                <button
+                  className={`
+                    mx-1.5
+                    px-2.5
+                    flex
+                    h-full
+                    bg-white
+                    rounded-full
+                    items-center
+                    aspect-square
+                    justify-center
+                    dark:text-white
+                    dark:bg-slate-700
+                    ${isButtonSettingsActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                    ${!isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                  `}
+                  onClick={() => handleClickSettingsButton()}
+                >
+                  <IconSettings />
+                </button>
+              </li>
+              {isButtonSettingsActive && <>
+                <li>
+                  <ul
+                    className={`
+                      flex
+                      flex-col
+                      items-center
+                      rounded-full
+                    `}>
+                    <li>
+                      <button
+                        className={`
+                          px-2.5
+                          flex
+                          h-full
+                          bg-white
+                          rounded-full
+                          items-center
+                          aspect-square
+                          justify-center
+                          dark:text-white
+                          dark:bg-slate-700
+                          ${isThemeSelectButtonActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                          ${isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                        `}
+                        onClick={() => setIsThemeSelectButtonActive(!isThemeSelectButtonActive)}
+                      >
+                        {themeSelectButtonIcon()}
+                      </button>
+                    </li>
+                    {isThemeSelectButtonActive && <>
+                      <li>
+                        <button
+                          className={`
+                            mt-1.5
+                            px-2.5
+                            flex
+                            h-full
+                            bg-white
+                            rounded-full
+                            items-center
+                            aspect-square
+                            justify-center
+                            dark:text-white
+                            dark:bg-slate-700
+                            ${theme === 'light' ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                            ${isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                          `}
+                          onClick={(e) => toggleTheme(e.target.innerText)}>
+                          {lightIcon}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`
+                            mt-1.5
+                            px-2.5
+                            flex
+                            h-full
+                            bg-white
+                            rounded-full
+                            items-center
+                            aspect-square
+                            justify-center
+                            dark:text-white
+                            dark:bg-slate-700
+                            ${theme === 'dark' ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                            ${isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                          `}
+                          onClick={(e) => toggleTheme(e.target.innerText)}>
+                          {darkIcon}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`
+                            mt-1.5
+                            px-2.5
+                            flex
+                            h-full
+                            bg-white
+                            rounded-full
+                            items-center
+                            aspect-square
+                            justify-center
+                            dark:text-white
+                            dark:bg-slate-700
+                            ${theme === 'system' ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                            ${isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                          `}
+                          onClick={(e) => toggleTheme(e.target.innerText)}>
+                          {systemIcon}
+                        </button>
+                      </li>
+                    </>}
+                  </ul>
+                </li>
+                <li>
+                  <button
+                    className={`
+                      ml-1.5
+                      px-2.5
+                      flex
+                      h-full
+                      bg-slate-200
+                      rounded-full
+                      items-center
+                      aspect-square
+                      justify-center
+                      dark:text-white
+                      dark:bg-slate-700
+                      ${!isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                    `}
+                    onClick={() => handleAreCardsVertical()}>
+                      {areCardsVertical ? <IconLayoutMasonry /> : <IconListLayout />}
+                  </button>
+                </li>
+              </>}
+            </ul>
+
           </div>
-          {isSearchBarVisible &&
-          <div
-            className={`
-              mx-3
-              flex
-              w-full
-              border
-              bg-white
-              rounded-3xl
-              items-center
-              border-transparent
-              dark:bg-slate-600
-              ${darkMode ? '' : styleOf.biggerShadow}
-              ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
-            `}>
-            <button
+
+          {isSearchBarVisible && !isButtonSettingsActive &&
+            <div
               className={`
-                p-1
-                flex
-                h-full
-                rounded-full
-                items-center
-                filter-button
-                aspect-square
-                justify-center
-                dark:text-white
-                dark:bg-slate-700
-                ${isButtonFilterActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
-                ${!isButtonFilterActive && !darkMode ? styleOf.biggerShadow : ''}
-              `}
-              onClick={handleClickFilterButton}
-            >
-              <IconFilter />
-            </button>
-            <input
-              autoFocus
-              type='text'
-              id='searchInput'
-              className={`
-                mx-2
-                w-full
-                bg-white
-                text-black
-                dark:text-white
-                placeholder:italic
-                focus:outline-none
-                dark:bg-slate-600
-                placeholder:text-sm
-              `}
-              ref={searchInputRef}
-              placeholder='recherche'
-              onChange={(e) => handleChangeOnSearchBar(e)}
-            />
-            <button
-              onClick={handleClickIconCross}
-              className={`
-                flex
-                h-full
-                rounded-full
-                items-center
-                cross-button
-                aspect-square
-                justify-center
-                dark:bg-slate-700
-                ${darkMode ? '' : styleOf.biggerShadow}
-              `}>
-              <IconCross />
-            </button>
-          </div>
-          }
-          {!user.isLogged &&
-          <div className='flex'>
-            <Link
-              to='/user/register'
-              className={`
+                ml-1.5
                 mr-3
                 flex
-                px-2.5
-                rounded-full
-                items-center
-                bg-slate-300
+                w-full
+                border
+                bg-white
+                rounded-3xl
+                border-transparent
                 dark:bg-slate-600
-              `}
-            >
-              <IconUserPlus className='text-black dark:text-yellow-100 text-xl' />
-            </Link>
-            <Link to='/user/login'
-              className={`
-                flex
-                px-2.5
-                rounded-full
-                items-center
-                bg-slate-300
-                dark:bg-slate-600
-              `}
-            >
-              <IconKey className='text-yellow-300 text-xl' />
-            </Link>
-          </div>}
+                ${darkMode ? '' : styleOf.biggerShadow}
+                ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
+              `}>
+                <ul>
+                  <li>
+                    <button
+                      className={`
+                        flex
+                        h-full
+                        bg-white
+                        rounded-full
+                        items-center
+                        aspect-square
+                        justify-center
+                        dark:text-white
+                        dark:bg-slate-700
+                        ${styleOf.filterButton}
+                        ${isFilterSelectButtonActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                        ${!isFilterSelectButtonActive && !darkMode ? styleOf.biggerShadow : ''}
+                      `}
+                      onClick={() => setIsFilterSelectButtonActive(!isFilterSelectButtonActive)}>
+                        <IconFilter />
+                    </button>
+                  </li>
+                  {isFilterSelectButtonActive && <>
+                    <li>
+                      <button
+                        className={`
+                          mt-1.5
+                          p-3
+                          flex
+                          h-full
+                          bg-white
+                          rounded-full
+                          items-center
+                          aspect-square
+                          justify-center
+                          dark:text-white
+                          dark:bg-slate-700
+                          ${isFilterOffButtonActive ? '': 'bg-slate-200 dark:bg-slate-500'}
+                          ${isFilterSelectButtonActive && !darkMode ? styleOf.biggerShadow : ''}
+                        `}
+                        onClick={handleClickFilterOffButton}>
+                          <IconFilterOff />
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className={`
+                          mt-1.5
+                          p-3
+                          flex
+                          h-full
+                          bg-white
+                          rounded-full
+                          items-center
+                          aspect-square
+                          justify-center
+                          dark:text-white
+                          dark:bg-slate-700
+                          ${isFilterMagneticButtonActive ? 'bg-slate-200 dark:bg-slate-500' : ''}
+                          ${isFilterSelectButtonActive && !darkMode ? styleOf.biggerShadow : ''}
+                        `}
+                        onClick={handleClickFilterMagneticButton}>
+                          <IconFilterMagnetic />
+                      </button>
+                    </li>
+                  </>}
+                </ul>
+              
+              <input
+                autoFocus
+                type='text'
+                id='searchInput'
+                className={`
+                  mx-2
+                  w-full
+                  bg-white
+                  text-black
+                  dark:text-white
+                  placeholder:italic
+                  focus:outline-none
+                  dark:bg-slate-600
+                  placeholder:text-sm
+                `}
+                ref={searchInputRef}
+                placeholder='recherche'
+                onChange={(e) => handleChangeOnSearchBar(e)}
+              />
+              <button
+                onClick={handleClickIconCross}
+                className={`
+                  flex
+                  h-full
+                  rounded-full
+                  items-center
+                  aspect-square
+                  justify-center
+                  dark:bg-slate-700
+                  ${styleOf.crossButton}
+                  ${darkMode ? '' : styleOf.biggerShadow}
+                `}>
+                <IconCross />
+              </button>
+            </div>
+          }
+
+          {!user.isLogged &&
+            <div className='flex'>
+                <Link
+                  to='/user/register'
+                  className={`
+                    mr-3
+                    flex
+                    px-2.5
+                    rounded-full
+                    items-center
+                    bg-slate-300
+                    dark:bg-slate-600
+                  `}
+                >
+                  <IconUserPlus className='text-black dark:text-yellow-100 text-xl' />
+                </Link>
+                <Link to='/user/login'
+                  className={`
+                    flex
+                    px-2.5
+                    rounded-full
+                    items-center
+                    bg-slate-300
+                    dark:bg-slate-600
+                  `}
+                >
+                  <IconKey className='text-yellow-300 text-xl' />
+                </Link>
+            </div>
+          }
+
           {user.isLogged &&
-            <Link to={`/user/${user.info._id}`} className='contents'>
+            <Link
+            className='w-10' // Tip : fix width cause ios safari
+            to={`/user/${user.info._id}`} >
               <img
                 alt='image utilisateur'
-                src={user.info.imageUser}
+                src={user.info.imageUser ? user.info.imageUser : defaultProfile}
                 className='max-w-none h-full rounded-full'
               />
             </Link>
           }
-          {user.isLogged && false &&
+
+          {/* {user.isLogged &&
           <nav className={`aspect-square ${focusOnSearchBar ? 'blur-2xl' : ''}`}>
             <ul
               className={`
@@ -436,12 +650,10 @@ function Layout({
                   className='rounded-3xl h-full w-full'
                   onClick={() => setIsMenuOpen(!isMenuOpen)}>
                   {user.isLogged ?
-                  <PictureUser
-                    imageUser={user.info.imageUser ?
-                      user.info.imageUser
-                      :
-                      defaultProfile
-                    }
+                  <img
+                    className='rounded-full'
+                    alt="image de l'utilisateur"
+                    src={user.info.imageUser ? user.info.imageUser : defaultProfile}
                   />
                   :
                   <IconAccount />
@@ -450,7 +662,7 @@ function Layout({
               </li>
               {isMenuOpen &&
               <>
-                {/* <li
+                <li
                   className={`
                     my-2
                     flex
@@ -469,7 +681,7 @@ function Layout({
                   >
                     {cardIcon}
                   </button>
-                </li> */}
+                </li>
                 <li
                   className={`
                     mt-1
@@ -649,7 +861,8 @@ function Layout({
               }
             </ul>
           </nav>
-          }
+          } */}
+
         </div>
 
         {/* {Boolean(filters.length) &&
@@ -670,7 +883,7 @@ function Layout({
             dark:bg-slate-800
             ${darkMode ? '' : styleOf.biggerShadow}
             ${isMenuOpen && !focusOnSearchBar ? styleOf.reducedWidthFilters : ''}
-            ${!isSearchBarVisible || !isButtonFilterActive ? 'hidden' : ''}
+            ${!isSearchBarVisible || !isFilterMagneticButtonActive ? 'hidden' : ''}
           `}
         >
 
@@ -791,17 +1004,17 @@ function Layout({
         {focusOnSearchBar &&
         <div className='absolute top-0 bottom-0 left-0 right-0'></div>
         }
-        <main className='min-h-[calc(100vh-12rem)]'>
+        <main className='min-h-[calc(100vh-13rem)]'>
           {children}
         </main>
         <footer
           className={`
             pt-6
-            pb-20
             text-xs
             text-center
             dark:text-white
             dark:bg-slate-900
+            ${user.isLogged ? 'pb-20' : 'pb-6'}
             ${focusOnSearchBar ? 'blur-2xl' : ''}
           `}
         >
