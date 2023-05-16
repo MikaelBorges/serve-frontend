@@ -10,13 +10,13 @@ function UserSettings({handleSearchBarVisibility}) {
   const user = useSelector(selectUser)
 
   const { urlId } = useParams()
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState(user.info.email)
+  const [phone, setPhone] = useState(user.info.tel)
   const [info, setInfo] = useState(null)
   const [error, setError] = useState(null)
-  const [lastname, setLastname] = useState('')
+  const [lastname, setLastname] = useState(user.info.lastname)
   const [password, setPassword] = useState('')
-  const [firstname, setFirstname] = useState('')
+  const [firstname, setFirstname] = useState(user.info.firstname)
   const [disabled, setDisabled] = useState(true)
 
   const onSubmitForm = e => {
@@ -61,7 +61,7 @@ function UserSettings({handleSearchBarVisibility}) {
         onSubmit={e => onSubmitForm(e)}
       >
         <input
-          defaultValue={user.info.firstname}
+          defaultValue={firstname}
           onChange={e => setFirstname(e.currentTarget.value)}
           type='text'
           name='firstname'
@@ -69,7 +69,7 @@ function UserSettings({handleSearchBarVisibility}) {
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          defaultValue={user.info.lastname}
+          defaultValue={lastname}
           onChange={(e) => setLastname(e.currentTarget.value)}
           type='text'
           name='lastname'
@@ -77,7 +77,7 @@ function UserSettings({handleSearchBarVisibility}) {
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          defaultValue={user.info.email}
+          defaultValue={email}
           onChange={(e) => setEmail(e.currentTarget.value)}
           type='text'
           name='email'
@@ -92,7 +92,7 @@ function UserSettings({handleSearchBarVisibility}) {
           className='w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          defaultValue={user.info.tel}
+          defaultValue={phone}
           onChange={(e) => setPhone(e.currentTarget.value)}
           type='tel'
           name='phone'
