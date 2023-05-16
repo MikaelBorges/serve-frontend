@@ -35,6 +35,9 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
 import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
+import { useSelector } from 'react-redux'
+import { selectUser } from './slices/userSlice'
+
 /* import FilterRadio from './components/filter/FilterRadio'
 import FilterInput from './components/filter/FilterInput'
 import FilterButton from './components/filter/FilterButton'
@@ -73,6 +76,8 @@ function Layout({
   isFilterOffButtonActive,
   isFilterMagneticButtonActive
 }) {
+
+  const user = useSelector(selectUser)
 
   const navigate = useNavigate()
   const searchInputRef = useRef(null)

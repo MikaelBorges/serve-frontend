@@ -61,6 +61,7 @@ function UserSettings({handleSearchBarVisibility}) {
         onSubmit={e => onSubmitForm(e)}
       >
         <input
+          defaultValue={user.info.firstname}
           onChange={e => setFirstname(e.currentTarget.value)}
           type='text'
           name='firstname'
@@ -68,6 +69,7 @@ function UserSettings({handleSearchBarVisibility}) {
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
+          defaultValue={user.info.lastname}
           onChange={(e) => setLastname(e.currentTarget.value)}
           type='text'
           name='lastname'
@@ -75,6 +77,7 @@ function UserSettings({handleSearchBarVisibility}) {
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
+          defaultValue={user.info.email}
           onChange={(e) => setEmail(e.currentTarget.value)}
           type='text'
           name='email'
@@ -89,9 +92,8 @@ function UserSettings({handleSearchBarVisibility}) {
           className='w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          onChange={(e) => {
-            setPhone(e.currentTarget.value);
-          }}
+          defaultValue={user.info.tel}
+          onChange={(e) => setPhone(e.currentTarget.value)}
           type='tel'
           name='phone'
           placeholder='votre numero de téléphone'
