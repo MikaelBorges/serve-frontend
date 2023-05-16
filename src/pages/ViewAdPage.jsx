@@ -1,4 +1,3 @@
-import { connect } from 'react-redux'
 import 'swiper/css'
 import 'swiper/css/scrollbar'
 //import './swiper-custom.scss'
@@ -24,6 +23,7 @@ function ViewAdPage({
   handleSearchBarVisibility,
   updateClickedAd
 }) {
+
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   

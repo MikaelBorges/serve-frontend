@@ -5,13 +5,8 @@ import { useParams, Navigate, Link, useNavigate } from 'react-router-dom'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
 import styleOf from './ProfilPage.module.scss'
 import Masonry from 'react-masonry-css'
-
-import { connect } from 'react-redux'
-
 //import { lightIcon, telescopeIcon, binIcon, validIcon } from '../constants/icons'
-
 import { logoutUser } from '../api/user'
-
 import {
   binIcon,
   starIcon,

@@ -1,6 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
 import axios from 'axios'
 import { config } from '../config'
 
@@ -75,10 +74,4 @@ function RequireAuth(props) {
   return <Child {...props} params={params} />
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    user: store.user
-  }
-}
-
-export default connect(mapStateToProps)(RequireAuth)
+export default RequireAuth

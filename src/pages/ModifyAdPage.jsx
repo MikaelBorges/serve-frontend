@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { config } from '../config'
-import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'

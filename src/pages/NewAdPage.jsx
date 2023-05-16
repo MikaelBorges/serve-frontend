@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { config } from '../config'
-import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { newAd, registerAdImages } from '../api/ads'
 import IconCross from '../components/icons/IconCross'

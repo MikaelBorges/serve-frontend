@@ -2,7 +2,6 @@ import { loginUser } from '../api/user'
 import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 
-
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, connectUser } from '../slices/userSlice'
 

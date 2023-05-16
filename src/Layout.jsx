@@ -13,7 +13,6 @@ import {
   disconnectIcon
 } from './constants/icons'
 import { debounce } from 'lodash'
-import { connect } from 'react-redux'
 import { logoutUser } from './api/user'
 import { useState, useRef } from 'react'
 import styleOf from './Layout.module.scss'
@@ -35,10 +34,6 @@ import logoRoundLight from './assets/images/logos/square.png'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
 import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
-
-import { useSelector } from 'react-redux'
-import { selectUser } from './slices/userSlice'
-import { selectAds } from './slices/adsSlice'
 
 /* import FilterRadio from './components/filter/FilterRadio'
 import FilterInput from './components/filter/FilterInput'
@@ -64,7 +59,6 @@ const filterPricePlaceholderElements = ['min', 'max']
 const filterElementsCheckbox = [`1${starIcon}`, `2${starIcon}`, `3${starIcon}`, `4${starIcon}`, `5${starIcon}`] */
 
 function Layout({
-  //user,
   theme,
   children,
   darkMode,
@@ -79,12 +73,6 @@ function Layout({
   isFilterOffButtonActive,
   isFilterMagneticButtonActive
 }) {
-
-  const user = useSelector(selectUser)
-  console.log('user [Layout]', user)
-
-  const ads = useSelector(selectAds)
-  console.log('ads [Layout]', ads)
 
   const navigate = useNavigate()
   const searchInputRef = useRef(null)

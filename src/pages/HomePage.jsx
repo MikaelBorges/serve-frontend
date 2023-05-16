@@ -1,12 +1,10 @@
 import { loadAds } from '../api/ads'
-import { connect } from 'react-redux'
 import Card from '../components/Card'
 import Masonry from 'react-masonry-css'
 import { useState, useEffect } from 'react'
 import styleOf from './HomePage.module.scss'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import IconSettings from '../components/icons/IconSettings'
-
 import {
   binIcon,
   starIcon,
@@ -24,7 +22,6 @@ import {
   disconnectIcon,
   telescopeIcon
 } from '../constants/icons'
-
 import FilterRadio from '../components/filter/FilterRadio'
 import FilterInput from '../components/filter/FilterInput'
 import FilterButton from '../components/filter/FilterButton'
