@@ -1,9 +1,14 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { changeUserData } from '../api/user'
 
-function UserSettings({user, handleSearchBarVisibility}) {
+import { useSelector } from 'react-redux'
+import { selectUser } from '../slices/userSlice'
+
+function UserSettings({handleSearchBarVisibility}) {
+
+  const user = useSelector(selectUser)
+
   const { urlId } = useParams()
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -116,10 +121,4 @@ function UserSettings({user, handleSearchBarVisibility}) {
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user
-  }
-}
-
-export default connect(mapStateToProps)(UserSettings)
+export default UserSettings

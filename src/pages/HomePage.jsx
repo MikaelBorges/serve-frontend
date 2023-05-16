@@ -4,7 +4,6 @@ import Card from '../components/Card'
 import Masonry from 'react-masonry-css'
 import { useState, useEffect } from 'react'
 import styleOf from './HomePage.module.scss'
-//import { fetchAdsAction } from '../actions/ads/adsActions'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import IconSettings from '../components/icons/IconSettings'
 
@@ -187,7 +186,6 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
       setAds(res.ads)
       //setNoAds(res.noAds)
       setAppIsLoading(false)
-      //props.fetchAdsAction(res.ads)
     })
     .catch(err => console.warn(err))
   }, []);
@@ -467,17 +465,4 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
   )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    lastInteractionAdLike: store.lastInteractionAdLike
-    //user: store.user,
-  }
-}
-
-/* const mapDispatchToProps = {
-  fetchAdsAction
-} */
-
-export default connect(mapStateToProps)(HomePage);
-//export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
-//export default HomePage
+export default HomePage

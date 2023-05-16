@@ -6,7 +6,13 @@ import { Navigate } from 'react-router-dom'
 import IconCross from '../components/icons/IconCross'
 import { registerUser, registerUserImage } from '../api/user'
 
-function RegisterPage({user}) {
+import { useSelector } from 'react-redux'
+import { selectUser } from '../slices/userSlice'
+
+function RegisterPage() {
+
+  const user = useSelector(selectUser)
+
   const [img, setImg] = useState(null)
   const [msg, setMsg] = useState(null)
   const [email, setEmail] = useState('')
@@ -189,13 +195,7 @@ function RegisterPage({user}) {
         <p className='text-red-500'>{error}</p>
       }
     </section>
-  );
+  )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    user: store.user
-  }
-}
-
-export default connect(mapStateToProps)(RegisterPage)
+export default RegisterPage

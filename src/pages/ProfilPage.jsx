@@ -3,7 +3,6 @@ import { loadUserAds } from '../api/ads'
 import { useState, useEffect } from 'react'
 import { useParams, Navigate, Link, useNavigate } from 'react-router-dom'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
-import { logoutUserAction } from '../actions/user/userActions'
 import styleOf from './ProfilPage.module.scss'
 import Masonry from 'react-masonry-css'
 
@@ -31,7 +30,22 @@ import {
   telescopeIcon
 } from '../constants/icons'
 
-function ProfilPage({user, handleAreCardsVertical, toggleTheme, logoutUserAction, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, disconnectUser } from '../slices/userSlice'
+
+function ProfilPage({
+  handleAreCardsVertical,
+  toggleTheme,
+  clickedAd,
+  resetClickedAd,
+  updateClickedAd,
+  areCardsVertical,
+  handleSearchBarVisibility
+}) {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
   const navigate = useNavigate()
   const { urlId } = useParams()
   const hour = new Date().getHours()
@@ -55,7 +69,9 @@ function ProfilPage({user, handleAreCardsVertical, toggleTheme, logoutUserAction
       if (res.status === 200) {
         window.localStorage.removeItem('redux')
         window.localStorage.removeItem('serve-token')
-        logoutUserAction()
+
+        dispatch(disconnectUser())
+
         if(window.location.pathname !== '/') navigate('/')
       }
       else {
@@ -427,15 +443,4 @@ function ProfilPage({user, handleAreCardsVertical, toggleTheme, logoutUserAction
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user,
-    likedAd: store.likedAd
-  }
-}
-
-const mapDispatchToProps = {
-  logoutUserAction
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfilPage)
+export default ProfilPage

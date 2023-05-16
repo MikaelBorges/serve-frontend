@@ -32,10 +32,13 @@ import IconListLayout from './components/icons/IconListLayout'
 import IconFilterOff from './components/icons/IconFilterOff'
 import IconFilterMagnetic from './components/icons/IconFilterMagnetic'
 import logoRoundLight from './assets/images/logos/square.png'
-import { logoutUserAction } from './actions/user/userActions'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logoRoundDark from './assets/images/logos/gitlab-discovery-logo.png'
 import defaultProfile from './assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
+
+import { useSelector } from 'react-redux'
+import { selectUser } from './slices/userSlice'
+import { selectAds } from './slices/adsSlice'
 
 /* import FilterRadio from './components/filter/FilterRadio'
 import FilterInput from './components/filter/FilterInput'
@@ -61,13 +64,12 @@ const filterPricePlaceholderElements = ['min', 'max']
 const filterElementsCheckbox = [`1${starIcon}`, `2${starIcon}`, `3${starIcon}`, `4${starIcon}`, `5${starIcon}`] */
 
 function Layout({
-  user,
+  //user,
   theme,
   children,
   darkMode,
   toggleTheme,
   areCardsVertical,
-  logoutUserAction,
   focusOnSearchBar,
   isSearchBarVisible,
   handleMagnetismFilter,
@@ -77,6 +79,13 @@ function Layout({
   isFilterOffButtonActive,
   isFilterMagneticButtonActive
 }) {
+
+  const user = useSelector(selectUser)
+  console.log('user [Layout]', user)
+
+  const ads = useSelector(selectAds)
+  console.log('ads [Layout]', ads)
+
   const navigate = useNavigate()
   const searchInputRef = useRef(null)
   //const locationInputRef = useRef(null)
@@ -90,10 +99,10 @@ function Layout({
   //const [resetAllFilters, setResetAllFilters] = useState(false)
 
   //const numberOfMessagesUnread = user.isLogged ? 2 : ''
-  const numberOfFavoritesLiked = user.isLogged ? user.info.favorites.length : null
+  //const numberOfFavoritesLiked = user.isLogged ? user.info.favorites.length : null
   //const numberOfFavoritesLiked = null
 
-  const dockElements = [
+  /* const dockElements = [
     {
       icon: heartIcon,
       notificationNumber: numberOfFavoritesLiked,
@@ -107,7 +116,7 @@ function Layout({
       icon: plusIcon,
       route: `/user/${user.info._id}/new`
     }
-  ]
+  ] */
 
   /* const inputsReseted = () => {
     setResetAllFilters(false)
@@ -1181,14 +1190,4 @@ function Layout({
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user
-  }
-}
-
-const mapDispatchToProps = {
-  logoutUserAction
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Layout)
+export default Layout

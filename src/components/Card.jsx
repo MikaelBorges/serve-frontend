@@ -25,17 +25,23 @@ import { addToFavorites } from '../api/user'
 import { Pagination, Navigation, Scrollbar } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { updateLastInteractionLikeAdAction } from '../actions/ads/adsActions'
-import {
-  logoutUserAction,
-  addFavoriteAdAction,
-  deleteFavoriteAdAction,
-  decrementAdsWithImagesOfUser,
-  deleteAdOfUserAction
-} from '../actions/user/userActions'
 import defaultProfile from '../assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
-function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUserAction, updateLastInteractionLikeAdAction, deleteAdOfUserAction, addFavoriteAdAction, decrementAdsWithImagesOfUser, deleteFavoriteAdAction}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, addToFavoritesUser, deleteToFavoritesUser, decrementAdsImagesUser, deleteToAdsOfUser, disconnectUser } from '../slices/userSlice'
+import { lastActionWithLikesAds } from '../slices/adsSlice'
+
+function Card({
+  ad,
+  //user,
+  openPopup,
+  areCardsVertical,
+  updateClickedAd,
+}) {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
   const { urlId } = useParams()
   const navigate = useNavigate()
   const urlOnBrowser = window.location.pathname
@@ -111,8 +117,11 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
     deleteAd(datas)
     .then(res => {
       if(res.status === 200) {
-        deleteAdOfUserAction(ad._id)
-        if(ad.imagesWork.length) decrementAdsWithImagesOfUser()
+
+        const adsArrayWithoutAd = user.info.ads.filter((adElement) => adElement !== ad._id)
+        dispatch(deleteToAdsOfUser(adsArrayWithoutAd))
+
+        if(ad.imagesWork.length) dispatch(decrementAdsImagesUser())
         openPopup(res.data.message)
       }
     })
@@ -139,9 +148,14 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             updateClickedAd({adId: ad._id, newFavNumber: res.data.newFavNumber})
             //console.log('go to redux action !')
             const index = user.info.favorites.indexOf(ad._id)
-            if (index > -1) deleteFavoriteAdAction(ad._id)
-            else addFavoriteAdAction(ad._id)
-            updateLastInteractionLikeAdAction({adId: ad._id, newFavNumber: res.data.newFavNumber})
+            if (index > -1) {
+              const favoriteArrayWithoutAd = user.info.favorites.filter((adFav) => adFav !== ad._id)
+              dispatch(deleteToFavoritesUser(favoriteArrayWithoutAd))
+            }
+            else {
+              dispatch(addToFavoritesUser(ad._id))
+            }
+            dispatch(lastActionWithLikesAds({adId: ad._id, newFavNumber: res.data.newFavNumber}))
           }
         })
         .catch(err => console.warn(err))
@@ -150,7 +164,7 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
     else {
       console.log('veuillez vous reconnecter pour utiliser cette fonctionnalité')
       window.localStorage.removeItem('redux')
-      logoutUserAction()
+      dispatch(disconnectUser())
       //navigate('/user/login')
     }
   }
@@ -471,20 +485,4 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user,
-    likedAd: store.likedAd
-  }
-}
-
-const mapDispatchToProps = {
-  logoutUserAction,
-  updateLastInteractionLikeAdAction,
-  addFavoriteAdAction,
-  deleteAdOfUserAction,
-  deleteFavoriteAdAction,
-  decrementAdsWithImagesOfUser
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Card)
+export default Card

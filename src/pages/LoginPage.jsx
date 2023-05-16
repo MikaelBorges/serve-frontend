@@ -2,10 +2,15 @@ import { loginUser } from '../api/user'
 import { useState, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 
-import { connect } from 'react-redux'
-import { loginUserAction } from '../actions/user/userActions'
 
-function LoginPage({loginUserAction, user}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, connectUser } from '../slices/userSlice'
+
+function LoginPage() {
+
+  //on prépare la fonctionnalité pour dispatcher notre action dans le store
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
 
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -31,7 +36,8 @@ function LoginPage({loginUserAction, user}) {
 
         //console.log('res', res)
 
-        loginUserAction(res.data.session.user)
+        dispatch(connectUser(res.data.session.user))
+
         navigate('/')
       }
       else {
@@ -118,15 +124,4 @@ function LoginPage({loginUserAction, user}) {
   )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    user: store.user
-  }
-}
-
-const mapDispatchToProps = {
-  loginUserAction
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
-//export default LoginPage
+export default LoginPage

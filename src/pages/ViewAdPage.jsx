@@ -12,11 +12,21 @@ import { useParams, Link } from 'react-router-dom'
 import IconMap from '../components/icons/IconMap'
 import { moneyIcon, smartphoneIcon, heartIcon } from '../constants/icons'
 import { addToFavorites } from '../api/user'
-import { updateLastInteractionLikeAdAction } from '../actions/ads/adsActions'
-import { logoutUserAction, addFavoriteAdAction } from '../actions/user/userActions'
 import defaultProfile from '../assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
-function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility, updateClickedAd, updateLastInteractionLikeAdAction, addFavoriteAdAction, logoutUserAction}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, addToFavoritesUser, deleteToFavoritesUser, disconnectUser } from '../slices/userSlice'
+import { lastActionWithLikesAds } from '../slices/adsSlice'
+
+function ViewAdPage({
+  clickedAd,
+  resetClickedAd,
+  handleSearchBarVisibility,
+  updateClickedAd
+}) {
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+  
   const { urlId } = useParams()
   const [ad, setAd] = useState({})
 
@@ -28,8 +38,16 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
         .then(res => {
           if(res.status === 200) {
             updateClickedAd({adId: ad._id, newFavNumber: res.data.newFavNumber})
-            addFavoriteAdAction(user, ad._id)
-            updateLastInteractionLikeAdAction({adId: ad._id, newFavNumber: res.data.newFavNumber})
+
+            const index = user.info.favorites.indexOf(ad._id)
+            if (index > -1) {
+              const favoriteArrayWithoutAd = user.info.favorites.filter((adFav) => adFav !== ad._id)
+              dispatch(deleteToFavoritesUser(favoriteArrayWithoutAd))
+            }
+            else {
+              dispatch(addToFavoritesUser(ad._id))
+            }
+            dispatch(lastActionWithLikesAds({adId: ad._id, newFavNumber: res.data.newFavNumber}))
           }
         })
         .catch(err => console.warn(err))
@@ -38,7 +56,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
     else {
       console.log('veuillez vous reconnecter pour utiliser cette fonctionnalité')
       window.localStorage.removeItem('redux')
-      logoutUserAction()
+      dispatch(disconnectUser())
       //navigate('/user/login')
     }
   }
@@ -73,7 +91,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
     }
   }, [clickedAd])
 
-  return(
+  return (
     <div className='lg:flex'>
       {Boolean(ad?.imagesWork?.length) &&
       <Swiper className='max-h-screen lg:w-2/3 aspect-square swiper-custom-view-ad-page swiper-custom-height' scrollbar={{hide: false}} navigation={true} modules={[Navigation, Scrollbar]}>
@@ -152,17 +170,4 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user,
-    likedAd: store.likedAd
-  }
-}
-
-const mapDispatchToProps = {
-  logoutUserAction,
-  updateLastInteractionLikeAdAction,
-  addFavoriteAdAction
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAdPage)
+export default ViewAdPage

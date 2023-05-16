@@ -5,9 +5,15 @@ import { useState, useEffect } from 'react'
 import { newAd, registerAdImages } from '../api/ads'
 import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
-import { addAdOfUserAction, incrementAdsWithImagesOfUser } from '../actions/user/userActions'
 
-function NewAdPage({user, addAdOfUserAction, incrementAdsWithImagesOfUser, handleSearchBarVisibility}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, addToAdsOfUser, incrementAdsImagesUser, decrementAdsImagesUser  } from '../slices/userSlice'
+
+function NewAdPage({handleSearchBarVisibility}) {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
   const { urlId } = useParams()
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
@@ -44,10 +50,9 @@ function NewAdPage({user, addAdOfUserAction, incrementAdsWithImagesOfUser, handl
     .then(async (res) => {
       if(res.status === 200) {
         setInfo(res.data.message)
-        // addAdOfUserAction(user, res.data.adIdCreated)
-        addAdOfUserAction(res.data.adIdCreated)
+        dispatch(addToAdsOfUser(res.data.adIdCreated))
         if(newImagesSelected.length) {
-          incrementAdsWithImagesOfUser()
+          dispatch(incrementAdsImagesUser())
           const adIdCreated = res.data.adIdCreated
           if(adIdCreated) console.warn('adIdCreated a bien été créé', adIdCreated)
           const urlsAdImages = []
@@ -192,15 +197,4 @@ function NewAdPage({user, addAdOfUserAction, incrementAdsWithImagesOfUser, handl
   )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    user: store.user
-  }
-}
-
-const mapDispatchToProps = {
-  addAdOfUserAction,
-  incrementAdsWithImagesOfUser
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewAdPage)
+export default NewAdPage
