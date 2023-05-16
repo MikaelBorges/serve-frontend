@@ -1,6 +1,6 @@
 import {
-  FETCH_ADS_ACTION
-
+  FETCH_ADS_ACTION,
+  UPDATE_LAST_INTERACTION_LIKE_AD_ACTION
 } from './actions-types'
 
 /* export const fetchAdsAction = (ads) => {
@@ -12,10 +12,10 @@ import {
   }
 } */
 
-export const updateLikedAdAction = (likedAd) => {
+export const updateLastInteractionLikeAdAction = (likedAd) => {
   return function(dispatch) {
     dispatch({
-      type: 'UPDATE_LIKED_AD_ACTION',
+      type: UPDATE_LAST_INTERACTION_LIKE_AD_ACTION,
       payload: likedAd
     })
   }

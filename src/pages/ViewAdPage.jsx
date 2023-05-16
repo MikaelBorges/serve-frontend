@@ -12,11 +12,11 @@ import { useParams, Link } from 'react-router-dom'
 import IconMap from '../components/icons/IconMap'
 import { moneyIcon, smartphoneIcon, heartIcon } from '../constants/icons'
 import { addToFavorites } from '../api/user'
-import { updateLikedAdAction } from '../actions/ads/adsActions'
-import { logoutUserAction, favoriteAddUserAction } from '../actions/user/userActions'
+import { updateLastInteractionLikeAdAction } from '../actions/ads/adsActions'
+import { logoutUserAction, addFavoriteAdAction } from '../actions/user/userActions'
 import defaultProfile from '../assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
-function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility, updateClickedAd, updateLikedAdAction, favoriteAddUserAction, logoutUserAction}) {
+function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility, updateClickedAd, updateLastInteractionLikeAdAction, addFavoriteAdAction, logoutUserAction}) {
   const { urlId } = useParams()
   const [ad, setAd] = useState({})
 
@@ -27,11 +27,9 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
         addToFavorites(ad._id)
         .then(res => {
           if(res.status === 200) {
-            //console.log('ok en bdd')
             updateClickedAd({adId: ad._id, newFavNumber: res.data.newFavNumber})
-            //console.log('go to redux action !')
-            favoriteAddUserAction(user, ad._id)
-            updateLikedAdAction({adId: ad._id, newFavNumber: res.data.newFavNumber})
+            addFavoriteAdAction(user, ad._id)
+            updateLastInteractionLikeAdAction({adId: ad._id, newFavNumber: res.data.newFavNumber})
           }
         })
         .catch(err => console.warn(err))
@@ -62,7 +60,7 @@ function ViewAdPage({user, clickedAd, resetClickedAd, handleSearchBarVisibility,
     retrieveUserAd(urlId)
     .then((res) => {
       setAd(res.adRetrieved)
-      console.log('ad', res.adRetrieved)
+      //console.log('ad', res.adRetrieved)
     })
   }, [])
 
@@ -163,8 +161,8 @@ const mapStateToProps = (store) => {
 
 const mapDispatchToProps = {
   logoutUserAction,
-  updateLikedAdAction,
-  favoriteAddUserAction
+  updateLastInteractionLikeAdAction,
+  addFavoriteAdAction
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewAdPage)

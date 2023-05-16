@@ -25,16 +25,17 @@ import { addToFavorites } from '../api/user'
 import { Pagination, Navigation, Scrollbar } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { updateLikedAdAction } from '../actions/ads/adsActions'
+import { updateLastInteractionLikeAdAction } from '../actions/ads/adsActions'
 import {
   logoutUserAction,
-  favoriteAddUserAction,
-  addAdsOfUserAction,
-  updateAdsWithImages
+  addFavoriteAdAction,
+  deleteFavoriteAdAction,
+  decrementAdsWithImagesOfUser,
+  deleteAdOfUserAction
 } from '../actions/user/userActions'
 import defaultProfile from '../assets/images/defaultProfile/default-m-818bf2b20d4b06a052dd..svg'
 
-function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUserAction, updateLikedAdAction, addAdsOfUserAction, favoriteAddUserAction, updateAdsWithImages}) {
+function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUserAction, updateLastInteractionLikeAdAction, deleteAdOfUserAction, addFavoriteAdAction, decrementAdsWithImagesOfUser, deleteFavoriteAdAction}) {
   const { urlId } = useParams()
   const navigate = useNavigate()
   const urlOnBrowser = window.location.pathname
@@ -110,8 +111,8 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
     deleteAd(datas)
     .then(res => {
       if(res.status === 200) {
-        addAdsOfUserAction(user, ad._id)
-        if(ad.imagesWork.length) updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        deleteAdOfUserAction(ad._id)
+        if(ad.imagesWork.length) decrementAdsWithImagesOfUser()
         openPopup(res.data.message)
       }
     })
@@ -137,8 +138,10 @@ function Card({ad, user, openPopup, areCardsVertical, updateClickedAd, logoutUse
             //console.log('ok en bdd')
             updateClickedAd({adId: ad._id, newFavNumber: res.data.newFavNumber})
             //console.log('go to redux action !')
-            favoriteAddUserAction(user, ad._id)
-            updateLikedAdAction({adId: ad._id, newFavNumber: res.data.newFavNumber})
+            const index = user.info.favorites.indexOf(ad._id)
+            if (index > -1) deleteFavoriteAdAction(ad._id)
+            else addFavoriteAdAction(ad._id)
+            updateLastInteractionLikeAdAction({adId: ad._id, newFavNumber: res.data.newFavNumber})
           }
         })
         .catch(err => console.warn(err))
@@ -477,10 +480,11 @@ const mapStateToProps = (store) => {
 
 const mapDispatchToProps = {
   logoutUserAction,
-  updateLikedAdAction,
-  favoriteAddUserAction,
-  addAdsOfUserAction,
-  updateAdsWithImages
+  updateLastInteractionLikeAdAction,
+  addFavoriteAdAction,
+  deleteAdOfUserAction,
+  deleteFavoriteAdAction,
+  decrementAdsWithImagesOfUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card)

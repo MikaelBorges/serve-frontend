@@ -6,9 +6,9 @@ import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
 import { modifyAd, retrieveUserAd, deleteCloudinaryImages } from '../api/ads'
 
-import { updateAdsWithImages } from '../actions/user/userActions'
+import { decrementAdsWithImagesOfUser, incrementAdsWithImagesOfUser } from '../actions/user/userActions'
 
-function ModifyAdPage({user, updateAdsWithImages}) {
+function ModifyAdPage({user, decrementAdsWithImagesOfUser, incrementAdsWithImagesOfUser}) {
   const { urlId } = useParams()
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
@@ -52,8 +52,8 @@ function ModifyAdPage({user, updateAdsWithImages}) {
       adHaveImages = true
 
       if(adHaveImages !== adHadImages) {
-        if(adHaveImages) updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
-        else updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        if(adHaveImages) incrementAdsWithImagesOfUser()
+        else decrementAdsWithImagesOfUser()
       }
 
       // Supprimer les images
@@ -123,8 +123,8 @@ function ModifyAdPage({user, updateAdsWithImages}) {
       console.log('adHaveImages', adHaveImages)
 
       if(adHaveImages !== adHadImages) {
-        if(adHaveImages) updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
-        else updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        if(adHaveImages) incrementAdsWithImagesOfUser()
+        else decrementAdsWithImagesOfUser()
       }
 
       const priceConvertedToNumber = parseInt(e.target.price.value)
@@ -164,8 +164,8 @@ function ModifyAdPage({user, updateAdsWithImages}) {
       console.log('adHaveImages', adHaveImages)
 
       if(adHaveImages !== adHadImages) {
-        if(adHaveImages) updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
-        else updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        if(adHaveImages) incrementAdsWithImagesOfUser()
+        else decrementAdsWithImagesOfUser()
       }
 
 
@@ -418,7 +418,8 @@ const mapStateToProps = (store, ownProps) => {
 }
 
 const mapDispatchToProps = {
-  updateAdsWithImages
+  incrementAdsWithImagesOfUser,
+  decrementAdsWithImagesOfUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModifyAdPage)

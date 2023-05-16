@@ -1,55 +1,44 @@
 import {
   LOGIN_USER_ACTION,
   LOGOUT_USER_ACTION,
-  ADD_ADS_USER_ACTION,
-  FAVORITE_ADD_USER_ACTION,
-  UPDATE_ADS_WITH_IMAGES_ACTION
+  ADD_AD_OF_USER_ACTION,
+  ADD_FAVORITE_AD_ACTION,
+  DELETE_AD_OF_USER_ACTION,
+  DELETE_FAVORITE_AD_ACTION,
+  INCREMENT_ADS_WITH_IMAGES_OF_USER_ACTION,
+  DECREMENT_ADS_WITH_IMAGES_OF_USER_ACTION
 } from './user-types'
 
-export const favoriteAddUserAction = (user, adId) => {
-  const index = user.info.favorites.indexOf(adId)
-  if (index > -1) {
-    //console.log('trouvé on le supprime')
-    user.info.favorites.splice(index, 1)
-  }
-  else {
-    //console.log("pas trouvé on l'ajoute")
-    user.info.favorites.push(adId)
-  }
-  //console.log('user after', user)
+export const addFavoriteAdAction = (adId) => {
   return function(dispatch) {
     dispatch({
-      type: FAVORITE_ADD_USER_ACTION,
-      payload: user.info
+      type: ADD_FAVORITE_AD_ACTION,
+      payload: adId
     })
   }
 }
 
-export const updateAdsWithImages = (user, newValueAdsWithImages) => {
-  user.info.adsWithImages = newValueAdsWithImages
+export const incrementAdsWithImagesOfUser = () => {
   return function(dispatch) {
     dispatch({
-      type: UPDATE_ADS_WITH_IMAGES_ACTION,
-      payload: user.info
+      type: INCREMENT_ADS_WITH_IMAGES_OF_USER_ACTION
     })
   }
 }
 
-export const addAdsOfUserAction = (user, adId) => {
-  const index = user.info.ads.indexOf(adId)
-  if (index > -1) {
-    //console.log('trouvé on le supprime')
-    user.info.ads.splice(index, 1)
-  }
-  else {
-    //console.log("pas trouvé on l'ajoute")
-    user.info.ads.push(adId)
-  }
-  //console.log('user after', user)
+export const decrementAdsWithImagesOfUser = () => {
   return function(dispatch) {
     dispatch({
-      type: ADD_ADS_USER_ACTION,
-      payload: user.info
+      type: DECREMENT_ADS_WITH_IMAGES_OF_USER_ACTION
+    })
+  }
+}
+
+export const addAdOfUserAction = (adId) => {
+  return function(dispatch) {
+    dispatch({
+      type: ADD_AD_OF_USER_ACTION,
+      payload: adId
     })
   }
 }
@@ -66,8 +55,25 @@ export const loginUserAction = (user) => {
 export const logoutUserAction = () => {
   return function(dispatch) {
     dispatch({
-      type: LOGOUT_USER_ACTION,
-      payload: null
+      type: LOGOUT_USER_ACTION
+    })
+  }
+}
+
+export const deleteAdOfUserAction = (adId) => {
+  return function(dispatch) {
+    dispatch({
+      type: DELETE_AD_OF_USER_ACTION,
+      payload: adId
+    })
+  }
+}
+
+export const deleteFavoriteAdAction = (adId) => {
+  return function(dispatch) {
+    dispatch({
+      type: DELETE_FAVORITE_AD_ACTION,
+      payload: adId
     })
   }
 }

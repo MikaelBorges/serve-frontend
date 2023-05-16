@@ -469,7 +469,7 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
 
 const mapStateToProps = (store, ownProps) => {
   return {
-    lastAdLiked: store.lastAdLiked
+    lastInteractionAdLike: store.lastInteractionAdLike
     //user: store.user,
   }
 }

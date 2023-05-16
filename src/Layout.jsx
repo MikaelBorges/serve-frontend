@@ -128,27 +128,6 @@ function Layout({
     }
   }
 
-  const handleLogout = () => {
-    let data = { _id : user.info._id }
-    logoutUser(data)
-    .then(res => {
-      if (res.status === 200) {
-        window.localStorage.removeItem('redux')
-        window.localStorage.removeItem('serve-token')
-        logoutUserAction()
-        if(window.location.pathname !== '/') navigate('/')
-      }
-      else {
-        setError(res.msg)
-      }
-    })
-    .catch(err => {
-      console.warn('erreur: rentre dans le catch du Layout')
-      console.warn(err)
-      // setError(err)
-    })
-  }
-
   /* const handleChangePriceInput = (e) => {
     const name = e.target.name
     const price = e.target.value
@@ -352,9 +331,10 @@ function Layout({
                     <li>
                       <button
                         className={`
-                          px-2.5
                           flex
+                          px-2.5
                           h-full
+                          text-xl
                           bg-white
                           rounded-full
                           items-center
@@ -374,10 +354,11 @@ function Layout({
                       <li>
                         <button
                           className={`
-                            mt-1.5
-                            px-2.5
                             flex
                             h-full
+                            mt-1.5
+                            px-2.5
+                            text-xl
                             bg-white
                             rounded-full
                             items-center
@@ -395,10 +376,11 @@ function Layout({
                       <li>
                         <button
                           className={`
+                            flex
                             mt-1.5
                             px-2.5
-                            flex
                             h-full
+                            text-xl
                             bg-white
                             rounded-full
                             items-center
@@ -416,10 +398,11 @@ function Layout({
                       <li>
                         <button
                           className={`
+                            flex
                             mt-1.5
                             px-2.5
-                            flex
                             h-full
+                            text-xl
                             bg-white
                             rounded-full
                             items-center
@@ -440,18 +423,18 @@ function Layout({
                 <li>
                   <button
                     className={`
-                      ml-1.5
-                      px-2.5
                       flex
                       h-full
-                      bg-slate-200
+                      ml-1.5
+                      px-2.5
+                      bg-white
                       rounded-full
                       items-center
                       aspect-square
                       justify-center
                       dark:text-white
                       dark:bg-slate-700
-                      ${!isButtonSettingsActive && !darkMode ? styleOf.biggerShadow : ''}
+                      ${!darkMode ? styleOf.biggerShadow : ''}
                     `}
                     onClick={() => handleAreCardsVertical()}>
                       {areCardsVertical ? <IconLayoutMasonry /> : <IconListLayout />}

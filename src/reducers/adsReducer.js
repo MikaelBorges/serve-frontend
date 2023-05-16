@@ -1,32 +1,29 @@
 import {
-  FETCH_ADS_ACTION
-
+  FETCH_ADS_ACTION,
+  UPDATE_LAST_INTERACTION_LIKE_AD_ACTION
 } from '../actions/ads/actions-types'
 
 const initState = {
   //fetchedAds : [],
-  lastAdLiked : {}
+  lastInteractionAdLike : {}
 }
 
 const AdsReducer = (state = initState, action) => {
   switch (action.type) {
-
     /* case FETCH_ADS_ACTION :
       return {
         fetchedAds : [
           ...action.payload
         ]
-      }
-    break */
+      } */
 
-    case 'UPDATE_LIKED_AD_ACTION' :
+    case UPDATE_LAST_INTERACTION_LIKE_AD_ACTION :
       return {
-        lastAdLiked : { ...action.payload }
+        ...state,
+        lastInteractionAdLike : { ...action.payload }
       }
-    break
 
     default: return state
-    break
   }
 }
 

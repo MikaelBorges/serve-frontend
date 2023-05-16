@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react'
 import { newAd, registerAdImages } from '../api/ads'
 import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
-import { addAdsOfUserAction, updateAdsWithImages } from '../actions/user/userActions'
+import { addAdOfUserAction, incrementAdsWithImagesOfUser } from '../actions/user/userActions'
 
-function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchBarVisibility}) {
+function NewAdPage({user, addAdOfUserAction, incrementAdsWithImagesOfUser, handleSearchBarVisibility}) {
   const { urlId } = useParams()
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
@@ -44,9 +44,10 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchB
     .then(async (res) => {
       if(res.status === 200) {
         setInfo(res.data.message)
-        addAdsOfUserAction(user, res.data.adIdCreated)
+        // addAdOfUserAction(user, res.data.adIdCreated)
+        addAdOfUserAction(res.data.adIdCreated)
         if(newImagesSelected.length) {
-          updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
+          incrementAdsWithImagesOfUser()
           const adIdCreated = res.data.adIdCreated
           if(adIdCreated) console.warn('adIdCreated a bien été créé', adIdCreated)
           const urlsAdImages = []
@@ -198,8 +199,8 @@ const mapStateToProps = (store, ownProps) => {
 }
 
 const mapDispatchToProps = {
-  addAdsOfUserAction,
-  updateAdsWithImages
+  addAdOfUserAction,
+  incrementAdsWithImagesOfUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewAdPage)

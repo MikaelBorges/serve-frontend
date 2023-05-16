@@ -1,9 +1,12 @@
 import {
   LOGIN_USER_ACTION,
   LOGOUT_USER_ACTION,
-  ADD_ADS_USER_ACTION,
-  FAVORITE_ADD_USER_ACTION,
-  UPDATE_ADS_WITH_IMAGES_ACTION
+  ADD_AD_OF_USER_ACTION,
+  DELETE_AD_OF_USER_ACTION,
+  ADD_FAVORITE_AD_ACTION,
+  DELETE_FAVORITE_AD_ACTION,
+  DECREMENT_ADS_WITH_IMAGES_OF_USER_ACTION,
+  INCREMENT_ADS_WITH_IMAGES_OF_USER_ACTION
 } from '../actions/user/user-types'
 
 const initState = {
@@ -14,41 +17,76 @@ const initState = {
 const UserReducer = (state = initState, action) => {
   switch (action.type) {
 
-    case UPDATE_ADS_WITH_IMAGES_ACTION :
+    case INCREMENT_ADS_WITH_IMAGES_OF_USER_ACTION :
       return {
-        isLogged: true,
-        info : { ...action.payload }
+        ...state,
+        info: {
+          ...state.info,
+          adsWithImages: state.info.adsWithImages + 1
+        }
       }
-    break
 
-    case ADD_ADS_USER_ACTION :
+    case DECREMENT_ADS_WITH_IMAGES_OF_USER_ACTION :
       return {
-        isLogged: true,
-        info : { ...action.payload }
+        ...state,
+        info: {
+          ...state.info,
+          adsWithImages: state.info.adsWithImages - 1
+        }
       }
-    break
 
-    case FAVORITE_ADD_USER_ACTION :
+    case ADD_AD_OF_USER_ACTION :
       return {
-        isLogged: true,
-        info : { ...action.payload }
+        ...state,
+        info: {
+          ...state.info,
+          ads: [...state.info.ads, action.payload]
+        }
       }
-    break
+
+    case ADD_FAVORITE_AD_ACTION :
+      return {
+        ...state,
+        info: {
+          ...state.info,
+          favorites: [...state.info.favorites, action.payload]
+        }
+      }
 
     case LOGIN_USER_ACTION :
       return {
+        ...state,
         isLogged: true,
         info : { ...action.payload }
       }
-    break
 
     case LOGOUT_USER_ACTION :
-      return initState
-    break
+      return {
+        ...state,
+        ...initState
+      }
 
-    default:
-      return state
-    break
+    case DELETE_AD_OF_USER_ACTION :
+      const filteredAd = state.info.ads.filter((ad) => ad !== action.payload)
+      return {
+        ...state,
+        info: {
+          ...state.info,
+          ads: [...filteredAd]
+        }
+      }
+
+    case DELETE_FAVORITE_AD_ACTION :
+      const filteredFavoriteAd = state.info.favorites.filter((ad) => ad !== action.payload)
+      return {
+        ...state,
+        info: {
+          ...state.info,
+          favorites: [...filteredFavoriteAd]
+        }
+      }
+
+    default: return state
   }
 }
 
