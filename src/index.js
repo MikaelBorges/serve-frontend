@@ -4,13 +4,8 @@ import './index.scss'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter as Router } from 'react-router-dom'
-
 import { Provider } from 'react-redux'
-import store from './store'
-// import { createStore } from 'redux'
-// import rootReducer from './reducers/rootReducer'
-// const store = createStore(rootReducer)
-
+import store from './slices/store'
 import ScrollToTop from "./utils/scrollToTop";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -12,13 +12,10 @@ import UserSettings from './pages/UserSettings'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { lightIcon, darkIcon, systemIcon } from './constants/icons'
 import ModifyAdPage from './pages/ModifyAdPage'
-
 import './swiper-custom.scss'
 
 function App() {
-
   const navigate = useNavigate()
-
   const [theme, setTheme] = useState('light')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
@@ -28,11 +25,16 @@ function App() {
   const [focusOnSearchBar, setFocusOnSearchBar] = useState(false)
   const [areCardsVertical, setAreCardsVertical] = useState(false)
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(null)
+  
+  const [isFilterMagneticButtonActive, setIsFilterMagneticButtonActive] = useState(false)
+  const [isFilterOffButtonActive, setIsFilterOffButtonActive] = useState(true)
 
-  const [isButtonFilterActive, setIsButtonFilterActive] = useState(false)
+  const handleMagnetismFilter = () => {
+    setIsFilterMagneticButtonActive(!isFilterMagneticButtonActive)
+  }
 
-  const handleVisibilityFilters = () => {
-    setIsButtonFilterActive(!isButtonFilterActive)
+  const handleVisibilityFilter = () => {
+    setIsFilterOffButtonActive(!isFilterOffButtonActive)
   }
 
   const handleFocusOnSearchBar = (focus) => {
@@ -149,9 +151,6 @@ function App() {
     setLocationTyped(locationTyped)
   }
 
-
-
-
   useEffect(() => {
     const areCardsVertical = window.localStorage.getItem('areCardsVertical')
     if(areCardsVertical) setAreCardsVertical(true)
@@ -232,19 +231,23 @@ function App() {
 
   }, []);
 
+  
 
   return (
     <Layout
       theme={theme}
       darkMode={darkMode}
       toggleTheme={toggleTheme}
+      areCardsVertical={areCardsVertical}
       focusOnSearchBar={focusOnSearchBar}
       isSearchBarVisible={isSearchBarVisible}
       changeLocationTyped={changeLocationTyped}
-      isButtonFilterActive={isButtonFilterActive}
+      handleMagnetismFilter={handleMagnetismFilter}
       handleFocusOnSearchBar={handleFocusOnSearchBar}
       handleAreCardsVertical={handleAreCardsVertical}
-      handleVisibilityFilters={handleVisibilityFilters}
+      handleVisibilityFilter={handleVisibilityFilter}
+      isFilterOffButtonActive={isFilterOffButtonActive}
+      isFilterMagneticButtonActive={isFilterMagneticButtonActive}
     >
       <Routes>
         <Route
@@ -256,13 +259,16 @@ function App() {
               maxPrice={maxPrice}
               darkMode={darkMode}
               clickedAd={clickedAd}
+              toggleTheme={toggleTheme}
               locationTyped={locationTyped}
               resetClickedAd={resetClickedAd}
               updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
-              isButtonFilterActive={isButtonFilterActive}
               handleFocusOnSearchBar={handleFocusOnSearchBar}
+              handleAreCardsVertical={handleAreCardsVertical}
+              isFilterOffButtonActive={isFilterOffButtonActive}
               handleSearchBarVisibility={handleSearchBarVisibility}
+              isFilterMagneticButtonActive={isFilterMagneticButtonActive}
             />
           }
         />
@@ -291,9 +297,11 @@ function App() {
             <ProfilPage
               darkMode={darkMode}
               clickedAd={clickedAd}
+              toggleTheme={toggleTheme}
               resetClickedAd={resetClickedAd}
               updateClickedAd={updateClickedAd}
               areCardsVertical={areCardsVertical}
+              handleAreCardsVertical={handleAreCardsVertical}
               handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }

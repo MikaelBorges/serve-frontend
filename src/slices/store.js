@@ -1,7 +1,6 @@
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import thunk from 'redux-thunk'
-import rootReducer from './reducers/rootReducer'
+import { configureStore } from '@reduxjs/toolkit'
+import userReducer from './userSlice'
+import adsReducer from './adsSlice'
 
 const saveToLocalStorage = (state) => {
   try {
@@ -28,8 +27,14 @@ const loadFromLocalStorage = () => {
 const persistedStore = loadFromLocalStorage();
 if(persistedStore) console.log('redux store hydrated from local storage', persistedStore)
 else console.log("redux store can't be hydrated because it has been removed from local storage")
-const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
-const store = createStore(rootReducer, persistedStore, composedEnhancer)
+
+const store = configureStore({
+  reducer: {
+      user: userReducer,
+      ads: adsReducer
+  },
+  preloadedState: persistedStore
+})
 
 store.subscribe(() => {
   const token = window.localStorage.getItem('serve-token')

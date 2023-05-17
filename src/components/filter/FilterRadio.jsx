@@ -1,8 +1,9 @@
 function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
+//function FilterRadio({radioName, groupName, handleChangeRadio, ...props}) {
 
   return (
     <label
-      className='[&:not(:last-child)]:mr-3 cursor-pointer'
+      className='ml-3 cursor-pointer'
       onClick={(e) => e.stopPropagation()}
       htmlFor={`${groupName}-${radioName}`}
     >
@@ -17,6 +18,7 @@ function FilterRadio({radioName, groupName, handleChangeRadio, isParamOnUrl}) {
         defaultChecked={
           isParamOnUrl && radioName === 'oui' ||
           !isParamOnUrl && radioName === 'non'}
+        //{...props}
       />
       {radioName}
     </label>

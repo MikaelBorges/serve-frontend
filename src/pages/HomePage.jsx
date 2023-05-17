@@ -1,12 +1,27 @@
 import { loadAds } from '../api/ads'
-import { connect } from 'react-redux'
 import Card from '../components/Card'
 import Masonry from 'react-masonry-css'
 import { useState, useEffect } from 'react'
 import styleOf from './HomePage.module.scss'
-//import { fetchAdsAction } from '../actions/ads/adsActions'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-
+import IconSettings from '../components/icons/IconSettings'
+import {
+  binIcon,
+  starIcon,
+  darkIcon,
+  userIcon,
+  cardIcon,
+  plusIcon,
+  heartIcon,
+  wheelIcon,
+  validIcon,
+  lightIcon,
+  systemIcon,
+  messageIcon,
+  modernKeyIcon,
+  disconnectIcon,
+  telescopeIcon
+} from '../constants/icons'
 import FilterRadio from '../components/filter/FilterRadio'
 import FilterInput from '../components/filter/FilterInput'
 import FilterButton from '../components/filter/FilterButton'
@@ -17,11 +32,11 @@ const photosAdsFilterRadioChoices = ['oui', 'non']
 const filterLocationPlaceholderElements = ['ville']
 const filterPricePlaceholderElements = ['min', 'max']
 
-function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
+function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical, isFilterMagneticButtonActive, darkMode, clickedAd, resetClickedAd, areCardsVertical, updateClickedAd, handleFocusOnSearchBar, handleSearchBarVisibility}) {
   const navigate = useNavigate()
   const [ads, setAds] = useState([])
   //const [noAds, setNoAds] = useState(null)
-  const [loaded, setLoaded] = useState(false)
+  const [appIsLoading, setAppIsLoading] = useState(true)
   const [search, setSearch] = useSearchParams()
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
 
@@ -107,6 +122,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
 
     if(name === 'superUserRadioGroup') {
       if(radioValue === 'oui') search.set('superUser', true)
+      //if(search.get('superUser') !== 'true') search.set('superUser', true)
       else search.delete('superUser')
     }
     else {
@@ -157,6 +173,20 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
     else setOnlyWithPhotos(false)
   }, [search]) */
 
+  useEffect(() => {
+    handleSearchBarVisibility(true)
+    generateMasonryBreakpointsUntilThisMaxValue(3000)
+    //if(props.refreshUrl) navigate('/')
+    // await loadAds()
+    loadAds()
+    .then(res => {
+      setAds(res.ads)
+      //setNoAds(res.noAds)
+      setAppIsLoading(false)
+    })
+    .catch(err => console.warn(err))
+  }, []);
+
   // Simulation du blur lors d'une recherche
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -196,21 +226,6 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
     }
   }, [clickedAd]);
 
-  useEffect(() => {
-    handleSearchBarVisibility(true)
-    generateMasonryBreakpointsUntilThisMaxValue(3000)
-    //if(props.refreshUrl) navigate('/')
-    // await loadAds()
-    loadAds()
-    .then(res => {
-      setAds(res.ads)
-      //setNoAds(res.noAds)
-      setLoaded(true)
-      //props.fetchAdsAction(res.ads)
-    })
-    .catch(err => console.warn(err))
-  }, []);
-
   /* const determinatePriceInputValue = (placeholder) => {
     if(placeholder === 'min') {
       if(search.get('minPrice')) return search.get('minPrice')
@@ -240,7 +255,7 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
   }
 
   const titlePage = () => {
-    if(loaded) {
+    if(!appIsLoading) {
       if(!ads.length) return 'Aucune annonces'
       else {
         if(!filteredAds.length) return 'Pas de résultats'
@@ -248,140 +263,171 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
         else return 'Toutes les annonces'
       }
     }
-    else return 'En chargement...'
+    else return 'Toutes les annonces...'
   }
 
   return (
     <section>
-      <ul
-        className={`
-          pt-1
-          flex
-          px-3
-          pb-2
-          mt-3
-          mx-3
-          right-3
-          flex-row
-          flex-wrap
-          items-end
-          bg-white
-          rounded-3xl
-          dark:text-white
-          dark:bg-slate-800
-          ${darkMode ? '' : styleOf.biggerShadow}
-          ${isButtonFilterActive && `sticky z-10 ${styleOf.stickyFilters}`}
-        `}
-      >
-        {/* {filters.map((filter, index) =>
-        <li className='mr-3'>
-          <FilterButton filterButtonName={filter.label}>
-            {filter.inputs.map((placeholder, index) =>
-              <FilterInput
-                key={index}
-                type={filter.type}
-                name={placeholder}
-                placeholder={placeholder}
-                onChange={filter.actionOnChange}
-              />
-            )}
-          </FilterButton>
-        </li>
-        )} */}
-        {Boolean(filterPricePlaceholderElements.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Prix'>
-            {filterPricePlaceholderElements.map((placeholder, index) =>
-              <FilterInput
-                //value={determinatePriceInputValue(placeholder)}
-                key={index}
-                type='number'
-                name={placeholder}
-                placeholder={placeholder}
-                onChange={handleChangePriceInput}
-                defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {Boolean(filterLocationPlaceholderElements.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Lieu'>
-            {filterLocationPlaceholderElements.map((placeholder, index) =>
-              <FilterInput
-                //value={search.get('location') ? search.get('location') : ''}
-                key={index}
-                type='text'
-                name={placeholder}
-                placeholder={placeholder}
-                onChange={handleChangeLocationInput}
-                defaultValue={search.get('location')}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {Boolean(superUserFilterRadioChoices.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Super utilisateurs'>
-            {superUserFilterRadioChoices.map((radioName, index) =>
-              <FilterRadio
-                key={index}
-                radioName={radioName}
-                groupName='superUserRadioGroup'
-                handleChangeRadio={handleChangeRadio}
-                isParamOnUrl={search.get('superUser') === 'true' ? true : false}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {Boolean(photosAdsFilterRadioChoices.length) &&
-        <li className='mr-3'>
-          <FilterButton filterButtonName='Uniquement avec photos'>
-            {photosAdsFilterRadioChoices.map((radioName, index) =>
-              <FilterRadio
-                key={index}
-                radioName={radioName}
-                groupName='photoRadioGroup'
-                handleChangeRadio={handleChangeRadio}
-                isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
-              />
-            )}
-          </FilterButton>
-        </li>
-        }
-        {/* <li className='mr-3'>
-          <button
-            className={`
-              px-3
-              flex
-              mt-1.5
-              rounded-3xl
-              items-center
-              bg-slate-200
-              dark:bg-slate-600
-              ${styleOf.resetFilterButton}
-          `}
-            onClick={() => handleResetFilters()}
-          >
-            Reset
+      {/* {isButtonSettingsActive &&
+      <ul>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
+            {darkIcon}
           </button>
-        </li> */}
-        <div
+        </li>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
+            {lightIcon}
+          </button>
+        </li>
+        <li className='inline'>
+          <button onClick={e => toggleTheme(e.target.innerText)}>
+            {systemIcon}
+          </button>
+        </li>
+        <li className='inline'>
+          <button onClick={() => handleAreCardsVertical()}>
+            {cardIcon}
+          </button>
+        </li>
+      </ul>
+      } */}
+      {isFilterOffButtonActive &&
+        <ul
           className={`
-            h-4
+            pt-1
             flex
-            w-full
-            items-center
-            justify-center
-            overflow-hidden
+            px-3
+            pb-2
+            mt-3
+            mx-3
+            right-3
+            bg-white
+            max-w-lg
+            flex-row
+            flex-wrap
+            items-end
+            rounded-3xl
+            dark:text-white
+            dark:bg-slate-800
+            ${darkMode ? '' : styleOf.biggerShadow}
+            ${isFilterMagneticButtonActive ? `sticky z-20 ${styleOf.stickyFilters}` : ''}
           `}
         >
-          <IconHorizontalRule />
-        </div>
-      </ul>
+          {/* {filters.map((filter, index) =>
+          <li className='mr-3'>
+            <FilterButton filterButtonName={filter.label}>
+              {filter.inputs.map((placeholder, index) =>
+                <FilterInput
+                  key={index}
+                  type={filter.type}
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={filter.actionOnChange}
+                />
+              )}
+            </FilterButton>
+          </li>
+          )} */}
+          {Boolean(filterPricePlaceholderElements.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Prix'>
+              {filterPricePlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  //value={determinatePriceInputValue(placeholder)}
+                  key={index}
+                  type='number'
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={handleChangePriceInput}
+                  defaultValue={placeholder === 'min' ? search.get('minPrice') : search.get('maxPrice')}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(filterLocationPlaceholderElements.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Lieu'>
+              {filterLocationPlaceholderElements.map((placeholder, index) =>
+                <FilterInput
+                  //value={search.get('location') ? search.get('location') : ''}
+                  key={index}
+                  type='text'
+                  name={placeholder}
+                  placeholder={placeholder}
+                  onChange={handleChangeLocationInput}
+                  defaultValue={search.get('location')}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(superUserFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Super users'>
+              {superUserFilterRadioChoices.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='superUserRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  isParamOnUrl={search.get('superUser') === 'true' ? true : false}
+                  //onChange={handleChangeRadio}
+                  //checked={search.get('superUser') === 'true' ? true : false}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {Boolean(photosAdsFilterRadioChoices.length) &&
+          <li className='mr-3'>
+            <FilterButton filterButtonName='Avec photos'>
+              {photosAdsFilterRadioChoices.map((radioName, index) =>
+                <FilterRadio
+                  key={index}
+                  radioName={radioName}
+                  groupName='photoRadioGroup'
+                  handleChangeRadio={handleChangeRadio}
+                  isParamOnUrl={search.get('onlyWithPhotos') === 'true' ? true : false}
+                  //onChange={handleChangeRadio}
+                  //value={search.get('onlyWithPhotos') === 'true' ? 'true' : 'false'}
+                />
+              )}
+            </FilterButton>
+          </li>
+          }
+          {/* <li className='mr-3'>
+            <button
+              className={`
+                px-3
+                flex
+                mt-1.5
+                rounded-3xl
+                items-center
+                bg-slate-200
+                dark:bg-slate-600
+                ${styleOf.resetFilterButton}
+            `}
+              onClick={() => handleResetFilters()}
+            >
+              Reset
+            </button>
+          </li> */}
+          <div
+            className={`
+              h-4
+              flex
+              w-full
+              items-center
+              justify-center
+              overflow-hidden
+            `}
+          >
+            <IconHorizontalRule />
+          </div>
+        </ul>
+      }
       <h1 className='mx-3 my-7 text-3xl dark:text-white'>{titlePage()}</h1>
       {Boolean(filteredAds.length) &&
       <ul className={areCardsVertical ? 'px-1.5' : 'px-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
@@ -412,27 +458,8 @@ function HomePage({isButtonFilterActive, darkMode, clickedAd, resetClickedAd, ar
         )}
       </ul>
       }
-      {!loaded &&
-      <img
-        className='w-20'
-        alt='chargement'
-        src='https://i.stack.imgur.com/y3Hm3.gif' />
-      }
     </section>
   )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    lastAdLiked: store.lastAdLiked
-    //user: store.user,
-  }
-}
-
-/* const mapDispatchToProps = {
-  fetchAdsAction
-} */
-
-export default connect(mapStateToProps)(HomePage);
-//export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
-//export default HomePage
+export default HomePage

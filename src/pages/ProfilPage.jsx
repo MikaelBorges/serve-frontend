@@ -1,16 +1,12 @@
 import Card from '../components/Card'
 import { loadUserAds } from '../api/ads'
 import { useState, useEffect } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate, Link, useNavigate } from 'react-router-dom'
 import { Image, Transformation, CloudinaryContext } from 'cloudinary-react'
-
 import styleOf from './ProfilPage.module.scss'
 import Masonry from 'react-masonry-css'
-
-import { connect } from 'react-redux'
-
-//import { lightIcon, goodEveningIcon, binIcon, validIcon } from '../constants/icons'
-
+//import { lightIcon, telescopeIcon, binIcon, validIcon } from '../constants/icons'
+import { logoutUser } from '../api/user'
 import {
   binIcon,
   starIcon,
@@ -26,17 +22,32 @@ import {
   messageIcon,
   modernKeyIcon,
   disconnectIcon,
-  goodEveningIcon
+  telescopeIcon
 } from '../constants/icons'
 
-function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsVertical, handleSearchBarVisibility}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, disconnectUser } from '../slices/userSlice'
 
+function ProfilPage({
+  handleAreCardsVertical,
+  toggleTheme,
+  clickedAd,
+  resetClickedAd,
+  updateClickedAd,
+  areCardsVertical,
+  handleSearchBarVisibility
+}) {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
+  const navigate = useNavigate()
   const { urlId } = useParams()
   const hour = new Date().getHours()
   const [ads, setAds] = useState([])
   const [imgUrl, setImgUrl] = useState('')
   const [noAds, setNoAds] = useState(null)
-  const [loaded, setLoaded] = useState(false)
+  const [appIsLoading, setAppIsLoading] = useState(true)
   const [isVisitor, setIsVisitor] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [liteInfosOfUser, setLiteInfosOfUser]= useState({})
@@ -44,12 +55,36 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   const [showCheckboxsDraft, setshowCheckboxsDraft] = useState(false)
   const [responseMessageFromCard, setResponseMessageFromCard] = useState('')
   const [breakpointsColumnsMasonry, setBreakpointsColumnsMasonry] = useState({})
+  const [error, setError] = useState(null)
+
+  const handleLogout = () => {
+    let data = { _id : user.info._id }
+    logoutUser(data)
+    .then(res => {
+      if (res.status === 200) {
+        window.localStorage.removeItem('redux')
+        window.localStorage.removeItem('serve-token')
+
+        dispatch(disconnectUser())
+
+        if(window.location.pathname !== '/') navigate('/')
+      }
+      else {
+        setError(res.msg)
+      }
+    })
+    .catch(err => {
+      console.warn('erreur: rentre dans le catch du Layout')
+      console.warn(err)
+      // setError(err)
+    })
+  }
 
   const wayToGreet = () => {
     return hour > 6 && hour < 20 ?
       `Bonjour ${user.info.firstname} ${lightIcon}`
       :
-      `Bonsoir ${user.info.firstname} ${goodEveningIcon}`
+      `Bonsoir ${user.info.firstname} ${telescopeIcon}`
   }
 
   const handleDeleteAd = e => {
@@ -121,7 +156,7 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
   }, [props.user, userIdPage]); */
 
   const titlePage = () => {
-    if(loaded) {
+    if(!appIsLoading) {
       if(ads.length) {
         if(user.info._id === urlId) return `Voici vos annonces`
         else return `Voici les annonces de ${liteInfosOfUser.firstname}`
@@ -131,8 +166,25 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
         else return `${liteInfosOfUser.firstname} n'a aucune annonce`
       }
     }
-    else return 'En chargement...'
+    else return 'Voici vos annonces...'
   }
+
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+    generateMasonryBreakpointsUntilThisMaxValue(3000)
+  }, [])
+
+  // loadUserAds
+  useEffect(() => {
+    loadUserAds(urlId)
+    .then(res => {
+      setLiteInfosOfUser(res.liteInfos)
+      setAds(res.adsOfUser)
+      //setNoAds(res.noAds)
+      setAppIsLoading(false)
+    })
+    .catch(err => console.error('err', err))
+  }, [urlId])
 
   // Mettre à jour les tableaux d'annonces au clic sur une annonce favorite
   useEffect(() => {
@@ -164,23 +216,6 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
     }
   }, [clickedAd]);
 
-  useEffect(() => {
-    handleSearchBarVisibility(false)
-    generateMasonryBreakpointsUntilThisMaxValue(3000)
-  }, [])
-
-  // loadUserAds
-  useEffect(() => {
-    loadUserAds(urlId)
-    .then(res => {
-      setLiteInfosOfUser(res.liteInfos)
-      setAds(res.adsOfUser)
-      //setNoAds(res.noAds)
-      setLoaded(true)
-    })
-    .catch(err => console.error('err', err))
-  }, [urlId])
-
   /* useEffect(() => {
     // console.warn('isVisitor', isVisitor)
 
@@ -206,105 +241,6 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
 
   return (
     <section>
-
-      {/* <ul className='flex'>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {darkIcon}
-          </button>
-        </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {lightIcon}
-          </button>
-        </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {systemIcon}
-          </button>
-        </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {disconnectIcon}
-          </button>
-        </li>
-        <li
-          className={`
-            
-            flex
-            rounded-full
-            items-center
-            aspect-square
-            bg-slate-200
-            cursor-pointer
-            justify-center
-            dark:bg-slate-400
-          `}
-        >
-          <button
-            className='rounded-3xl h-full w-full text-2xl'
-          >
-            {wheelIcon}
-          </button>
-        </li>
-      </ul> */}
-
       <div className='m-3'>
         {/* {!isVisitor &&
           <>
@@ -394,9 +330,42 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
         </div> */}
 
         {user.info._id === urlId &&
-        <h1 className='pb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
+        <h1 className='mb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
         }
-        <h2 className='text-2xl dark:text-white'>{titlePage()}</h2>
+        {user.info._id === urlId &&
+        <div className='flex justify-between mt-6'>
+          <Link
+            className={`
+              px-2
+              py-1
+              text-xs
+              bg-slate-200
+              rounded-full
+              text-gray-500
+              cursor-pointer
+              dark:bg-slate-600
+              dark:text-yellow-100
+            `}
+            to={`/user/${user.info._id}/settings`}>
+              Modifier mon compte
+          </Link>
+          <button
+            className={`
+              px-2
+              py-1
+              text-xs
+              bg-slate-200
+              rounded-full
+              text-red-600
+              cursor-pointer
+              dark:bg-slate-600
+            `}
+            onClick={() => handleLogout()}>
+              Se déconnecter
+          </button>
+        </div>
+        }
+        <h2 className='mt-4 text-2xl dark:text-white'>{titlePage()}</h2>
       </div>
 
       {Boolean(ads.length) &&
@@ -436,12 +405,6 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
         )}
       </ul>
       }
-      {!loaded &&
-      <img
-        className='w-20'
-        alt='chargement'
-        src='https://i.stack.imgur.com/y3Hm3.gif' />
-      }
       {/* {noAds && !isVisitor &&
       <img
         alt="Vous n'avez pas d'annonces"
@@ -449,39 +412,30 @@ function ProfilPage({user, clickedAd, resetClickedAd, updateClickedAd, areCardsV
       />
       } */}
       {isPopupOpen &&
-      <div
-        className={`
-          flex
-          fixed
-          inset-0
-          text-center
-          items-center
-          justify-center
-          z-10
-        `}
-      >
         <div
           className={`
-            p-4
-            bg-white
-            rounded-3xl
-            text-green-500
-          `}
-        >
-          <div className='text-7xl'>{validIcon}</div>
-          <div>{responseMessageFromCard}</div>
+            flex
+            fixed
+            inset-0
+            text-center
+            items-center
+            justify-center
+            z-10
+          `}>
+          <div
+            className={`
+              p-4
+              bg-white
+              rounded-3xl
+              text-green-500
+            `}>
+            <div className='text-7xl'>{validIcon}</div>
+            <div>{responseMessageFromCard}</div>
+          </div>
         </div>
-      </div>
       }
     </section>
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user,
-    likedAd: store.likedAd
-  }
-}
-
-export default connect(mapStateToProps)(ProfilPage)
+export default ProfilPage

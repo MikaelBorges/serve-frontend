@@ -1,13 +1,18 @@
 import axios from 'axios'
 import { config } from '../config'
-import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { newAd, registerAdImages } from '../api/ads'
 import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
-import { addAdsOfUserAction, updateAdsWithImages } from '../actions/user/userActions'
 
-function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchBarVisibility}) {
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, addToAdsOfUser, incrementAdsImagesUser, decrementAdsImagesUser  } from '../slices/userSlice'
+
+function NewAdPage({handleSearchBarVisibility}) {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
   const { urlId } = useParams()
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
@@ -44,9 +49,9 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchB
     .then(async (res) => {
       if(res.status === 200) {
         setInfo(res.data.message)
-        addAdsOfUserAction(user, res.data.adIdCreated)
+        dispatch(addToAdsOfUser(res.data.adIdCreated))
         if(newImagesSelected.length) {
-          updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
+          dispatch(incrementAdsImagesUser())
           const adIdCreated = res.data.adIdCreated
           if(adIdCreated) console.warn('adIdCreated a bien été créé', adIdCreated)
           const urlsAdImages = []
@@ -100,7 +105,7 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchB
   if(user.info._id !== urlId) return <Navigate to='/' />
 
   return (
-    <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section className='dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
       <h1 className='dark:text-white text-3xl'>Nouvelle annonce</h1>
       <form
         method='post'
@@ -191,15 +196,4 @@ function NewAdPage({user, addAdsOfUserAction, updateAdsWithImages, handleSearchB
   )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    user: store.user
-  }
-}
-
-const mapDispatchToProps = {
-  addAdsOfUserAction,
-  updateAdsWithImages
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewAdPage)
+export default NewAdPage

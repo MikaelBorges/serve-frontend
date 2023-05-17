@@ -1,14 +1,18 @@
 import axios from 'axios'
 import { config } from '../config'
-import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import IconCross from '../components/icons/IconCross'
 import { Navigate, useParams } from 'react-router-dom'
 import { modifyAd, retrieveUserAd, deleteCloudinaryImages } from '../api/ads'
 
-import { updateAdsWithImages } from '../actions/user/userActions'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUser, incrementAdsImagesUser, decrementAdsImagesUser } from '../slices/userSlice'
 
-function ModifyAdPage({user, updateAdsWithImages}) {
+function ModifyAdPage() {
+
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
   const { urlId } = useParams()
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
@@ -52,8 +56,8 @@ function ModifyAdPage({user, updateAdsWithImages}) {
       adHaveImages = true
 
       if(adHaveImages !== adHadImages) {
-        if(adHaveImages) updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
-        else updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        if(adHaveImages) dispatch(incrementAdsImagesUser())
+        else dispatch(decrementAdsImagesUser())
       }
 
       // Supprimer les images
@@ -123,8 +127,8 @@ function ModifyAdPage({user, updateAdsWithImages}) {
       console.log('adHaveImages', adHaveImages)
 
       if(adHaveImages !== adHadImages) {
-        if(adHaveImages) updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
-        else updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        if(adHaveImages) dispatch(incrementAdsImagesUser())
+        else dispatch(decrementAdsImagesUser())
       }
 
       const priceConvertedToNumber = parseInt(e.target.price.value)
@@ -164,8 +168,8 @@ function ModifyAdPage({user, updateAdsWithImages}) {
       console.log('adHaveImages', adHaveImages)
 
       if(adHaveImages !== adHadImages) {
-        if(adHaveImages) updateAdsWithImages(user, Number(user.info.adsWithImages) + 1)
-        else updateAdsWithImages(user, Number(user.info.adsWithImages) - 1)
+        if(adHaveImages) dispatch(incrementAdsImagesUser())
+        else dispatch(decrementAdsImagesUser())
       }
 
 
@@ -290,7 +294,7 @@ function ModifyAdPage({user, updateAdsWithImages}) {
   if(!user.isLogged || !user.info.ads.includes(urlId)) return <Navigate to='/' />
 
   return (
-    <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section className='dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
       <form
         method='post'
         onSubmit={e => onSubmitForm(e)}
@@ -411,14 +415,4 @@ function ModifyAdPage({user, updateAdsWithImages}) {
   )
 }
 
-const mapStateToProps = (store, ownProps) => {
-  return {
-    user: store.user
-  }
-}
-
-const mapDispatchToProps = {
-  updateAdsWithImages
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ModifyAdPage)
+export default ModifyAdPage

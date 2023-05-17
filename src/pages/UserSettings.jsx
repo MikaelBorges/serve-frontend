@@ -1,17 +1,22 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { changeUserData } from '../api/user'
 
-function UserSettings({user, handleSearchBarVisibility}) {
+import { useSelector } from 'react-redux'
+import { selectUser } from '../slices/userSlice'
+
+function UserSettings({handleSearchBarVisibility}) {
+
+  const user = useSelector(selectUser)
+
   const { urlId } = useParams()
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState(user.info.email)
+  const [phone, setPhone] = useState(user.info.tel)
   const [info, setInfo] = useState(null)
   const [error, setError] = useState(null)
-  const [lastname, setLastname] = useState('')
+  const [lastname, setLastname] = useState(user.info.lastname)
   const [password, setPassword] = useState('')
-  const [firstname, setFirstname] = useState('')
+  const [firstname, setFirstname] = useState(user.info.firstname)
   const [disabled, setDisabled] = useState(true)
 
   const onSubmitForm = e => {
@@ -48,7 +53,7 @@ function UserSettings({user, handleSearchBarVisibility}) {
   if(user.info._id !== urlId) return <Navigate to='/' />
 
   return (
-    <section className='min-h-screen dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section className='dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
       <h1 className='dark:text-white text-3xl'>Changer mes données</h1>
       <form
         method='post'
@@ -56,6 +61,7 @@ function UserSettings({user, handleSearchBarVisibility}) {
         onSubmit={e => onSubmitForm(e)}
       >
         <input
+          defaultValue={firstname}
           onChange={e => setFirstname(e.currentTarget.value)}
           type='text'
           name='firstname'
@@ -63,6 +69,7 @@ function UserSettings({user, handleSearchBarVisibility}) {
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
+          defaultValue={lastname}
           onChange={(e) => setLastname(e.currentTarget.value)}
           type='text'
           name='lastname'
@@ -70,6 +77,7 @@ function UserSettings({user, handleSearchBarVisibility}) {
           className='pl-1 w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
+          defaultValue={email}
           onChange={(e) => setEmail(e.currentTarget.value)}
           type='text'
           name='email'
@@ -84,9 +92,8 @@ function UserSettings({user, handleSearchBarVisibility}) {
           className='w-full border dark:bg-slate-800 dark:text-white'
         />
         <input
-          onChange={(e) => {
-            setPhone(e.currentTarget.value);
-          }}
+          defaultValue={phone}
+          onChange={(e) => setPhone(e.currentTarget.value)}
           type='tel'
           name='phone'
           placeholder='votre numero de téléphone'
@@ -116,10 +123,4 @@ function UserSettings({user, handleSearchBarVisibility}) {
   )
 }
 
-const mapStateToProps = (store) => {
-  return {
-    user: store.user
-  }
-}
-
-export default connect(mapStateToProps)(UserSettings)
+export default UserSettings
