@@ -599,12 +599,12 @@ function Layout({
 
           {user.isLogged &&
             <Link
-            className='w-10' // Tip : fix width cause ios safari
+            className='w-10 flex justify-center items-center' // Tip : fix width cause ios safari
             to={`/user/${user.info._id}`} >
               <img
                 alt='image utilisateur'
                 src={user.info.imageUser ? user.info.imageUser : defaultProfile}
-                className='max-w-none h-full rounded-full'
+                className='max-w-none h-full rounded-full aspect-square object-cover' // Tip : height: 100% and max-width: none cause ios safari
               />
             </Link>
           }

@@ -196,7 +196,7 @@ function Card({
       className={`${areCardsVertical ? '[&:not(:last-child)]:mb-3' : ''}`}
     >
       {user.isLogged && user.info._id === urlId &&
-      <div className='p-1 flex'>
+      <div className='py-1 flex'>
         <button
           onClick={e => handleDeleteAd(e, ad._id)}
           className={`
@@ -289,13 +289,12 @@ function Card({
               <div className={`w-6 ${styleOf.crownImageContainer}`}>
                 <Link
                   onClick={(e) => e.stopPropagation()}
-                  //className='w-6 h-6 ml-1.5 rounded-full float-right'
-                  className='rounded-full'
+                  className='flex justify-center items-center'
                   to={`/user/${ad.userId}`}>
                   <img
                     src={ad.imageUser ? ad.imageUser : defaultProfile}
                     alt="image de l'utilisateur"
-                    className='rounded-full'
+                    className='rounded-full aspect-square object-cover'
                   />
                 </Link>
                 {Boolean(ad.superUser) &&

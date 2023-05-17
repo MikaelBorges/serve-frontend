@@ -33,6 +33,12 @@ export function registerUserImage(data) {
   })
 }
 
+/* export function deleteAccount(id) {
+  return axios.post(`${config.api_url}/user/deleteAccount/${id}`)
+  .then((res) => res)
+  .catch((err) => err)
+} */
+
 export function changeUserData(datas, id) {
   return axios.post(`${config.api_url}/user/changeUserData/${id}`, datas)
   .then(res => {
@@ -73,7 +79,7 @@ export function logoutUser(datas) {
     return res
   })
   .catch(err => {
-    console.warn('erreur: rentre dans le catch de user')
+    console.warn('erreur: rentre dans le catch de logoutUser')
     console.warn(err)
     return err
   })

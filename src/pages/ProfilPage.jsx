@@ -74,7 +74,7 @@ function ProfilPage({
       }
     })
     .catch(err => {
-      console.warn('erreur: rentre dans le catch du Layout')
+      console.warn('erreur: rentre dans le catch de ProfilPage')
       console.warn(err)
       // setError(err)
     })
@@ -330,7 +330,7 @@ function ProfilPage({
         </div> */}
 
         {user.info._id === urlId &&
-        <h1 className='mb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
+        <h1 className='text-3xl dark:text-white'>{wayToGreet()}</h1>
         }
         {user.info._id === urlId &&
         <div className='flex justify-between mt-6'>
@@ -341,7 +341,7 @@ function ProfilPage({
               text-xs
               bg-slate-200
               rounded-full
-              text-gray-500
+              text-slate-500
               cursor-pointer
               dark:bg-slate-600
               dark:text-yellow-100
@@ -354,14 +354,14 @@ function ProfilPage({
               px-2
               py-1
               text-xs
-              bg-slate-200
+              bg-red-100
               rounded-full
               text-red-600
               cursor-pointer
               dark:bg-slate-600
             `}
             onClick={() => handleLogout()}>
-              Se déconnecter
+              <p>Se déconnecter</p>
           </button>
         </div>
         }
