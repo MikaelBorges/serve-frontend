@@ -124,6 +124,8 @@ function UserSettings({handleSearchBarVisibility}) {
                   bg-slate-200
                   cursor-pointer
                   text-slate-500
+                  dark:bg-slate-600
+                  dark:text-yellow-100
                 `}>
                   {imageUser ? 'Changer ma photo' : 'Ajouter une photo'}
               </label>
@@ -154,6 +156,7 @@ function UserSettings({handleSearchBarVisibility}) {
                     bg-red-100
                     text-red-600
                     rounded-full
+                    dark:bg-slate-600
                   `}
                   onClick={(e) => onClickRemovePreviewImage(e)}
                 >
