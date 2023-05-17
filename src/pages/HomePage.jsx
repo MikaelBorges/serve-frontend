@@ -382,7 +382,7 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
           }
           {Boolean(photosAdsFilterRadioChoices.length) &&
           <li className='mr-3'>
-            <FilterButton filterButtonName='Avec photos'>
+            <FilterButton filterButtonName='Avec photos seulement'>
               {photosAdsFilterRadioChoices.map((radioName, index) =>
                 <FilterRadio
                   key={index}
