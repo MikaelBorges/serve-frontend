@@ -90,6 +90,7 @@ function UserSettings({handleSearchBarVisibility}) {
     e.preventDefault()
     setImageUser('')
     setNewImageUser(null)
+  }
 
   /* const handleDeleteAccount = () => {
     deleteAccount(user.info._id)
