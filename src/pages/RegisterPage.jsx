@@ -25,10 +25,25 @@ function RegisterPage({handleSearchBarVisibility}) {
 
   const [imageSelected, setImageSelected] = useState(null)
 
+  const formatPhone = (phone) => {
+    if(!phone.includes(' ')) {
+      if(phone.includes('.')) return phone.replace(/[.]/g, ' ')
+      else {
+        const arrayTel = phone.split('')
+        let arrayTelSpaced = []
+        arrayTel.forEach((el, index) => {
+          if(index > 0 && index % 2 === 0) arrayTelSpaced.push(' ')
+          arrayTelSpaced.push(el)
+        })
+        return arrayTelSpaced.join('')
+      }
+    }
+  }
+
   const onSubmitForm = e => {
     e.preventDefault()
     let data = {
-      phone: e.target.phone.value,
+      phone: formatPhone(e.target.phone.value),
       email: e.target.email.value,
       lastname: e.target.lastname.value,
       password: e.target.password.value,

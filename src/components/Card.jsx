@@ -338,7 +338,7 @@ function Card({
             </div>
           </div> */}
 
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-end'>
 
             <div>
               {Boolean(ad.starsNb) &&
