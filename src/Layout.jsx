@@ -289,7 +289,7 @@ function Layout({
           <div className='flex'>
             <Link
             to='/'
-            className='mr-1.5 w-10' // Tip : fix width cause ios safari
+            className='mr-1.5 w-10 rounded-full' // Tip : fix width cause ios safari
             >
               <img
                 alt='logo'
@@ -450,17 +450,17 @@ function Layout({
           {isSearchBarVisible && !isButtonSettingsActive &&
             <div
               className={`
-                ml-1.5
                 mr-3
                 flex
+                ml-1.5
                 w-full
                 border
                 bg-white
-                rounded-3xl
+                rounded-full
                 border-transparent
                 dark:bg-slate-600
                 ${darkMode ? '' : styleOf.biggerShadow}
-                ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mx-0 z-20 h-full' : 'relative'}
+                ${focusOnSearchBar ? 'absolute left-0 right-0 top-0 mr-0 ml-0 z-20 h-full' : 'relative'}
               `}>
                 <ul>
                   <li>
@@ -538,10 +538,11 @@ function Layout({
                   w-full
                   bg-white
                   text-black
+                  rounded-full
                   dark:text-white
+                  dark:bg-slate-600
                   placeholder:italic
                   focus:outline-none
-                  dark:bg-slate-600
                   placeholder:text-sm
                 `}
                 ref={searchInputRef}
@@ -599,8 +600,8 @@ function Layout({
 
           {user.isLogged &&
             <Link
-            className='w-10 flex justify-center items-center' // Tip : fix width cause ios safari
-            to={`/user/${user.info._id}`} >
+            className='w-10 flex justify-center items-center rounded-full' // Tip : fix width cause ios safari
+            to={`/user/${user.info._id}`}>
               <img
                 alt='image utilisateur'
                 src={user.info.imageUser ? user.info.imageUser : defaultProfile}

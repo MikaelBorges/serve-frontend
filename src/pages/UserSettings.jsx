@@ -1,8 +1,11 @@
 import { Navigate, useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { changeUserData, deleteAccount, logoutUser } from '../api/user'
+import { changeUserData, deleteAccount } from '../api/user'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectUser, disconnectUser } from '../slices/userSlice'
+import axios from 'axios'
+import { config } from '../config'
+
+import { selectUser, updateInfosOfUser } from '../slices/userSlice'
 
 function UserSettings({handleSearchBarVisibility}) {
 
@@ -20,20 +23,49 @@ function UserSettings({handleSearchBarVisibility}) {
   const [firstname, setFirstname] = useState(user.info.firstname)
   const [disabled, setDisabled] = useState(true)
   const [imageUser, setImageUser] = useState(user.info.imageUser)
+  const [newImageUser, setNewImageUser] = useState(null)
 
-  const onSubmitForm = e => {
+  const userHasImage = user.info.imageUser ? true : false
+
+  const onSubmitForm = async(e) => {
     e.preventDefault()
+    let replaceImage = false
+    let deleteImageAndFolder = false
+    let imageUserChoosen = imageUser
+
+    if(newImageUser) {
+      const formData = new FormData()
+      formData.append("file", newImageUser)
+      formData.append('folder', `users/${user.info._id}/profile`)
+      formData.append("upload_preset", "unsigned_upload_preset")
+      const response = await axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
+      imageUserChoosen = response.data.secure_url
+      if(userHasImage) replaceImage = true
+    }
+    else {
+      if(!imageUser && userHasImage) {
+        deleteImageAndFolder = true
+        imageUserChoosen = ''
+      }
+    }
+
     let datas = {
       phone: e.target.phone.value,
       email: e.target.email.value,
       lastname: e.target.lastname.value,
       password: e.target.password.value,
-      firstname: e.target.firstname.value
+      firstname: e.target.firstname.value,
+      imageUser: imageUserChoosen,
+      deleteImageAndFolder: deleteImageAndFolder,
+      replaceImage: replaceImage
     }
-    //console.log('data', datas)
-    changeUserData(datas, user.info._id)
+    changeUserData(user.info._id, datas)
     .then((res) => {
-      if (res.status === 200) setInfo(res.data.message)
+      if(res.status === 200) {
+        setInfo(res.data.message)
+        const { deleteImageAndFolder, replaceImage, password, ...restOfDatas } = datas
+        dispatch(updateInfosOfUser(restOfDatas))
+      }
       else setError(res.response.data.message)
     })
     .catch((err) => setError(err))
@@ -54,36 +86,10 @@ function UserSettings({handleSearchBarVisibility}) {
 
   if(user.info._id !== urlId) return <Navigate to='/' />
 
-  const onChangeInputImage = (e) => {
-    console.log('e', e)
-  }
-
   const onClickRemovePreviewImage = (e) => {
     e.preventDefault()
-    console.log('e', e)
-  }
-
-  /* const handleLogout = () => {
-    let data = { _id : user.info._id }
-    logoutUser(data)
-    .then(res => {
-      if (res.status === 200) {
-        localStorage.removeItem('redux')
-        localStorage.removeItem('serve-token')
-        dispatch(disconnectUser())
-        console.warn('message from api', res.data.message)
-        navigate('/')
-      }
-      else {
-        setError(res.msg)
-      }
-    })
-    .catch(err => {
-      console.warn('erreur: rentre dans le catch de UserSettings')
-      console.warn(err)
-      setError(err)
-    })
-  } */
+    setImageUser('')
+    setNewImageUser(null)
 
   /* const handleDeleteAccount = () => {
     deleteAccount(user.info._id)
@@ -134,14 +140,14 @@ function UserSettings({handleSearchBarVisibility}) {
                 type='file'
                 name='fichier'
                 className='hidden'
-                onChange={(e) => onChangeInputImage(e)}
+                onChange={(e) => setNewImageUser(e.target.files[0])}
               />
             </div>
-            {Boolean(imageUser) &&
+            {(Boolean(imageUser) || Boolean(newImageUser)) &&
               <div className='flex flex-col'>
-                <div className='mx-auto mb-3 flex justify-center items-center w-2/4 sm:w-auto h-40'>
+                <div className='mx-auto mb-3 flex justify-center items-center sm:w-auto h-40'>
                   <img
-                    src={imageUser}
+                    src={newImageUser ? URL.createObjectURL(newImageUser) : imageUser}
                     alt='image user'
                     className='aspect-square object-cover rounded-full h-full'
                   />

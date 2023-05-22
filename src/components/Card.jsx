@@ -286,7 +286,7 @@ function Card({
                   <span className='mr-1'><IconMap className='text-red-500 relative bottom-0.5 inline' /></span>{ad.location}
                 </div>
               </div>
-              <div className={`w-6 ${styleOf.crownImageContainer}`}>
+              <div className={`w-8 ${styleOf.crownImageContainer}`}>
                 <Link
                   onClick={(e) => e.stopPropagation()}
                   className='flex justify-center items-center'

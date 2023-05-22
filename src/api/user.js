@@ -39,7 +39,7 @@ export function registerUserImage(data) {
   .catch((err) => err)
 } */
 
-export function changeUserData(datas, id) {
+export function changeUserData(id, datas) {
   return axios.post(`${config.api_url}/user/changeUserData/${id}`, datas)
   .then(res => {
     return res

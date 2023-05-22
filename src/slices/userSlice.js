@@ -34,6 +34,9 @@ export const userSlice = createSlice({
     },
     decrementAdsImagesUser: (state) => {
       state.info.adsWithImages = state.info.adsWithImages - 1
+    },
+    updateInfosOfUser: (state, action) => {
+      state.info = {...state.info, ...action.payload}
     }
   }
 })
@@ -42,6 +45,7 @@ export const {
   connectUser,
   disconnectUser,
   addToAdsOfUser,
+  updateInfosOfUser,
   deleteToAdsOfUser,
   addToFavoritesUser,
   deleteToFavoritesUser,

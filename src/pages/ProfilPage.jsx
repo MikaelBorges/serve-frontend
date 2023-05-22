@@ -27,6 +27,8 @@ import {
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, disconnectUser } from '../slices/userSlice'
+import IconLogout from '../components/icons/IconLogout'
+import IconWheel from '../components/icons/IconWheel'
 
 function ProfilPage({
   handleAreCardsVertical,
@@ -338,7 +340,9 @@ function ProfilPage({
             className={`
               px-2
               py-1
+              flex
               text-xs
+              items-center
               bg-slate-200
               rounded-full
               text-slate-500
@@ -347,21 +351,23 @@ function ProfilPage({
               dark:text-yellow-100
             `}
             to={`/user/${user.info._id}/settings`}>
-              Modifier mon compte
+              <IconWheel /><p className='ml-1'>Modifier mon compte</p>
           </Link>
           <button
             className={`
               px-2
               py-1
+              flex
               text-xs
               bg-red-100
+              items-center
               rounded-full
               text-red-600
               cursor-pointer
               dark:bg-slate-600
             `}
             onClick={() => handleLogout()}>
-              <p>Se déconnecter</p>
+              <IconLogout /><p className='ml-1'>Se déconnecter</p>
           </button>
         </div>
         }

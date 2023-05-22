@@ -110,12 +110,12 @@ function ViewAdPage({
 
         <div className='flex justify-between items-center'>
           <Link
-            className='w-8'
+            className='w-8 flex justify-center items-center'
             to={`/user/${ad.userId}`}>
             <img
               src={ad.imageUser ? ad.imageUser : defaultProfile}
               alt='image utilisateur'
-              className='rounded-full'
+              className='rounded-full aspect-square object-cover'
             />
           </Link>
           <button
