@@ -294,13 +294,13 @@ function ModifyAdPage() {
   if(!user.isLogged || !user.info.ads.includes(urlId)) return <Navigate to='/' />
 
   return (
-    <section className='dark:bg-slate-900 bg-white flex flex-col space-y-12 px-8'>
+    <section className='dark:bg-slate-900 bg-white flex flex-col px-3'>
       <form
         method='post'
         onSubmit={e => onSubmitForm(e)}
         action={`/ad/${urlId}/edit`}
       >
-        <h1 className='dark:text-white text-3xl'>Modifier mon annonce</h1>
+        <h1 className='dark:text-white text-3xl mt-3 mb-6'>Modifier mon annonce</h1>
         <input
           type='file'
           name='fichiers'

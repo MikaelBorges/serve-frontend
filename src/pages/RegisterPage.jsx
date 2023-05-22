@@ -8,7 +8,7 @@ import { registerUser, registerUserImage } from '../api/user'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../slices/userSlice'
 
-function RegisterPage() {
+function RegisterPage({handleSearchBarVisibility}) {
 
   const user = useSelector(selectUser)
 
@@ -88,20 +88,23 @@ function RegisterPage() {
     }
   }, [email, password, firstname, lastname, phone])
 
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+  }, [])
+
   if(user.isLogged) return <Navigate to='/' />
 
   return (
     <section
       className={`
-        px-8
+        px-3
         flex
         flex-col
         bg-white
-        space-y-12
         dark:bg-slate-900
       `}
     >
-      <h1 className='dark:text-white text-3xl'>Créer un compte</h1>
+      <h1 className='dark:text-white text-3xl mt-3 mb-6'>Créer un compte</h1>
       <form
         method='post'
         action='/user/register'
