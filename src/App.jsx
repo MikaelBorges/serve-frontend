@@ -278,6 +278,7 @@ function App() {
           element={
             <LoginPage
               darkMode={darkMode}
+              handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }
         />
@@ -287,6 +288,7 @@ function App() {
           element={
             <RegisterPage
               darkMode={darkMode}
+              handleSearchBarVisibility={handleSearchBarVisibility}
             />
           }
         />

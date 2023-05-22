@@ -8,7 +8,7 @@ import { registerUser, registerUserImage } from '../api/user'
 import { useSelector } from 'react-redux'
 import { selectUser } from '../slices/userSlice'
 
-function RegisterPage() {
+function RegisterPage({handleSearchBarVisibility}) {
 
   const user = useSelector(selectUser)
 
@@ -25,10 +25,25 @@ function RegisterPage() {
 
   const [imageSelected, setImageSelected] = useState(null)
 
+  const formatPhone = (phone) => {
+    if(!phone.includes(' ')) {
+      if(phone.includes('.')) return phone.replace(/[.]/g, ' ')
+      else {
+        const arrayTel = phone.split('')
+        let arrayTelSpaced = []
+        arrayTel.forEach((el, index) => {
+          if(index > 0 && index % 2 === 0) arrayTelSpaced.push(' ')
+          arrayTelSpaced.push(el)
+        })
+        return arrayTelSpaced.join('')
+      }
+    }
+  }
+
   const onSubmitForm = e => {
     e.preventDefault()
     let data = {
-      phone: e.target.phone.value,
+      phone: formatPhone(e.target.phone.value),
       email: e.target.email.value,
       lastname: e.target.lastname.value,
       password: e.target.password.value,
@@ -88,20 +103,23 @@ function RegisterPage() {
     }
   }, [email, password, firstname, lastname, phone])
 
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+  }, [])
+
   if(user.isLogged) return <Navigate to='/' />
 
   return (
     <section
       className={`
-        px-8
+        px-3
         flex
         flex-col
         bg-white
-        space-y-12
         dark:bg-slate-900
       `}
     >
-      <h1 className='dark:text-white text-3xl'>Créer un compte</h1>
+      <h1 className='dark:text-white text-3xl mt-3 mb-6'>Créer un compte</h1>
       <form
         method='post'
         action='/user/register'

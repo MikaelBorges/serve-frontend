@@ -299,8 +299,7 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
             flex
             px-3
             pb-2
-            mt-3
-            mx-3
+            m-3
             right-3
             bg-white
             max-w-lg
@@ -382,7 +381,7 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
           }
           {Boolean(photosAdsFilterRadioChoices.length) &&
           <li className='mr-3'>
-            <FilterButton filterButtonName='Avec photos'>
+            <FilterButton filterButtonName='Avec photos seulement'>
               {photosAdsFilterRadioChoices.map((radioName, index) =>
                 <FilterRadio
                   key={index}
@@ -428,7 +427,7 @@ function HomePage({isFilterOffButtonActive, toggleTheme, handleAreCardsVertical,
           </div>
         </ul>
       }
-      <h1 className='mx-3 my-7 text-3xl dark:text-white'>{titlePage()}</h1>
+      <h1 className='p-3 text-3xl dark:text-white'>{titlePage()}</h1>
       {Boolean(filteredAds.length) &&
       <ul className={areCardsVertical ? 'px-1.5' : 'px-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3'}>
         {areCardsVertical &&

@@ -27,6 +27,8 @@ import {
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, disconnectUser } from '../slices/userSlice'
+import IconLogout from '../components/icons/IconLogout'
+import IconWheel from '../components/icons/IconWheel'
 
 function ProfilPage({
   handleAreCardsVertical,
@@ -74,7 +76,7 @@ function ProfilPage({
       }
     })
     .catch(err => {
-      console.warn('erreur: rentre dans le catch du Layout')
+      console.warn('erreur: rentre dans le catch de ProfilPage')
       console.warn(err)
       // setError(err)
     })
@@ -330,7 +332,7 @@ function ProfilPage({
         </div> */}
 
         {user.info._id === urlId &&
-        <h1 className='mb-4 text-3xl dark:text-white'>{wayToGreet()}</h1>
+        <h1 className='text-3xl dark:text-white'>{wayToGreet()}</h1>
         }
         {user.info._id === urlId &&
         <div className='flex justify-between mt-6'>
@@ -338,30 +340,34 @@ function ProfilPage({
             className={`
               px-2
               py-1
+              flex
               text-xs
+              items-center
               bg-slate-200
               rounded-full
-              text-gray-500
+              text-slate-500
               cursor-pointer
               dark:bg-slate-600
               dark:text-yellow-100
             `}
             to={`/user/${user.info._id}/settings`}>
-              Modifier mon compte
+              <IconWheel /><p className='ml-1'>Modifier mon compte</p>
           </Link>
           <button
             className={`
               px-2
               py-1
+              flex
               text-xs
-              bg-slate-200
+              bg-red-100
+              items-center
               rounded-full
               text-red-600
               cursor-pointer
               dark:bg-slate-600
             `}
             onClick={() => handleLogout()}>
-              Se déconnecter
+              <IconLogout /><p className='ml-1'>Se déconnecter</p>
           </button>
         </div>
         }

@@ -5,7 +5,7 @@ import { useNavigate, Navigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUser, connectUser } from '../slices/userSlice'
 
-function LoginPage() {
+function LoginPage({handleSearchBarVisibility}) {
 
   //on prépare la fonctionnalité pour dispatcher notre action dans le store
   const dispatch = useDispatch()
@@ -59,20 +59,23 @@ function LoginPage() {
     }
   }, [email, password])
 
+  useEffect(() => {
+    handleSearchBarVisibility(false)
+  }, [])
+
   if(user.isLogged) return <Navigate to='/' />
 
   return (
     <section
       className={`
-        px-8
+        px-3
         flex
         flex-col
         bg-white
-        space-y-12
         dark:bg-slate-900
       `}
     >
-      <h1 className='dark:text-white text-3xl'>Se connecter</h1>
+      <h1 className='dark:text-white text-3xl mt-3 mb-6'>Se connecter</h1>
       <form
         method='post'
         action='/user/login'

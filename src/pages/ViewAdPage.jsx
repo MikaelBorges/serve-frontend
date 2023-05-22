@@ -61,18 +61,6 @@ function ViewAdPage({
     }
   }
 
-  const formattedTel = () => {
-    if(ad.tel) {
-      const arrayTel = ad.tel.split('')
-      let arrayTelSpaced = []
-      arrayTel.forEach((el, index) => {
-        if(index > 0 && index % 2 === 0) arrayTelSpaced.push(' ')
-        arrayTelSpaced.push(el)
-      })
-      return arrayTelSpaced.join('')
-    }
-  }
-
   useEffect(() => {
     handleSearchBarVisibility(false)
     retrieveUserAd(urlId)
@@ -108,14 +96,14 @@ function ViewAdPage({
       }
       <div className='lg:w-1/3 p-3 dark:text-white'>
 
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-end'>
           <Link
-            className='w-8'
+            className='w-10 flex justify-center items-center'
             to={`/user/${ad.userId}`}>
             <img
               src={ad.imageUser ? ad.imageUser : defaultProfile}
               alt='image utilisateur'
-              className='rounded-full'
+              className='rounded-full aspect-square object-cover'
             />
           </Link>
           <button
@@ -162,7 +150,7 @@ function ViewAdPage({
         >
           <div>{smartphoneIcon}</div>
           <div className='ml-1'>
-            {formattedTel()}
+            {ad.tel}
           </div>
         </a>
       </div>
