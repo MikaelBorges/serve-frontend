@@ -98,7 +98,7 @@ function ViewAdPage({
 
         <div className='flex justify-between items-end'>
           <Link
-            className='w-10 flex justify-center items-center'
+            className='w-10 flex justify-center items-center rounded-full'
             to={`/user/${ad.userId}`}>
             <img
               src={ad.imageUser ? ad.imageUser : defaultProfile}

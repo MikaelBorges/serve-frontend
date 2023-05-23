@@ -294,7 +294,7 @@ function ModifyAdPage() {
   if(!user.isLogged || !user.info.ads.includes(urlId)) return <Navigate to='/' />
 
   return (
-    <section className='dark:bg-slate-900 bg-white flex flex-col px-3'>
+    <section className='dark:bg-slate-900 flex flex-col px-3'>
       <form
         method='post'
         onSubmit={e => onSubmitForm(e)}

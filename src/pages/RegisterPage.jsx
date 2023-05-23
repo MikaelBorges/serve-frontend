@@ -115,7 +115,6 @@ function RegisterPage({handleSearchBarVisibility}) {
         px-3
         flex
         flex-col
-        bg-white
         dark:bg-slate-900
       `}
     >
