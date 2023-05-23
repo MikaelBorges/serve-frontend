@@ -995,7 +995,7 @@ function Layout({
         </main>
         <footer
           className={`
-            pt-6
+            pt-5
             text-xs
             text-center
             dark:text-white
