@@ -51,23 +51,36 @@ function NewAdPage({handleSearchBarVisibility}) {
         setInfo(res.data.message)
         dispatch(addToAdsOfUser(res.data.adIdCreated))
         if(newImagesSelected.length) {
-          dispatch(incrementAdsImagesUser())
           const adIdCreated = res.data.adIdCreated
           if(adIdCreated) console.warn('adIdCreated a bien été créé', adIdCreated)
+          const fetches = []
           const urlsAdImages = []
-          for(let newImageSelected of newImagesSelected) {
-            const formData = new FormData()
-            formData.append("file", newImageSelected)
-            formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
+          const formData = new FormData()
+          for (let i = 0; i < newImagesSelected.length; i++) {
+            let file = newImagesSelected[i]
+            formData.append("file", file)
             formData.append("upload_preset", "unsigned_upload_preset")
-            const response = await axios.post(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, formData)
-            urlsAdImages.push(response.data.secure_url)
+            formData.append('folder', `users/${user.info._id}/ads/${adIdCreated}`)
+            fetches.push(
+              fetch(`https://api.cloudinary.com/v1_1/${config.cloudname}/image/upload`, {
+                method: "POST",
+                body: formData
+              })
+              .then((response) => response.text())
+              .then((data) => {
+                const freshUrl = JSON.parse(data).secure_url
+                urlsAdImages.push(freshUrl)
+              })
+            )
           }
-          const datas = {
-            adIdCreated,
-            urlsAdImages
-          }
-          await registerAdImages(datas)
+          Promise.all(fetches).then(async() => {
+            const datas = {
+              adIdCreated,
+              urlsAdImages
+            }
+            await registerAdImages(datas)
+            dispatch(incrementAdsImagesUser())
+          })
         }
       }
       else {
@@ -83,8 +96,6 @@ function NewAdPage({handleSearchBarVisibility}) {
     const filesArray = Object.values(e.target.files)
     setNewImagesSelected(filesArray)
   }
-
-  console.log('newImagesSelected', newImagesSelected)
 
   const onClickRemovePreviewImage = (image) => {
     setNewImagesSelected(newImagesSelected.filter(item => item.name !== image.name && item.lastModified !== image.lastModified))

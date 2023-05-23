@@ -24,9 +24,9 @@ const loadFromLocalStorage = () => {
   }
 }
 
-const persistedStore = loadFromLocalStorage();
+const persistedStore = loadFromLocalStorage()
 if(persistedStore) console.log('le store de redux a été hydraté par le local storage', persistedStore)
-else console.log("le store de redux n'a pas pu être hydraté because car il n'est plus dans le local storage")
+else console.log("le store de redux n'a pas pu être hydraté car il n'est plus dans le local storage")
 
 const store = configureStore({
   reducer: {
@@ -43,7 +43,7 @@ store.subscribe(() => {
     console.log('le store de redux a été sauvegardé dans le local storage', store.getState())
   }
   else {
-    console.log("le store de redux n'a pas été sauvegardé car le token n'existe plsu dans le local storage")
+    console.log("le store de redux n'a pas été sauvegardé car le token n'existe plus dans le local storage")
     window.localStorage.removeItem('redux')
   }
 })
