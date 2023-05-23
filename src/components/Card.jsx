@@ -289,7 +289,7 @@ function Card({
               <div className={`w-8 ${styleOf.crownImageContainer}`}>
                 <Link
                   onClick={(e) => e.stopPropagation()}
-                  className='flex justify-center items-center'
+                  className='flex justify-center items-center rounded-full'
                   to={`/user/${ad.userId}`}>
                   <img
                     src={ad.imageUser ? ad.imageUser : defaultProfile}
